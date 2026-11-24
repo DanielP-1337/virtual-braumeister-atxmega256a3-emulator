@@ -4,7 +4,7 @@ A headless JavaScript emulator for the ATxmega256A3 in the legacy Speidel Braume
 
 ## Run the tests
 
-Use Node.js 24 and PowerShell 7. From the repository root, run the following commands. The 276 synthetic tests exercise the emulator using generated programs and test inputs. They run offline with Node's standard library.
+Use Node.js 24 and PowerShell 7. From the repository root, run the following commands. The 283 synthetic tests exercise the emulator using generated programs and test inputs. They run offline with Node's standard library.
 
 ```powershell
 New-Item -ItemType Directory -Path private -Force | Out-Null
@@ -13,9 +13,9 @@ node --test "tests/*.test.mjs"
 
 ## Current state
 
-The core supports an independently tested subset of AVRxm instructions, three-byte return addresses, deterministic tracing, and explicit stops on unsupported operations. The memory bus connects the CPU to GPIO, NVM and mapped EEPROM, SPI, TWI, interrupts, and clock-control models. Each peripheral implements only its documented, tested subset.
+The core supports an independently tested subset of AVRxm instructions, three-byte return addresses, deterministic tracing, and explicit stops on unsupported operations. The memory bus connects the CPU to GPIO, NVM and mapped EEPROM, SPI, TWI, interrupts, clock control, and the USARTF0 enable register. Each peripheral implements only its documented, tested subset.
 
-In a local BrewControl 1.1.27 run the emulator reached the application entry from reset after 46,682 instructions and 61,883 clocks. With unknown EEPROM contents, execution stops at the first unknown byte. With simulated erased EEPROM and uncharacterized oscillator startup times, it stops at the first readiness check. With the explicit oscillator timing profile, it reaches a write to `USARTF0.CTRLB` after 2,872,882 instructions and 4,706,325 clocks. A complete application boot and a browser UI are future work.
+In a local BrewControl 1.1.27 run the emulator reached the application entry from reset after 46,682 instructions and 61,883 clocks. With unknown EEPROM contents, execution stops at the first unknown byte. With simulated erased EEPROM and uncharacterized oscillator startup times, it stops at the first readiness check. With the explicit oscillator timing profile, it writes zero to `USARTF0.CTRLB` and reaches a write to `USARTF0.CTRLC` after 2,872,898 instructions and 4,706,352 clocks. A complete application boot and a browser UI are future work.
 
 ## Repository contents
 

@@ -11,7 +11,7 @@ import { comparisonRun, withComparedLog } from './compare-run.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2), args = {};
 if (argv.length % 2) throw new Error('Arguments require --name value pairs');
-for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
 const eepromScenario = args['--eeprom-state'];
 if (eepromScenario !== undefined && eepromScenario !== 'erased') throw new Error('Expected --eeprom-state erased');
 if (eepromScenario && (args['--eeprom'] !== undefined || args['--eeprom-ihex'] !== undefined)) {
@@ -35,6 +35,11 @@ const dfllEnable = args['--dfll-enable'] ?? dfllReference;
 if (!['mapped', 'unmapped'].includes(dfllEnable) || (dfllEnable === 'mapped' && dfllReference !== 'mapped')) {
   throw new Error('DFLLRC32M.CTRL requires a mapped reference selector. Use --dfll-enable mapped or unmapped.');
 }
+const usartControl = args['--usartf0-ctrlb'] ?? (core === 'current' ? 'mapped' : 'unmapped');
+if (!['mapped', 'unmapped'].includes(usartControl) || (usartControl === 'mapped' && core !== 'current')) {
+  throw new Error('USARTF0 control requires the current core. Use --usartf0-ctrlb mapped or unmapped.');
+}
+const Usart = usartControl === 'mapped' ? (await import('../src/peripherals/usart.mjs')).USARTF0Control : null;
 const compareRun = args['--compare-run'];
 const clockModule = clockControl === 'mapped' ? await import('../src/peripherals/system-clock.mjs') : null;
 // A3 Table 34-19 gives typical wake-up times, not enable-to-ready times.
@@ -78,6 +83,9 @@ try {
     const gpioEvents = [], nvmTransitions = [], applicationPCs = new Set(); let previousInstructionSha256 = null, completedNvmRead = null, completedSkip = null, completedOri = null, completedMapping = null;
     const gpio = new GPIOController({ onAccess: e => gpioEvents.push(e) });
     gpio.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, cyclesBefore: c.cycles, instructionAttempt: c.steps + 1 }) });
+    const usartAccesses = [];
+    const usart = Usart ? new Usart({ onAccess: e => usartAccesses.push(e) }) : null;
+    usart?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const oscAccesses = [], dfllAccesses = [];
     const clockAccesses = [];
     const systemClock = clockModule ? new clockModule.SystemClock({ onAccess: e => clockAccesses.push(e) }) : null;
@@ -164,7 +172,7 @@ try {
       assert.ok(initialValidity.every(v => v === 0) && storage.valid.every(v => v === 0), 'Strict run requires an entirely unknown EEPROM');
       assert.deepEqual(integrity.changedOffsets, [], 'Unexpected persistent write during the strict execution prefix');
     }
-    return { dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
+    return { usartAccesses, usartState: usart?.snapshot(), dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
   }
   function executePass(recording) {
     if (!reference) return withNvmAccessLog(resolve(output, 'nvm-accesses.jsonl'), recording, emit => run(recording, emit));
@@ -205,6 +213,8 @@ try {
   assert.deepEqual(a.oscAccesses, b.oscAccesses);
   assert.deepEqual(a.oscState, b.oscState);
   assert.deepEqual(a.references, b.references);
+  assert.deepEqual(a.usartAccesses, b.usartAccesses);
+  assert.deepEqual(a.usartState, b.usartState);
   assert.deepEqual(a.dfllAccesses, b.dfllAccesses);
   assert.deepEqual(a.dfllState, b.dfllState);
   assert.deepEqual(a.clockAccesses, b.clockAccesses);
@@ -235,6 +245,10 @@ try {
     assert.equal(receipt.trace.sha256, a.traceSha256, 'Generated and independently recorded trace hashes differ');
     result.traceStorage = receipt;
     writeFileSync(resolve(output, 'trace-reference.json'), JSON.stringify(receipt, null, 2) + '\n');
+  }
+  if (a.usartState) {
+    result.usartF0 = { accesses: a.usartAccesses.length, state: a.usartState };
+    writeFileSync(resolve(output, 'usartf0-accesses.jsonl'), a.usartAccesses.map(e => JSON.stringify(e) + '\n').join(''));
   }
   if (a.dfllState) {
     result.dfll32m = { accesses: a.dfllAccesses.length, state: a.dfllState };
@@ -297,6 +311,7 @@ try {
   result.sourceSha256['scripts/nvm-access-log.mjs'] = sha(readFileSync(resolve(root, 'scripts/nvm-access-log.mjs')));
   if (clockModule) result.sourceSha256['src/peripherals/system-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/system-clock.mjs')));
   result.sourceSha256['scripts/compare-run.mjs'] = sha(readFileSync(resolve(root, 'scripts/compare-run.mjs')));
+  if (Usart) result.sourceSha256['src/peripherals/usart.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart.mjs')));
   if (a.dfllState) result.sourceSha256['src/peripherals/dfll32m.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/dfll32m.mjs')));
   if (Osc) result.sourceSha256['src/peripherals/oscillator.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/oscillator.mjs')));
   if (Pmic) result.sourceSha256['src/peripherals/pmic.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/pmic.mjs')));
