@@ -1,0 +1,315 @@
+// Local application fixture. No firmware-specific addresses enter the CPU/bus.
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync, mkdirSync, openSync, writeSync, closeSync, realpathSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { dirname, resolve, relative, isAbsolute } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { loadEepromInput } from './eeprom-input.mjs';
+import { withNvmAccessLog } from './nvm-access-log.mjs';
+import { comparisonRun, withComparedLog } from './compare-run.mjs';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const argv = process.argv.slice(2), args = {};
+if (argv.length % 2) throw new Error('Arguments require --name value pairs');
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+const eepromScenario = args['--eeprom-state'];
+if (eepromScenario !== undefined && eepromScenario !== 'erased') throw new Error('Expected --eeprom-state erased');
+if (eepromScenario && (args['--eeprom'] !== undefined || args['--eeprom-ihex'] !== undefined)) {
+  throw new Error('Choose either a simulated EEPROM state or an EEPROM input file');
+}
+const core = args['--core'] ?? 'current';
+const oscTiming = args['--osc-timing'] ?? (core === 'current' ? 'uncharacterized' : 'unmapped');
+if (!['uncharacterized', 'a3-wake-proxy', 'unmapped'].includes(oscTiming) || (core !== 'current' && oscTiming !== 'unmapped')) {
+  throw new Error('Expected --osc-timing uncharacterized, a3-wake-proxy or unmapped (historical profile)');
+}
+const Osc = oscTiming === 'unmapped' ? null : (await import('../src/peripherals/oscillator.mjs')).OscillatorController;
+const clockControl = args['--clock-control'] ?? (Osc ? 'mapped' : 'unmapped');
+if (!['mapped', 'unmapped'].includes(clockControl) || (clockControl === 'mapped' && !Osc)) {
+  throw new Error('CLK.CTRL requires a mapped OSC controller. Use --clock-control mapped or unmapped.');
+}
+const dfllReference = args['--dfll-reference'] ?? (Osc ? 'mapped' : 'unmapped');
+if (!['mapped', 'unmapped'].includes(dfllReference) || (dfllReference === 'mapped' && !Osc)) {
+  throw new Error('OSC.DFLLCTRL requires a mapped OSC controller. Use --dfll-reference mapped or unmapped.');
+}
+const dfllEnable = args['--dfll-enable'] ?? dfllReference;
+if (!['mapped', 'unmapped'].includes(dfllEnable) || (dfllEnable === 'mapped' && dfllReference !== 'mapped')) {
+  throw new Error('DFLLRC32M.CTRL requires a mapped reference selector. Use --dfll-enable mapped or unmapped.');
+}
+const compareRun = args['--compare-run'];
+const clockModule = clockControl === 'mapped' ? await import('../src/peripherals/system-clock.mjs') : null;
+// A3 Table 34-19 gives typical wake-up times, not enable-to-ready times.
+// This opt-in sensitivity run rounds 5.8 us and 320 us up to whole 2 MHz CPU clocks.
+const oscStartupCycles = oscTiming === 'a3-wake-proxy' ? { rc32m: 12, rc32k: 640 } : {};
+const Spi = core === 'current' ? (await import('../src/peripherals/spic.mjs')).SPIController : null;
+const Twi = core === 'current' ? (await import('../src/peripherals/twie.mjs')).TWIMaster : null;
+const Pmic = core === 'current' ? (await import('../src/peripherals/pmic.mjs')).PMIC : null;
+const coreRoots = new Map([
+  ['current', root],
+  ['002h', resolve(root, 'private/poc-002i-baseline')],
+  ['002i', resolve(root, 'private/poc-002j-baseline')],
+]);
+if (!coreRoots.has(core)) throw new Error('Expected --core current, 002h or 002i');
+const implementationRoot = coreRoots.get(core);
+const PageBuffer = core === 'current' ? (await import('../src/peripherals/eeprom-page-buffer.mjs')).EEPROMPageBuffer : null;
+const modules = ['hex', 'xmega', 'discovery', 'peripherals/gpio', 'peripherals/nvm', 'eeprom-storage'];
+const [{ parseHex }, { XmegaCPU }, { discover }, { GPIOController }, { NVMController }, { EEPROMStorage, EEPROM_SIZE }] =
+  await Promise.all(modules.map(name => import(pathToFileURL(resolve(implementationRoot, 'src', name + '.mjs')))));
+const firmware = args['--firmware'] ?? 'C:/dev/BraumeisterSoftwareUpdater-1.1.27-120918/BrewControl-1-1-27.hex';
+if (!args['--output']) throw new Error('Required --output NEW_PRIVATE_DIRECTORY');
+const output = resolve(args['--output']), privateRoot = realpathSync(resolve(root, 'private')), rel = relative(privateRoot, output);
+if (!rel || rel.startsWith('..') || isAbsolute(rel) || realpathSync(dirname(output)) !== privateRoot) throw new Error('Output must be a new direct child of workspace/private');
+mkdirSync(output); // Never overwrite an existing diagnostic run.
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+let result;
+try {
+  const raw = readFileSync(firmware), firmwareSha256 = sha(raw);
+  assert.equal(firmwareSha256, 'c5cea66ff95f62b9e487559d9b2177b84956033854a54ea670a7927731c71847', 'Unexpected firmware revision');
+  const baseline = JSON.parse(readFileSync(resolve(root, 'private/poc-001-validation/result.json')));
+  assert.equal(baseline.status, 'PASS');
+  const image = parseHex(raw.toString('utf8'));
+  const reference = compareRun === undefined ? null : comparisonRun(privateRoot, compareRun, firmwareSha256);
+  const eepromInput = eepromScenario === 'erased'
+    ? { bytes: new Uint8Array(EEPROM_SIZE).fill(0xff), provenance: { kind: 'synthetic', label: 'Simulated erased EEPROM (all bytes 0xFF)' } }
+    : loadEepromInput(args['--eeprom'], args['--eeprom-ihex']);
+  const maxSteps = args['--max-steps'] === undefined ? 100000 : Number(args['--max-steps']);
+  const maxCycles = args['--max-cycles'] === undefined ? 200000 : Number(args['--max-cycles']);
+  function run(save, onNvmAccess, compareLine = null) {
+    const storage=new EEPROMStorage(eepromInput); const c = new XmegaCPU(image,{eeprom:storage}); let checkpoint = null;
+    const gpioEvents = [], nvmTransitions = [], applicationPCs = new Set(); let previousInstructionSha256 = null, completedNvmRead = null, completedSkip = null, completedOri = null, completedMapping = null;
+    const gpio = new GPIOController({ onAccess: e => gpioEvents.push(e) });
+    gpio.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, cyclesBefore: c.cycles, instructionAttempt: c.steps + 1 }) });
+    const oscAccesses = [], dfllAccesses = [];
+    const clockAccesses = [];
+    const systemClock = clockModule ? new clockModule.SystemClock({ onAccess: e => clockAccesses.push(e) }) : null;
+    const osc = Osc ? new Osc({ systemClock, startupCycles: oscStartupCycles, onAccess: e => oscAccesses.push(e) }) : null;
+    if (osc) {
+      osc.register(c.bus.mmio, { dfllReference: dfllReference === 'mapped', dfll32m: dfllEnable === 'mapped', onDfllAccess: e => dfllAccesses.push(e), fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+      osc.releaseReset();
+      systemClock?.register(c.bus, osc);
+    }
+    const spiAccesses = [], spiTransfers = [];
+    const spi = Spi ? new Spi({ gpio, onAccess: event => spiAccesses.push(event), onTransfer: event => spiTransfers.push(event) }) : null;
+    spi?.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const twiEvidence = { accesses: [], transfers: [], interrupts: [] };
+    const twi = Twi ? new Twi({
+      onAccess: event => twiEvidence.accesses.push(event),
+      onTransfer: event => twiEvidence.transfers.push(event),
+      onInterrupt: event => twiEvidence.interrupts.push(event),
+    }) : null;
+    twi?.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const pmicAccesses = [];
+    const pmic = Pmic ? new Pmic({ sources: [cycle => {
+      if (twi.needsClock) twi.advanceTo(cycle);
+      return twi.interruptRequest;
+    }], onAccess: e => pmicAccesses.push(e) }) : null;
+    if (pmic) c.bus.attachPMIC(pmic);
+    const nvm = new NVMController({timeBase:systemClock,pageBuffer:PageBuffer ? new PageBuffer(storage) : null,onAccess:onNvmAccess,onTransition:e=>nvmTransitions.push(e)});
+    nvm.register(c.bus.mmio,{fault:(m,d)=>c.fault(m,d),clock:()=>c.cycles,context:()=>({pcWord:c.pc,cyclesBefore:c.cycles,instructionAttempt:c.steps+1})});
+    const eepromEvents = [];
+    const mapping = c.bus.attachEEPROM(nvm, {
+      onAccess: e => eepromEvents.push(e),
+      ...(core === 'current' ? { programming: { eraseWriteCycles: 24000 } } : {}),
+    });
+    const initialEeprom = storage.bytes.slice(), initialValidity = storage.valid.slice();
+    const initialFlashSha256 = sha(c.flash);
+    let firstApplicationInstruction = null;
+    const instructionHash = createHash('sha256'); const hash = createHash('sha256'); const fd = save ? openSync(resolve(output, 'trace.jsonl'), 'wx') : null;
+    let diagnostic;
+    try {
+      diagnostic = discover(c, { maxSteps, maxCycles, onTrace: t => {
+        const line = JSON.stringify({ origin: t.eventType === 'instruction' ? 'original-firmware' : 'emulator', ...t }) + '\n';
+        hash.update(line); if (t.eventType === 'instruction') instructionHash.update(line); if (compareLine) compareLine(line); else if (save) writeSync(fd, line);
+        if (t.eventType === 'instruction' || t.eventType === 'interrupt-entry') {
+          nvm.advanceTo(c.cycles);
+          if (spi?.needsClock) spi.advanceTo(c.cycles);
+          if (twi?.needsClock) twi.advanceTo(c.cycles);
+        }
+        if (t.eventType === 'instruction') {
+          if(t.step===46736) previousInstructionSha256=instructionHash.copy().digest('hex');
+          // Later EEPROM reads reuse this helper. The startup checkpoints describe its first invocation.
+          if (t.before.pcWord === 0x14e81) completedNvmRead ??= t;
+          if (t.before.pcWord === 0x14e82) completedSkip ??= t;
+          if (t.before.pcWord === 0x14e85) completedOri ??= t;
+          if (t.before.pcWord === 0x14e86) completedMapping ??= { instruction: t, mapping: mapping.snapshot(), ctrlb: nvm.registers[12] };
+        }
+        if (checkpoint && t.eventType === 'instruction') {
+          applicationPCs.add(t.before.pcWord);
+          firstApplicationInstruction ??= t;
+        }
+        if (t.eventType === 'instruction' && t.after.pcWord === 0x7b43 && checkpoint === null) {
+          const prefixSha256 = hash.copy().digest('hex');
+          assert.equal(prefixSha256, baseline.traceSha256, 'PoC 001 trace prefix regressed');
+          assert.equal(c.steps, 46682); assert.equal(c.cycles, 61883);
+          assert.deepEqual(c.sram.slice(0, 0x7e2), image.flash.slice(0x29d80, 0x2a562));
+          assert.ok(c.sram.slice(0x7e2, 0x2b97).every(v => v === 0));
+          assert.equal(c.sp, 0x5ffc); assert.deepEqual(Array.from(c.sram.slice(-3)), [0, 0x78, 0x48]);
+          checkpoint = { verified: true, instructions: c.steps, cycles: c.cycles, tracePrefixSha256: prefixSha256 };
+        }
+      }});
+    } finally { if (fd !== null) closeSync(fd); }
+    const integrity = {
+      initialFlashSha256, finalFlashSha256: sha(c.flash),
+      initialEepromSha256: sha(initialEeprom), finalEepromSha256: sha(storage.bytes),
+      initialValiditySha256: sha(initialValidity), finalValiditySha256: sha(storage.valid),
+      changedOffsets: [],
+    };
+    assert.equal(integrity.finalFlashSha256, initialFlashSha256, 'Flash changed during execution');
+    for (let offset = 0; offset < storage.bytes.length; offset++) {
+      if (initialEeprom[offset] === storage.bytes[offset] && initialValidity[offset] === storage.valid[offset]) continue;
+      assert.equal(storage.valid[offset], 1, 'EEPROM change must establish a valid byte');
+      assert.equal(storage.provenanceAt?.(offset)?.kind, 'emulated-write', 'Unattributed EEPROM change');
+      integrity.changedOffsets.push(offset);
+    }
+    if (eepromInput.provenance.kind === 'unknown') {
+      assert.ok(initialValidity.every(v => v === 0) && storage.valid.every(v => v === 0), 'Strict run requires an entirely unknown EEPROM');
+      assert.deepEqual(integrity.changedOffsets, [], 'Unexpected persistent write during the strict execution prefix');
+    }
+    return { dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
+  }
+  function executePass(recording) {
+    if (!reference) return withNvmAccessLog(resolve(output, 'nvm-accesses.jsonl'), recording, emit => run(recording, emit));
+    const nvm = withComparedLog(resolve(output, 'nvm-suffix.jsonl'), recording, reference.nvm, appendNvm =>
+      withComparedLog(resolve(output, 'trace-suffix.jsonl'), recording, reference.trace, appendTrace =>
+        run(false, event => appendNvm(JSON.stringify(event) + '\n'), appendTrace)));
+    return { result: nvm.result.result, count: nvm.count, receipt: { format: 'jsonl-prefix-v1',
+      referenceRun: reference.runName, referenceTraceSha256: reference.trace.originalSha256, trace: nvm.result.receipt, nvm: nvm.receipt } };
+  }
+  const { result: a, count: nvmAccesses, receipt } = executePass(true);
+  const { result: b, count: replayedAccesses, receipt: secondReceipt } = executePass(false);
+  assert.deepEqual(receipt, secondReceipt);
+  const previous = JSON.parse(readFileSync(resolve(root,'private/poc-002f-discovery/result.json')));
+  assert.equal(sha(readFileSync(resolve(root,'private/poc-002f-discovery/trace.jsonl'))),'dab21b7ca8c14aa638dc1fa7f5c38458f0f86f67b9f5dd0bbd7b2821441f0aca');
+  const previousPrefixVerified=a.previousInstructionSha256===previous.completedInstructionSha256;
+  const mapped=a.completedMapping;
+  const mappingVerified=!!mapped && mapped.instruction.opcode===@FLASH_WORD(014e86)@ && mapped.instruction.mnemonic==='STD' && mapped.instruction.after.pcWord===0x14e87 && mapped.instruction.after.cycles-mapped.instruction.before.cycles===2 && mapped.ctrlb===8 && mapped.mapping.enabled && mapped.instruction.accesses.some(x=>x.kind==='write' && x.addressByte===0x1cc && x.value===8);
+  assert.deepEqual(a.eepromState,b.eepromState);assert.deepEqual(a.eepromEvents,b.eepromEvents);assert.deepEqual(a.eepromValidity,b.eepromValidity);
+  assert.deepEqual(a.eepromBytes, b.eepromBytes);
+  assert.deepEqual(a.integrity, b.integrity);
+  if (eepromInput.provenance.kind === 'local-dump') {
+    assert.equal(sha(readFileSync(eepromInput.provenance.label)), eepromInput.provenance.sha256, 'EEPROM source changed during replay');
+  }
+  const ori=a.completedOri;
+  let oriVerified=false;
+  if(ori){
+    const expectedRegisters=ori.before.registers.slice();expectedRegisters[19]=8;
+    oriVerified=ori.opcode===@FLASH_WORD(014e85)@ && ori.mnemonic==='ORI' && ori.before.registers[19]===0 && ori.after.pcWord===0x14e86 && ori.after.cycles-ori.before.cycles===1 && ori.before.sreg===2 && ori.after.sreg===0;
+    assert.deepEqual(ori.after.registers,expectedRegisters);
+  }
+  const skip=a.completedSkip;
+  const skipVerified=!!skip && skip.opcode===@FLASH_WORD(014e82)@ && skip.mnemonic==='SBRC' && skip.before.registers[19]===0 && skip.after.pcWord===0x14e84 && skip.after.cycles-skip.before.cycles===2 && skip.skip.taken && skip.skip.skippedWords===1 && skip.skip.skippedPcWord===0x14e83 && skip.skip.skippedOpcode===@FLASH_WORD(014e83)@ && !a.applicationPCs.includes(0x14e83);
+  const read=a.completedNvmRead;
+  const statusReadCompleted=!!read && read.opcode===@FLASH_WORD(014e81)@ && read.mnemonic==='LDD' && read.accesses.some(x=>x.kind==='read' && x.addressByte===0x1cf && x.value===0);
+  if(read) {assert.equal(read.after.pcWord,0x14e82); assert.equal(read.after.registers[19],0);assert.equal(read.after.cycles-read.before.cycles,2);}
+  assert.equal(nvmAccesses,replayedAccesses);assert.deepEqual(a.nvmTransitions,b.nvmTransitions);assert.deepEqual(a.nvmState,b.nvmState);
+  assert.deepEqual(a.diagnostic, b.diagnostic, 'Diagnostic replay differs'); assert.equal(a.traceSha256, b.traceSha256, 'Trace replay differs'); assert.deepEqual(a.sram, b.sram);
+  assert.deepEqual(a.oscAccesses, b.oscAccesses);
+  assert.deepEqual(a.oscState, b.oscState);
+  assert.deepEqual(a.references, b.references);
+  assert.deepEqual(a.dfllAccesses, b.dfllAccesses);
+  assert.deepEqual(a.dfllState, b.dfllState);
+  assert.deepEqual(a.clockAccesses, b.clockAccesses);
+  assert.deepEqual(a.clockState, b.clockState);
+  assert.deepEqual(a.clockChanges, b.clockChanges);
+  assert.deepEqual(a.spiAccesses, b.spiAccesses);
+  assert.deepEqual(a.spiTransfers, b.spiTransfers);
+  assert.deepEqual(a.spiState, b.spiState);
+  assert.deepEqual(a.pmicAccesses, b.pmicAccesses);
+  assert.deepEqual(a.pmicState, b.pmicState);
+  assert.deepEqual(a.twiEvidence, b.twiEvidence);
+  assert.deepEqual(a.twiState, b.twiState);
+  assert.deepEqual(a.gpioEvents, b.gpioEvents); assert.deepEqual(a.gpioState, b.gpioState);
+  if (a.firstApplicationInstruction) {
+    assert.equal(a.firstApplicationInstruction.before.pcWord, 0x7b43);
+    assert.equal(a.firstApplicationInstruction.mnemonic, 'STS');
+    assert.ok(a.firstApplicationInstruction.accesses.some(x => x.kind === 'write' && x.addressByte === 0x604 && x.value === 0));
+  }
+  assert.equal(sha(readFileSync(firmware)), firmwareSha256);
+  result = { ...a.diagnostic, firmwareSha256, nodeVersion: process.version, deterministicReplay: true, traceSha256: a.traceSha256, startupCheckpoint: a.checkpoint, completedApplicationInstructions: a.checkpoint ? a.diagnostic.completedInstructions - a.checkpoint.instructions : null };
+  result.discoveryAcceptanceVerified = previousPrefixVerified && mappingVerified && oriVerified && statusReadCompleted && skipVerified && a.checkpoint?.verified === true; result.previous002fInstructionPrefixVerified=previousPrefixVerified; result.mappingVerified=mappingVerified; result.mappingEnableEvent=mapped; result.eepromState=a.eepromState; result.eepromAccessEvents=a.eepromEvents.length; result.oriVerified=oriVerified; result.executedOri=ori; result.skipVerified=skipVerified; result.executedSkip=skip; result.previousInstructionSha256=a.previousInstructionSha256; result.nvmStatusReadCompleted=statusReadCompleted; result.nvmEnabled=true; result.nvmAccesses=nvmAccesses; result.nvmState=a.nvmState; result.completedInstructionSha256 = a.completedInstructionSha256; result.previousGpioInstructionPrefixVerified = previousPrefixVerified; result.gpioEnabled = true; result.gpioAccesses = a.gpioEvents.length; result.gpioState = a.gpioState;
+  if (clockModule) {
+    result.clock = { resetClockHz: clockModule.RESET_CLOCK_HZ, timeTicksPerSecond: clockModule.TIME_TICKS_PER_SECOND,
+      accesses: a.clockAccesses.length, switches: a.clockChanges, state: a.clockState };
+    writeFileSync(resolve(output, 'clock-accesses.jsonl'), a.clockAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (receipt) {
+    assert.equal(receipt.trace.sha256, a.traceSha256, 'Generated and independently recorded trace hashes differ');
+    result.traceStorage = receipt;
+    writeFileSync(resolve(output, 'trace-reference.json'), JSON.stringify(receipt, null, 2) + '\n');
+  }
+  if (a.dfllState) {
+    result.dfll32m = { accesses: a.dfllAccesses.length, state: a.dfllState };
+    writeFileSync(resolve(output, 'dfll32m-accesses.jsonl'), a.dfllAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.references) {
+    result.dfllReference = { accesses: a.oscAccesses.filter(e => e.referenceAfter).length, state: a.references };
+  }
+  if (Osc) {
+    result.oscillator = { profile: oscTiming, cpuClockHz: a.clockState?.cpuClockHz ?? 2000000, startupCycles: { rc32m: oscStartupCycles.rc32m ?? null, rc32k: oscStartupCycles.rc32k ?? null },
+      accesses: a.oscAccesses.length, state: a.oscState };
+    writeFileSync(resolve(output, 'osc-accesses.jsonl'), a.oscAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (Spi) {
+    const accesses = a.diagnostic.mmioInventory.filter(row => row.addressByte >= 0x08c0 && row.addressByte <= 0x08c3);
+    result.spicAccesses = a.spiAccesses.length;
+    result.spicAttemptedAccesses = accesses.reduce((sum, row) => sum + row.count, 0);
+    result.spicCompletedTransfers = a.spiTransfers.filter(event => event.action === 'complete').length;
+    result.spicState = a.spiState;
+    for (const [file, events] of [['spic-accesses', a.spiAccesses], ['spic-transfers', a.spiTransfers]]) {
+      writeFileSync(resolve(output, file + '.jsonl'), events.map(e => JSON.stringify(e) + '\n').join(''));
+    }
+  }
+  if (Twi) {
+    result.twieState = a.twiState;
+    result.twieAttemptedAccesses = a.twiEvidence.accesses.length;
+    result.twieCompletedAccesses = a.twiEvidence.accesses.filter(e => e.completed).length;
+    result.twieBusEvents = a.twiEvidence.transfers.length;
+    result.twieInterruptAssertions = a.twiEvidence.interrupts.filter(e => e.asserted).length;
+    for (const [name, events] of Object.entries(a.twiEvidence)) {
+      writeFileSync(resolve(output, 'twie-' + name + '.jsonl'), events.map(e => JSON.stringify(e) + '\n').join(''));
+    }
+  }
+  if (Pmic) {
+    result.pmicState = a.pmicState;
+    result.pmicAccesses = a.pmicAccesses.length;
+    writeFileSync(resolve(output, 'pmic-accesses.jsonl'), a.pmicAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  result.integrity = a.integrity;
+  result.nonvolatileMemoryPreserved = a.integrity.initialFlashSha256 === a.integrity.finalFlashSha256 && a.integrity.changedOffsets.length === 0;
+  result.uniqueCompletedApplicationPcWords = a.applicationPCs;
+  result.firstApplicationInstructionCompleted = a.firstApplicationInstruction !== null;
+  writeFileSync(resolve(output,'eeprom-accesses.jsonl'),a.eepromEvents.map(e=>JSON.stringify(e)+'\n').join(''));
+  writeFileSync(resolve(output,'eeprom-valid.bin'),a.eepromValidity);
+  if (eepromScenario === 'erased') writeFileSync(resolve(output, 'eeprom-final.bin'), a.eepromBytes);
+
+  writeFileSync(resolve(output,'nvm-transitions.json'),JSON.stringify(a.nvmTransitions,null,2)+'\n');
+  writeFileSync(resolve(output, 'gpio-accesses.jsonl'), a.gpioEvents.map(e => JSON.stringify(e) + '\n').join(''));
+  writeFileSync(resolve(output, 'final-sram.bin'), a.sram);
+  writeFileSync(resolve(output, 'mmio-inventory.json'), JSON.stringify(result.mmioInventory, null, 2) + '\n');
+  writeFileSync(resolve(output, 'opcode-coverage.json'), JSON.stringify(result.opcodeCoverage, null, 2) + '\n');
+  const f = result.firstBlockingEvent;
+  writeFileSync(resolve(output, 'diagnostic-events.json'), JSON.stringify([{ origin: 'emulator', eventType: 'diagnostic', ...f }], null, 2) + '\n');
+  result.coreProfile = core;
+  result.eepromPageBufferEnabled = core === 'current';
+  result.eepromProtectedProgrammingEnabled = core === 'current';
+  result.sourceSha256 = Object.fromEntries(['src/xmega.mjs', 'src/memory-bus.mjs', 'src/peripherals/mmio-registry.mjs', 'src/peripherals/gpio.mjs', 'src/discovery.mjs', 'src/hex.mjs', 'src/peripherals/nvm.mjs', 'src/eeprom-storage.mjs', 'src/eeprom-mapping.mjs', 'tests/eeprom.test.mjs'].map(p => [p, sha(readFileSync(resolve(implementationRoot, p)))]));
+  result.sourceSha256['scripts/discover-eeprom.mjs'] = sha(readFileSync(fileURLToPath(import.meta.url)));
+  result.sourceSha256['scripts/eeprom-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/eeprom-input.mjs')));
+  result.sourceSha256['scripts/nvm-access-log.mjs'] = sha(readFileSync(resolve(root, 'scripts/nvm-access-log.mjs')));
+  if (clockModule) result.sourceSha256['src/peripherals/system-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/system-clock.mjs')));
+  result.sourceSha256['scripts/compare-run.mjs'] = sha(readFileSync(resolve(root, 'scripts/compare-run.mjs')));
+  if (a.dfllState) result.sourceSha256['src/peripherals/dfll32m.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/dfll32m.mjs')));
+  if (Osc) result.sourceSha256['src/peripherals/oscillator.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/oscillator.mjs')));
+  if (Pmic) result.sourceSha256['src/peripherals/pmic.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/pmic.mjs')));
+  if (Twi) result.sourceSha256['src/peripherals/twie.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/twie.mjs')));
+  if (Spi) result.sourceSha256['src/peripherals/spic.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/spic.mjs')));
+  if (PageBuffer) result.sourceSha256['src/peripherals/eeprom-page-buffer.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/eeprom-page-buffer.mjs')));
+  if (result.eepromProtectedProgrammingEnabled) result.sourceSha256['src/peripherals/ccp.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/ccp.mjs')));
+  process.exitCode = 2; // Controlled stop is NOT successful application boot.
+} catch (error) { result = { status: 'HARNESS_ERROR', applicationBootSuccessful: false, reason: error.message }; process.exitCode = 1; }
+writeFileSync(resolve(output, 'result.json'), JSON.stringify(result, null, 2) + '\n');
+console.log(JSON.stringify({ status: result.status, completedInstructions: result.completedInstructions, cycles: result.cycles, completedApplicationInstructions: result.completedApplicationInstructions, firstBlockingEvent: result.firstBlockingEvent, reason: result.reason }, null, 2));
+
+
+
+
+

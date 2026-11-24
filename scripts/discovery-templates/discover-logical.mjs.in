@@ -1,0 +1,114 @@
+// Local application fixture. No firmware-specific addresses enter the CPU/bus.
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync, mkdirSync, openSync, writeSync, closeSync, realpathSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { dirname, resolve, relative, isAbsolute } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseHex } from '../src/hex.mjs';
+import { XmegaCPU } from '../src/xmega.mjs';
+import { discover } from '../src/discovery.mjs';
+import { GPIOController } from '../src/peripherals/gpio.mjs';
+import { NVMController } from '../src/peripherals/nvm.mjs';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const argv = process.argv.slice(2), args = {};
+if (argv.length % 2) throw new Error('Arguments require --name value pairs');
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles'].includes(argv[i]) || args[argv[i]]) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+const firmware = args['--firmware'] ?? 'C:/dev/BraumeisterSoftwareUpdater-1.1.27-120918/BrewControl-1-1-27.hex';
+if (!args['--output']) throw new Error('Required --output NEW_PRIVATE_DIRECTORY');
+const output = resolve(args['--output']), privateRoot = realpathSync(resolve(root, 'private')), rel = relative(privateRoot, output);
+if (!rel || rel.startsWith('..') || isAbsolute(rel) || realpathSync(dirname(output)) !== privateRoot) throw new Error('Output must be a new direct child of workspace/private');
+mkdirSync(output); // Never overwrite an existing diagnostic run.
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+let result;
+try {
+  const raw = readFileSync(firmware), firmwareSha256 = sha(raw);
+  assert.equal(firmwareSha256, 'c5cea66ff95f62b9e487559d9b2177b84956033854a54ea670a7927731c71847', 'Unexpected firmware revision');
+  const baseline = JSON.parse(readFileSync(resolve(root, 'private/poc-001-validation/result.json')));
+  assert.equal(baseline.status, 'PASS');
+  const image = parseHex(raw.toString('utf8'));
+  const maxSteps = args['--max-steps'] === undefined ? 100000 : Number(args['--max-steps']);
+  const maxCycles = args['--max-cycles'] === undefined ? 200000 : Number(args['--max-cycles']);
+  function run(save) {
+    const c = new XmegaCPU(image); let checkpoint = null;
+    const gpioEvents = [], nvmEvents = [], nvmTransitions = [], applicationPCs = new Set(); let previousInstructionSha256 = null, completedNvmRead = null, completedSkip = null, completedOri = null;
+    const gpio = new GPIOController({ onAccess: e => gpioEvents.push(e) });
+    gpio.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, cyclesBefore: c.cycles, instructionAttempt: c.steps + 1 }) });
+    const nvm = new NVMController({onAccess:e=>nvmEvents.push(e),onTransition:e=>nvmTransitions.push(e)});
+    nvm.register(c.bus.mmio,{fault:(m,d)=>c.fault(m,d),clock:()=>c.cycles,context:()=>({pcWord:c.pc,cyclesBefore:c.cycles,instructionAttempt:c.steps+1})});
+    const initialFlashSha256=sha(c.flash),initialEepromSha256=sha(c.eeprom);
+    let firstApplicationInstruction = null;
+    const instructionHash = createHash('sha256'); const hash = createHash('sha256'); const fd = save ? openSync(resolve(output, 'trace.jsonl'), 'wx') : null;
+    let diagnostic;
+    try {
+      diagnostic = discover(c, { maxSteps, maxCycles, onTrace: t => {
+        const line = JSON.stringify({ origin: t.eventType === 'instruction' ? 'original-firmware' : 'emulator', ...t }) + '\n';
+        hash.update(line); if (t.eventType === 'instruction') instructionHash.update(line); if (save) writeSync(fd, line);
+        if(t.eventType==='instruction') {
+          nvm.advanceTo(c.cycles);
+          if(t.step===46735) previousInstructionSha256=instructionHash.copy().digest('hex');
+          if(t.before.pcWord===0x14e81) completedNvmRead=t; if(t.before.pcWord===0x14e82) completedSkip=t; if(t.before.pcWord===0x14e85) completedOri=t;
+        }
+        if (checkpoint && t.eventType === 'instruction') {
+          applicationPCs.add(t.before.pcWord);
+          firstApplicationInstruction ??= t;
+        }
+        if (t.eventType === 'instruction' && t.after.pcWord === 0x7b43 && checkpoint === null) {
+          const prefixSha256 = hash.copy().digest('hex');
+          assert.equal(prefixSha256, baseline.traceSha256, 'PoC 001 trace prefix regressed');
+          assert.equal(c.steps, 46682); assert.equal(c.cycles, 61883);
+          assert.deepEqual(c.sram.slice(0, 0x7e2), image.flash.slice(0x29d80, 0x2a562));
+          assert.ok(c.sram.slice(0x7e2, 0x2b97).every(v => v === 0));
+          assert.equal(c.sp, 0x5ffc); assert.deepEqual(Array.from(c.sram.slice(-3)), [0, 0x78, 0x48]);
+          checkpoint = { verified: true, instructions: c.steps, cycles: c.cycles, tracePrefixSha256: prefixSha256 };
+        }
+      }});
+    } finally { if (fd !== null) closeSync(fd); }
+    assert.equal(sha(c.flash),initialFlashSha256); assert.equal(sha(c.eeprom),initialEepromSha256); return { diagnostic, checkpoint, nvmEvents, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
+  }
+  const a = run(true), b = run(false);
+  const previous = JSON.parse(readFileSync(resolve(root,'private/poc-002e-discovery/result.json')));
+  assert.equal(sha(readFileSync(resolve(root,'private/poc-002e-discovery/trace.jsonl'))),'4128611855510dd0ffaf82f42802ab3ace11a21368be33c7dfcfaf7a02ebb01f');
+  const previousPrefixVerified=a.previousInstructionSha256===previous.completedInstructionSha256;
+  const ori=a.completedOri;
+  let oriVerified=false;
+  if(ori){
+    const expectedRegisters=ori.before.registers.slice();expectedRegisters[19]=8;
+    oriVerified=ori.opcode===@FLASH_WORD(014e85)@ && ori.mnemonic==='ORI' && ori.before.registers[19]===0 && ori.after.pcWord===0x14e86 && ori.after.cycles-ori.before.cycles===1 && ori.before.sreg===2 && ori.after.sreg===0;
+    assert.deepEqual(ori.after.registers,expectedRegisters);
+  }
+  const skip=a.completedSkip;
+  const skipVerified=!!skip && skip.opcode===@FLASH_WORD(014e82)@ && skip.mnemonic==='SBRC' && skip.before.registers[19]===0 && skip.after.pcWord===0x14e84 && skip.after.cycles-skip.before.cycles===2 && skip.skip.taken && skip.skip.skippedWords===1 && skip.skip.skippedPcWord===0x14e83 && skip.skip.skippedOpcode===@FLASH_WORD(014e83)@ && !a.applicationPCs.includes(0x14e83);
+  const read=a.completedNvmRead;
+  const statusReadCompleted=!!read && read.opcode===@FLASH_WORD(014e81)@ && read.mnemonic==='LDD' && read.accesses.some(x=>x.kind==='read' && x.addressByte===0x1cf && x.value===0);
+  if(read) {assert.equal(read.after.pcWord,0x14e82); assert.equal(read.after.registers[19],0);assert.equal(read.after.cycles-read.before.cycles,2);}
+  assert.deepEqual(a.nvmEvents,b.nvmEvents);assert.deepEqual(a.nvmTransitions,b.nvmTransitions);assert.deepEqual(a.nvmState,b.nvmState);
+  assert.deepEqual(a.diagnostic, b.diagnostic, 'Diagnostic replay differs'); assert.equal(a.traceSha256, b.traceSha256, 'Trace replay differs'); assert.deepEqual(a.sram, b.sram);
+  assert.deepEqual(a.gpioEvents, b.gpioEvents); assert.deepEqual(a.gpioState, b.gpioState);
+  if (a.firstApplicationInstruction) {
+    assert.equal(a.firstApplicationInstruction.before.pcWord, 0x7b43);
+    assert.equal(a.firstApplicationInstruction.mnemonic, 'STS');
+    assert.ok(a.firstApplicationInstruction.accesses.some(x => x.kind === 'write' && x.addressByte === 0x604 && x.value === 0));
+  }
+  assert.equal(sha(readFileSync(firmware)), firmwareSha256);
+  result = { ...a.diagnostic, firmwareSha256, nodeVersion: process.version, deterministicReplay: true, traceSha256: a.traceSha256, startupCheckpoint: a.checkpoint, completedApplicationInstructions: a.checkpoint ? a.diagnostic.completedInstructions - a.checkpoint.instructions : null };
+  result.discoveryAcceptanceVerified = previousPrefixVerified && oriVerified && statusReadCompleted && skipVerified && a.checkpoint?.verified === true; result.previous002eInstructionPrefixVerified=previousPrefixVerified; result.oriVerified=oriVerified; result.executedOri=ori; result.skipVerified=skipVerified; result.executedSkip=skip; result.previousInstructionSha256=a.previousInstructionSha256; result.nvmStatusReadCompleted=statusReadCompleted; result.nonvolatileMemoryPreserved=true; result.nvmEnabled=true; result.nvmAccesses=a.nvmEvents.length; result.nvmState=a.nvmState; result.completedInstructionSha256 = a.completedInstructionSha256; result.previousGpioInstructionPrefixVerified = previousPrefixVerified; result.gpioEnabled = true; result.gpioAccesses = a.gpioEvents.length; result.gpioState = a.gpioState;
+  result.uniqueCompletedApplicationPcWords = a.applicationPCs;
+  result.firstApplicationInstructionCompleted = a.firstApplicationInstruction !== null;
+  writeFileSync(resolve(output,'nvm-accesses.jsonl'),a.nvmEvents.map(e=>JSON.stringify(e)+'\n').join(''));
+  writeFileSync(resolve(output,'nvm-transitions.json'),JSON.stringify(a.nvmTransitions,null,2)+'\n');
+  writeFileSync(resolve(output, 'gpio-accesses.jsonl'), a.gpioEvents.map(e => JSON.stringify(e) + '\n').join(''));
+  writeFileSync(resolve(output, 'final-sram.bin'), a.sram);
+  writeFileSync(resolve(output, 'mmio-inventory.json'), JSON.stringify(result.mmioInventory, null, 2) + '\n');
+  writeFileSync(resolve(output, 'opcode-coverage.json'), JSON.stringify(result.opcodeCoverage, null, 2) + '\n');
+  const f = result.firstBlockingEvent;
+  writeFileSync(resolve(output, 'diagnostic-events.json'), JSON.stringify([{ origin: 'emulator', eventType: 'diagnostic', ...f }], null, 2) + '\n');
+  result.sourceSha256 = Object.fromEntries(['src/xmega.mjs', 'src/memory-bus.mjs', 'src/peripherals/mmio-registry.mjs', 'src/peripherals/gpio.mjs', 'src/discovery.mjs', 'src/hex.mjs', 'scripts/discover-logical.mjs', 'src/peripherals/nvm.mjs', 'tests/logical-immediate.test.mjs'].map(p => [p, sha(readFileSync(resolve(root, p)))]));
+  process.exitCode = 2; // Controlled stop is NOT successful application boot.
+} catch (error) { result = { status: 'HARNESS_ERROR', applicationBootSuccessful: false, reason: error.message }; process.exitCode = 1; }
+writeFileSync(resolve(output, 'result.json'), JSON.stringify(result, null, 2) + '\n');
+console.log(JSON.stringify({ status: result.status, completedInstructions: result.completedInstructions, cycles: result.cycles, completedApplicationInstructions: result.completedApplicationInstructions, firstBlockingEvent: result.firstBlockingEvent, reason: result.reason }, null, 2));
+
+
+
+
