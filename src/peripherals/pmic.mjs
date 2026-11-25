@@ -5,12 +5,13 @@ const IVSEL = 0x40, RREN = 0x80;
 const BOOT_BASE_WORD = 0x20000;
 
 export class PMIC {
-  constructor({ sources = [], onAccess = null } = {}) {
+  constructor({ sources = [], onAccess = null, onAcknowledge = null } = {}) {
     // Each source presents its current request until the peripheral clears it.
     // Sampling by level also honors requests withdrawn before an instruction boundary.
     if (!sources.every(source => typeof source === 'function')) throw new TypeError('Expected PMIC request sources');
     this.sources = [...sources];
     this.onAccess = onAccess;
+    this.onAcknowledge = onAcknowledge;
     this.registered = false;
     this.reset();
   }
@@ -106,9 +107,10 @@ export class PMIC {
     return base + request.vectorWord;
   }
 
-  acknowledge(request) {
+  acknowledge(request, cycle) {
     this.status |= 1 << (request.level - 1);
     if (request.level === 1 && (this.ctrl & RREN)) this.intpri = request.vectorWord / 2;
+    this.onAcknowledge?.(request, cycle);
   }
 
   finishInterrupt() {

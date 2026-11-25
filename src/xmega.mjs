@@ -70,10 +70,10 @@ export class XmegaCPU {
     const target = pmic.vectorTarget(request, this.pc, (reason, details) => this.fault(reason, details));
     this.checkPcTarget(target);
     this.pushReturn(this.pc); // PC already names the next unexecuted word at this boundary.
-    pmic.acknowledge(request);
     this.pc = target;
     this.interruptEnableStep = this.steps + 1; // Execute the vector instruction before resampling.
     this.advanceCycles(2); // XMEGA A 12.4.2, PC-store portion after the interrupted instruction.
+    pmic.acknowledge(request, this.cycles);
     return { eventType: 'interrupt-entry', afterStep: this.steps, interruptRequest: { ...request },
       vectorPcWord: target, returnPcWord: before.pcWord, before, after: this.state(), accesses: this.accesses };
   }

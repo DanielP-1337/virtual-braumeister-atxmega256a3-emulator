@@ -11,7 +11,7 @@ import { comparisonRun, withComparedLog } from './compare-run.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2), args = {};
 if (argv.length % 2) throw new Error('Arguments require --name value pairs');
-for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
 const eepromScenario = args['--eeprom-state'];
 if (eepromScenario !== undefined && eepromScenario !== 'erased') throw new Error('Expected --eeprom-state erased');
 if (eepromScenario && (args['--eeprom'] !== undefined || args['--eeprom-ihex'] !== undefined)) {
@@ -40,6 +40,53 @@ if (!['mapped', 'unmapped'].includes(usartControl) || (usartControl === 'mapped'
   throw new Error('USARTF0 control requires the current core. Use --usartf0-ctrlb mapped or unmapped.');
 }
 const Usart = usartControl === 'mapped' ? (await import('../src/peripherals/usart.mjs')).USARTF0Control : null;
+const frameControl = args['--usartf0-ctrlc'] ?? usartControl;
+if (!['mapped', 'unmapped'].includes(frameControl) || (frameControl === 'mapped' && usartControl !== 'mapped')) {
+  throw new Error('USARTF0 frame control requires mapped CTRLB. Use --usartf0-ctrlc mapped or unmapped.');
+}
+const Frame = frameControl === 'mapped' ? (await import('../src/peripherals/usart-frame.mjs')).USARTF0FrameControl : null;
+const interruptControl = args['--usartf0-ctrla'] ?? frameControl;
+if (!['mapped', 'unmapped'].includes(interruptControl) || (interruptControl === 'mapped' && core !== 'current')) {
+  throw new Error('USARTF0 interrupt control requires the current core. Use --usartf0-ctrla mapped or unmapped.');
+}
+const InterruptControl = interruptControl === 'mapped'
+  ? (await import('../src/peripherals/usart-interrupts.mjs')).USARTF0InterruptControl : null;
+const baudControl = args['--usartf0-baudctrla'] ?? interruptControl;
+if (!['mapped', 'unmapped'].includes(baudControl) || (baudControl === 'mapped' && core !== 'current')) {
+  throw new Error('USARTF0 baud control requires the current core. Use --usartf0-baudctrla mapped or unmapped.');
+}
+const BaudControl = baudControl === 'mapped' ? (await import('../src/peripherals/usart-baud.mjs')).USARTF0BaudControl : null;
+const baudHighControl = args['--usartf0-baudctrlb'] ?? baudControl;
+if (!['mapped', 'unmapped'].includes(baudHighControl) || (baudHighControl === 'mapped' && !BaudControl)) {
+  throw new Error('USARTF0 high baud control requires BAUDCTRLA. Use --usartf0-baudctrlb mapped or unmapped.');
+}
+const BaudHigh = baudHighControl === 'mapped' ? (await import('../src/peripherals/usart-baud-high.mjs')).USARTF0BaudHighControl : null;
+const timerCounter = args['--tcc0-counter'] ?? baudHighControl;
+if (!['mapped', 'unmapped'].includes(timerCounter) || (timerCounter === 'mapped' && core !== 'current')) {
+  throw new Error('TCC0 counter requires the current core. Use --tcc0-counter mapped or unmapped.');
+}
+const timerClock = args['--tcc0-clock'] ?? timerCounter;
+if (!['mapped', 'unmapped'].includes(timerClock) || (timerClock === 'mapped' && timerCounter !== 'mapped')) {
+  throw new Error('TCC0 clock requires the mapped TCC0 counter. Use --tcc0-clock mapped or unmapped.');
+}
+const waveformControl = args['--tcc0-ctrlb'] ?? timerClock;
+if (!['mapped', 'unmapped'].includes(waveformControl) || (waveformControl === 'mapped' && timerClock !== 'mapped')) {
+  throw new Error('TCC0.CTRLB requires the mapped timer clock. Use --tcc0-ctrlb mapped or unmapped.');
+}
+const Waveform = waveformControl === 'mapped' ? (await import('../src/peripherals/tcc0-ctrlb.mjs')).TCC0WaveformControl : null;
+const periodMapping = args['--tcc0-period'] ?? waveformControl;
+if (!['mapped', 'unmapped'].includes(periodMapping) || (periodMapping === 'mapped' && timerCounter !== 'mapped')) {
+  throw new Error('TCC0.PER requires the mapped counter. Use --tcc0-period mapped or unmapped.');
+}
+const mapPeriod = periodMapping === 'mapped';
+const timerInterruptMapping = args['--tcc0-intctrla'] ?? periodMapping;
+if (!['mapped', 'unmapped'].includes(timerInterruptMapping) || (timerInterruptMapping === 'mapped' && timerClock !== 'mapped')) {
+  throw new Error('TCC0.INTCTRLA requires the mapped timer clock. Use --tcc0-intctrla mapped or unmapped.');
+}
+const TimerInterrupts = timerInterruptMapping === 'mapped'
+  ? (await import('../src/peripherals/tcc0-intctrla.mjs')).TCC0InterruptControl : null;
+const TimerClock = timerClock === 'mapped' ? (await import('../src/peripherals/tcc0-clock.mjs')).TCC0Clock : null;
+const Counter = timerCounter === 'mapped' ? (await import('../src/peripherals/tcc0-counter.mjs')).TCC0Counter : null;
 const compareRun = args['--compare-run'];
 const clockModule = clockControl === 'mapped' ? await import('../src/peripherals/system-clock.mjs') : null;
 // A3 Table 34-19 gives typical wake-up times, not enable-to-ready times.
@@ -86,6 +133,35 @@ try {
     const usartAccesses = [];
     const usart = Usart ? new Usart({ onAccess: e => usartAccesses.push(e) }) : null;
     usart?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const baudAccesses = [];
+    const baud = BaudControl ? new BaudControl({ onAccess: e => baudAccesses.push(e) }) : null;
+    baud?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const counterAccesses = [], periodAccesses = [];
+    const counter = Counter ? new Counter({ onAccess: e => counterAccesses.push(e) }) : null;
+    counter?.register(c.bus.mmio, { mapPeriod, onPeriodAccess: e => periodAccesses.push(e),
+      context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const timerClockAccesses = [];
+    const timer = TimerClock ? new TimerClock({ counter, onAccess: e => timerClockAccesses.push(e) }) : null;
+    timer?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }),
+      fault: (reason, details) => c.fault(reason, details) });
+    const timerInterruptAccesses = [];
+    const timerInterrupts = TimerInterrupts ? new TimerInterrupts({ clock: timer, onAccess: e => timerInterruptAccesses.push(e) }) : null;
+    timerInterrupts?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const waveformAccesses = [];
+    const waveform = Waveform ? new Waveform({ clock: timer, onAccess: e => waveformAccesses.push(e) }) : null;
+    waveform?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }),
+      fault: (reason, details) => c.fault(reason, details) });
+    const baudHighAccesses = [];
+    const baudHigh = BaudHigh ? new BaudHigh({ low: baud, onAccess: e => baudHighAccesses.push(e) }) : null;
+    baudHigh?.register(c.bus.mmio, { fault: (reason, details) => c.fault(reason, details),
+      context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const interruptAccesses = [];
+    const interrupts = InterruptControl ? new InterruptControl({ onAccess: e => interruptAccesses.push(e) }) : null;
+    interrupts?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const frameAccesses = [];
+    const frame = Frame ? new Frame({ onAccess: e => frameAccesses.push(e) }) : null;
+    frame?.register(c.bus.mmio, { fault: (reason, details) => c.fault(reason, details),
+      context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const oscAccesses = [], dfllAccesses = [];
     const clockAccesses = [];
     const systemClock = clockModule ? new clockModule.SystemClock({ onAccess: e => clockAccesses.push(e) }) : null;
@@ -109,7 +185,9 @@ try {
     const pmic = Pmic ? new Pmic({ sources: [cycle => {
       if (twi.needsClock) twi.advanceTo(cycle);
       return twi.interruptRequest;
-    }], onAccess: e => pmicAccesses.push(e) }) : null;
+    }, ...(timerInterrupts ? [cycle => timerInterrupts.request(cycle)] : [])],
+      onAcknowledge: (request, cycle) => timerInterrupts?.acknowledge(request, cycle),
+      onAccess: e => pmicAccesses.push(e) }) : null;
     if (pmic) c.bus.attachPMIC(pmic);
     const nvm = new NVMController({timeBase:systemClock,pageBuffer:PageBuffer ? new PageBuffer(storage) : null,onAccess:onNvmAccess,onTransition:e=>nvmTransitions.push(e)});
     nvm.register(c.bus.mmio,{fault:(m,d)=>c.fault(m,d),clock:()=>c.cycles,context:()=>({pcWord:c.pc,cyclesBefore:c.cycles,instructionAttempt:c.steps+1})});
@@ -172,7 +250,8 @@ try {
       assert.ok(initialValidity.every(v => v === 0) && storage.valid.every(v => v === 0), 'Strict run requires an entirely unknown EEPROM');
       assert.deepEqual(integrity.changedOffsets, [], 'Unexpected persistent write during the strict execution prefix');
     }
-    return { usartAccesses, usartState: usart?.snapshot(), dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
+    timer?.advanceTo(c.cycles);
+    return { timerInterruptAccesses, timerInterruptState: timerInterrupts?.snapshot(), waveformAccesses, waveformState: waveform?.snapshot(), timerClockAccesses, timerClockState: timer?.snapshot(c.cycles), counterAccesses, counterState: counter?.snapshot(), periodAccesses, periodState: mapPeriod ? counter.snapshotPeriod() : null, baudHighAccesses, baudHighState: baudHigh?.snapshot(), baudAccesses, baudState: baud?.snapshot(), interruptAccesses, interruptState: interrupts?.snapshot(), frameAccesses, frameState: frame?.snapshot(), usartAccesses, usartState: usart?.snapshot(), dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
   }
   function executePass(recording) {
     if (!reference) return withNvmAccessLog(resolve(output, 'nvm-accesses.jsonl'), recording, emit => run(recording, emit));
@@ -215,6 +294,24 @@ try {
   assert.deepEqual(a.references, b.references);
   assert.deepEqual(a.usartAccesses, b.usartAccesses);
   assert.deepEqual(a.usartState, b.usartState);
+  assert.deepEqual(a.frameAccesses, b.frameAccesses);
+  assert.deepEqual(a.frameState, b.frameState);
+  assert.deepEqual(a.interruptAccesses, b.interruptAccesses);
+  assert.deepEqual(a.interruptState, b.interruptState);
+  assert.deepEqual(a.baudAccesses, b.baudAccesses);
+  assert.deepEqual(a.baudState, b.baudState);
+  assert.deepEqual(a.baudHighAccesses, b.baudHighAccesses);
+  assert.deepEqual(a.baudHighState, b.baudHighState);
+  assert.deepEqual(a.timerInterruptAccesses, b.timerInterruptAccesses);
+  assert.deepEqual(a.timerInterruptState, b.timerInterruptState);
+  assert.deepEqual(a.waveformAccesses, b.waveformAccesses);
+  assert.deepEqual(a.waveformState, b.waveformState);
+  assert.deepEqual(a.timerClockAccesses, b.timerClockAccesses);
+  assert.deepEqual(a.timerClockState, b.timerClockState);
+  assert.deepEqual(a.counterAccesses, b.counterAccesses);
+  assert.deepEqual(a.counterState, b.counterState);
+  assert.deepEqual(a.periodAccesses, b.periodAccesses);
+  assert.deepEqual(a.periodState, b.periodState);
   assert.deepEqual(a.dfllAccesses, b.dfllAccesses);
   assert.deepEqual(a.dfllState, b.dfllState);
   assert.deepEqual(a.clockAccesses, b.clockAccesses);
@@ -245,6 +342,42 @@ try {
     assert.equal(receipt.trace.sha256, a.traceSha256, 'Generated and independently recorded trace hashes differ');
     result.traceStorage = receipt;
     writeFileSync(resolve(output, 'trace-reference.json'), JSON.stringify(receipt, null, 2) + '\n');
+  }
+  if (a.timerInterruptState) {
+    result.tcc0Intctrla = { accesses: a.timerInterruptAccesses.length, state: a.timerInterruptState };
+    writeFileSync(resolve(output, 'tcc0-intctrla-accesses.jsonl'), a.timerInterruptAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.waveformState) {
+    result.tcc0Ctrlb = { accesses: a.waveformAccesses.length, state: a.waveformState };
+    writeFileSync(resolve(output, 'tcc0-ctrlb-accesses.jsonl'), a.waveformAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.timerClockState) {
+    result.tcc0Clock = { accesses: a.timerClockAccesses.length, state: a.timerClockState };
+    writeFileSync(resolve(output, 'tcc0-clock-accesses.jsonl'), a.timerClockAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.periodState) {
+    result.tcc0Period = { accesses: a.periodAccesses.length, state: a.periodState };
+    writeFileSync(resolve(output, 'tcc0-period-accesses.jsonl'), a.periodAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.counterState) {
+    result.tcc0Counter = { accesses: a.counterAccesses.length, state: a.counterState };
+    writeFileSync(resolve(output, 'tcc0-counter-accesses.jsonl'), a.counterAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.baudHighState) {
+    result.usartF0BaudHigh = { accesses: a.baudHighAccesses.length, state: a.baudHighState };
+    writeFileSync(resolve(output, 'usartf0-baudctrlb-accesses.jsonl'), a.baudHighAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.baudState) {
+    result.usartF0Baud = { accesses: a.baudAccesses.length, state: a.baudState };
+    writeFileSync(resolve(output, 'usartf0-baudctrla-accesses.jsonl'), a.baudAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.interruptState) {
+    result.usartF0Interrupts = { accesses: a.interruptAccesses.length, state: a.interruptState };
+    writeFileSync(resolve(output, 'usartf0-ctrla-accesses.jsonl'), a.interruptAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.frameState) {
+    result.usartF0Format = { accesses: a.frameAccesses.length, state: a.frameState };
+    writeFileSync(resolve(output, 'usartf0-ctrlc-accesses.jsonl'), a.frameAccesses.map(e => JSON.stringify(e) + '\n').join(''));
   }
   if (a.usartState) {
     result.usartF0 = { accesses: a.usartAccesses.length, state: a.usartState };
@@ -311,6 +444,14 @@ try {
   result.sourceSha256['scripts/nvm-access-log.mjs'] = sha(readFileSync(resolve(root, 'scripts/nvm-access-log.mjs')));
   if (clockModule) result.sourceSha256['src/peripherals/system-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/system-clock.mjs')));
   result.sourceSha256['scripts/compare-run.mjs'] = sha(readFileSync(resolve(root, 'scripts/compare-run.mjs')));
+  if (TimerInterrupts) result.sourceSha256['src/peripherals/tcc0-intctrla.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-intctrla.mjs')));
+  if (Waveform) result.sourceSha256['src/peripherals/tcc0-ctrlb.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-ctrlb.mjs')));
+  if (TimerClock) result.sourceSha256['src/peripherals/tcc0-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-clock.mjs')));
+  if (Counter) result.sourceSha256['src/peripherals/tcc0-counter.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-counter.mjs')));
+  if (BaudHigh) result.sourceSha256['src/peripherals/usart-baud-high.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart-baud-high.mjs')));
+  if (BaudControl) result.sourceSha256['src/peripherals/usart-baud.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart-baud.mjs')));
+  if (InterruptControl) result.sourceSha256['src/peripherals/usart-interrupts.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart-interrupts.mjs')));
+  if (Frame) result.sourceSha256['src/peripherals/usart-frame.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart-frame.mjs')));
   if (Usart) result.sourceSha256['src/peripherals/usart.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart.mjs')));
   if (a.dfllState) result.sourceSha256['src/peripherals/dfll32m.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/dfll32m.mjs')));
   if (Osc) result.sourceSha256['src/peripherals/oscillator.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/oscillator.mjs')));

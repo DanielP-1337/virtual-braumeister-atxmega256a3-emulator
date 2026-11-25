@@ -56,6 +56,10 @@
 /verification/*
 !/verification/gnu-avr-probe.mjs
 
+!/verification/cpu/
+/verification/cpu/*
+!/verification/cpu/lds-mmio-timing.mjs
+
 !/verification/inc-cp/
 /verification/inc-cp/*
 !/verification/inc-cp/check-gnu.mjs
