@@ -10,6 +10,10 @@
 !/docs/ADIW-STUDIO7.md
 !/docs/CPU-CORE-EVALUATION.md
 !/docs/OUT-SREG-STUDIO7.md
+!/docs/results/
+/docs/results/*
+!/docs/results/*.md
+!/docs/results/reset-runs.json
 
 !/scripts/
 /scripts/*
@@ -28,6 +32,9 @@
 !/scripts/discover-main.mjs
 !/scripts/eeprom-input.mjs
 !/scripts/nvm-access-log.mjs
+!/scripts/pe2-input.mjs
+!/scripts/twie-input.mjs
+!/scripts/production-signature-input.mjs
 !/scripts/probe-cores.mjs
 !/scripts/restore-discovery.mjs
 !/scripts/test_compare_firmware.py
@@ -51,10 +58,19 @@
 !/tests/
 /tests/*
 !/tests/*.test.mjs
+!/tests/adca-store-fixture.mjs
 
 !/verification/
 /verification/*
 !/verification/gnu-avr-probe.mjs
+
+!/verification/adca/
+/verification/adca/*
+!/verification/adca/pe2-opcodes-gnu.mjs
+
+!/verification/usartf0/
+/verification/usartf0/*
+!/verification/usartf0/trace-evidence.mjs
 
 !/verification/cpu/
 /verification/cpu/*

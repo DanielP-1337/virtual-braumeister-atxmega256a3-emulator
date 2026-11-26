@@ -54,6 +54,11 @@ export class XmegaCPU {
     this.sp += 3;
     return value;
   }
+  setLogicalResult(register, result) {
+    this.r[register] = result;
+    // Preserve I/T/H/C. V clears and S equals N.
+    this.sreg = (this.sreg & 0xe1) | (result === 0 ? 2 : 0) | (result & 128 ? 0x14 : 0);
+  }
   compare(a, b, carry, chained) {
     const result = (a - b - carry) & 255;
     const c = a < b + carry, h = (a & 15) < (b & 15) + carry;
@@ -157,9 +162,7 @@ export class XmegaCPU {
         const dest = 16 + ((op >>> 4) & 15), and = !!(op & 0x1000);
         name = and ? 'ANDI' : 'ORI';
         const result = and ? this.r[dest] & imm : this.r[dest] | imm;
-        this.r[dest] = result;
-        // Preserve I/T/H/C; clear V; S equals N. One word, one AVRxm cycle.
-        this.sreg = (this.sreg & 0xe1) | (result === 0 ? 2 : 0) | (result & 128 ? 0x14 : 0);
+        this.setLogicalResult(dest, result);
       }
       else if ((op & 0xfc00) === 0x0800) {
         name = 'SBC';
@@ -207,9 +210,17 @@ export class XmegaCPU {
         this.sreg = (this.sreg & 0xe1) | (negative !== overflow ? 0x10 : 0) |
           (overflow ? 8 : 0) | (negative ? 4 : 0) | (result === 0 ? 2 : 0);
       }
-      else if ((op & 0xfc00) === 0x2400) {
-        name = 'EOR'; const result = this.r[d] ^ this.r[rr]; this.r[d] = result;
-        this.sreg = (this.sreg & 0xe1) | (result === 0 ? 2 : 0) | (result & 128 ? 0x14 : 0);
+      else if ((op & 0xfc00) === 0x2000) {
+        name = 'AND';
+        this.checkPcTarget(next);
+        this.setLogicalResult(d, this.r[d] & this.r[rr]);
+      } else if ((op & 0xfc00) === 0x2400) {
+        name = 'EOR';
+        this.setLogicalResult(d, this.r[d] ^ this.r[rr]);
+      } else if ((op & 0xfc00) === 0x2800) {
+        name = 'OR';
+        this.checkPcTarget(next);
+        this.setLogicalResult(d, this.r[d] | this.r[rr]);
       } else if ((op & 0xf800) === 0xb800) {
         name = 'OUT';
         this.checkPcTarget(next);
@@ -272,17 +283,22 @@ export class XmegaCPU {
           this.sp = address;
         }
       }
-      else if ((op & 0xfe0f) === 0x920d || (op & 0xfe0f) === 0x920c) {
-        name = (op & 1) ? 'ST X+' : 'ST X';
-        if ((op & 1) && (d === 26 || d === 27)) this.fault('Undefined ST X+ with source overlapping X');
+      else if ((op & 0xfe0f) === 0x920d || (op & 0xfe0f) === 0x920c || (op & 0xfe0f) === 0x9201) {
+        const pair = (op & 15) === 1 ? 30 : 26;
+        const pointer = pair === 30 ? 'Z' : 'X', postIncrement = Boolean(op & 1);
+        name = 'ST ' + pointer + (postIncrement ? '+' : '');
+        if (postIncrement && (d === pair || d === pair + 1)) {
+          this.fault('Undefined ' + name + ' with source overlapping ' + pointer, {classification:'UNDEFINED_OPERANDS'});
+        }
         this.checkPcTarget(next);
-        const address = this.pair(26);
+        const address = this.pair(pair);
         cycles += this.write(address, this.r[d], this.cycles + cycles);
-        if (op & 1) this.setPair(26, (address + 1) & 0xffff);
-      } else if ((op & 0xfe0f) === 0x900d || (op & 0xfe0f) === 0x9001) {
+        if (postIncrement) this.setPair(pair, (address + 1) & 0xffff);
+      } else if ((op & 0xfe0f) === 0x900c || (op & 0xfe0f) === 0x900d || (op & 0xfe0f) === 0x9001) {
         name = 'LD';
-        const pair = (op & 0x0f) === 0x0d ? 26 : 30;
-        if (d === pair || d === pair + 1) {
+        const pair = (op & 0x0f) === 1 ? 30 : 26;
+        const postIncrement = Boolean(op & 1);
+        if (postIncrement && (d === pair || d === pair + 1)) {
           const pointer = pair === 26 ? 'X' : 'Z';
           this.fault('Undefined LD Rd,' + pointer + '+ with destination overlapping ' + pointer, { classification: 'UNDEFINED_OPERANDS' });
         }
@@ -290,7 +306,7 @@ export class XmegaCPU {
         const address = this.pair(pair); // The A3 data map fits in the 16-bit pointer.
         cycles = address < 0x1000 ? 1 : 2; // The bus adds the mapped EEPROM read wait.
         this.r[d] = this.read(address, this.cycles + cycles);
-        this.setPair(pair, (address + 1) & 0xffff);
+        if (postIncrement) this.setPair(pair, (address + 1) & 0xffff);
       } else if ((op & 0xd000) === 0x8000) {
         // 10q0 qqsr rrrr pqqq: p selects Y; s selects store.
         const q = (op & 7) | ((op >>> 7) & 0x18) | ((op >>> 8) & 0x20);
@@ -323,7 +339,7 @@ export class XmegaCPU {
             'ELPM during an IOREG grant has no specified CCP behavior in XMEGA A section 3.12.1';
           this.fault(reason, { classification: 'CCP_PROGRAM_READ_UNSUPPORTED', addressByte: address, accessKind: 'read' });
         }
-        this.r[dest] = this.flashByte(address, 'read');
+        this.r[dest] = this.bus.readProgramData(address, extended);
         if (ccpMode === 1) this.bus.ccp.clear(); // Section 3.12.1 explicitly lists LPM.
         if (inc) { this.setPair(30, (address + 1) & 0xffff); if (extended) this.rampz = ((address + 1) >>> 16) & 7; }
         cycles = 3;

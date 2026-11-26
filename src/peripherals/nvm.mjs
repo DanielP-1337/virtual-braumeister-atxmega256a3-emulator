@@ -5,6 +5,8 @@ import { EEPROMPageBuffer } from './eeprom-page-buffer.mjs';
 export const NVM_BASE = 0x1c0;
 export const NVM_REGISTERS = Object.freeze({ADDR0:0, ADDR1:1, ADDR2:2, DATA0:4, DATA1:5, DATA2:6, CMD:10, CTRLA:11, CTRLB:12, INTCTRL:13, STATUS:15, LOCKBITS:16});
 const offsets = Object.values(NVM_REGISTERS);
+const READ_CALIB_ROW = 0x02;
+const PRODUCTION_SIGNATURE_SIZE = 0x34; // ATxmega256A3.atdf, PROD_SIGNATURES memory segment.
 const cycle = n => { if (!Number.isSafeInteger(n) || n < 0) throw new RangeError('Invalid virtual cycle'); return n; };
 const byte = n => { if (!Number.isInteger(n) || n < 0 || n > 255) throw new RangeError('Invalid byte'); return n; };
 
@@ -46,7 +48,17 @@ export class NVMActivity {
 }
 
 export class NVMController {
-  constructor({onAccess=null, onTransition=null, lockbits=null, pageBuffer=null, timeBase=null, activity=new NVMActivity(pageBuffer)}={}) {
+  #productionSignature = null;
+
+  constructor({onAccess=null, onTransition=null, lockbits=null, pageBuffer=null, timeBase=null, activity=new NVMActivity(pageBuffer), productionSignature=null}={}) {
+    if (productionSignature !== null) {
+      if (!(productionSignature instanceof Map)) throw new TypeError('Expected a map of known production signature bytes');
+      for (const [offset, value] of productionSignature) {
+        if (!Number.isInteger(offset) || offset < 0 || offset >= PRODUCTION_SIGNATURE_SIZE) throw new RangeError('Invalid production signature offset');
+        byte(value);
+      }
+      this.#productionSignature = new Map(productionSignature);
+    }
     this.timeBase=timeBase;
     if (pageBuffer && activity.pageBuffer !== pageBuffer) throw new Error('NVM activity and controller must share one page buffer');
     if(lockbits!==null) byte(lockbits);
@@ -57,6 +69,18 @@ export class NVMController {
     this.programming=null;
     this.operation=null;
     this.ccp=null;
+  }
+  get productionSignatureKnownBytes() { return this.#productionSignature?.size ?? null; }
+  get productionSignatureSelected() { return this.registers[NVM_REGISTERS.CMD] === READ_CALIB_ROW; }
+  readProductionSignature(address, extended) {
+    const access = { accessSpace: 'production-signature', addressByte: address, accessKind: 'read' };
+    if (extended) return this.fault('Only LPM is documented for READ_CALIB_ROW', { ...access, classification: 'NVM_COMMAND_TRIGGER_UNSUPPORTED' });
+    if (address >= PRODUCTION_SIGNATURE_SIZE) return this.fault('Production signature address outside the A3 device definition', { ...access, classification: 'NVM_PRODUCTION_SIGNATURE_ADDRESS_UNSUPPORTED' });
+    if (!this.#productionSignature.has(address)) {
+      return this.fault('Unknown factory production signature byte at offset 0x' + address.toString(16).padStart(2, '0'),
+        { ...access, classification: 'UNKNOWN_PRODUCTION_SIGNATURE_BYTE' });
+    }
+    return this.#productionSignature.get(address);
   }
   enableProgramming(programming,ccp) {
     if(this.programming) throw new Error('EEPROM programming already enabled');
@@ -94,6 +118,7 @@ export class NVMController {
       read:edge=>this.read(offset,edge),
       write:(value,edge,authorized=false)=>this.write(offset,value,edge,authorized)
     });
+    if (this.#productionSignature !== null) registry.programReadNvm = this;
     this.registered=true;
   }
   fail(offset,kind,classification,message,value=null) { this.fault(message,{classification,addressByte:NVM_BASE+offset,accessKind:kind,attemptedValue:value}); }
@@ -141,7 +166,7 @@ export class NVMController {
       if(offset===16 && this.lockbits===null) this.fail(offset,kind,'NVM_LOCKBITS_UNKNOWN','Actual lock bits were not supplied');
       return;
     }
-    if(offset===10 && value!==0 && !(value===0x33 && this.activity.pageBuffer && !this.eepromMapping?.enabled) && !(this.programming && (value===0x35 || value===0x36))) {
+    if(offset===10 && value!==0 && !(value===READ_CALIB_ROW && this.#productionSignature !== null) && !(value===0x33 && this.activity.pageBuffer && !this.eepromMapping?.enabled) && !(this.programming && (value===0x35 || value===0x36))) {
       this.fail(offset,'write','NVM_UNSUPPORTED_COMMAND','Unsupported NVM command in the current configuration',value);
     }
     if(offset===11 && value!==0) {

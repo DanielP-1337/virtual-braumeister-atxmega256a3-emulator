@@ -1,7 +1,7 @@
 // Application-independent diagnostic runner. Does not change PC or install peripherals.
 import { decodeWordImmediateOperands, ExecutionFault } from './xmega.mjs';
 
-const registerMnemonics = new Map([[0x0800, 'SBC'], [0x0c00, 'ADD'], [0x1c00, 'ADC'], [0x2c00, 'MOV']]);
+const registerMnemonics = new Map([[0x0800, 'SBC'], [0x0c00, 'ADD'], [0x1c00, 'ADC'], [0x2000, 'AND'], [0x2800, 'OR'], [0x2c00, 'MOV']]);
 
 export function decodeAt(cpu, pc = cpu.pc) {
   const address = pc * 2;
@@ -10,6 +10,14 @@ export function decodeAt(cpu, pc = cpu.pc) {
   const base = { pcWord: pc, pcByte: address, opcode: op, opcodeWords: op === null ? [] : [op], mnemonic: 'UNKNOWN', operands: {} };
   if (op === null) return { ...base, mnemonic: 'UNFETCHABLE' };
   const d = (op >>> 4) & 31, rr = (op & 15) | ((op >>> 5) & 16);
+  if (op === 0x95c8 || op === 0x95d8 || (op & 0xfe0c) === 0x9004) {
+    const implied = op === 0x95c8 || op === 0x95d8;
+    const extended = implied ? op === 0x95d8 : !!(op & 2);
+    return { ...base, mnemonic: extended ? 'ELPM' : 'LPM', operands: {
+      register: implied ? 0 : d, pointer: extended ? 'RAMPZ:Z' : 'Z', postIncrement: !implied && !!(op & 1),
+      addressByte: cpu.pair(30) + (extended ? cpu.rampz * 65536 : 0),
+    } };
+  }
   if ((op & 0xfc00) === 0x9c00) {
     return { ...base, mnemonic: 'MUL', operands: { leftRegister: d, rightRegister: rr } };
   }
@@ -44,9 +52,18 @@ export function decodeAt(cpu, pc = cpu.pc) {
   if ((op & 0xfe0f) === 0x9402) return { ...base, mnemonic: 'SWAP', operands: { register: d } };
   if ((op & 0xfe0f) === 0x9403) return { ...base, mnemonic: 'INC', operands: { register: d } };
   if ((op & 0xfe0f) === 0x940a) return { ...base, mnemonic: 'DEC', operands: { register: d } };
+  if ((op & 0xfe0f) === 0x900c) {
+    return { ...base, mnemonic: 'LD', operands: { register: d, pointer: 'X', postIncrement: false, addressByte: cpu.pair(26) } };
+  }
   if ((op & 0xfe0f) === 0x9001 || (op & 0xfe0f) === 0x900d) {
     const pointer = (op & 0x0f) === 0x0d ? 'X' : 'Z';
     return { ...base, mnemonic: 'LD', operands: { register: d, pointer, postIncrement: true } };
+  }
+  if ((op & 0xfe0f) === 0x920c || (op & 0xfe0f) === 0x920d || (op & 0xfe0f) === 0x9201) {
+    const postIncrement = (op & 1) !== 0;
+    const z = (op & 15) === 1, pointer = z ? 'Z' : 'X';
+    return { ...base, mnemonic: 'ST ' + pointer + (postIncrement ? '+' : ''),
+      operands: { register: d, pointer, postIncrement, addressByte: cpu.pair(z ? 30 : 26), value: cpu.r[d] } };
   }
   if ((op & 0xd000) === 0x8000) {
     const displacement = (op & 7) | ((op >>> 7) & 0x18) | ((op >>> 8) & 0x20);
@@ -118,8 +135,10 @@ export function discover(cpu, { maxSteps = 100000, maxCycles = 200000, recentLim
       if (!entering) attempts++;
       const operation = entering ? { pcWord: before.pcWord, pcByte: before.pcWord * 2, opcode: null, opcodeWords: [],
         mnemonic: 'INTERRUPT_ENTRY', instructionAttempted: false, interruptRequest: error.trace.interruptRequest } : decodeAt(cpu, before.pcWord);
-      failure = { classification: classify(error), reason: error.message, instructionCompleted: false, ...operation, stateBefore: before, stateAtStop: cpu.state(), memoryAccess: error.addressByte === undefined ? null : { addressByte: error.addressByte, kind: error.accessKind, attemptedValue: error.attemptedValue ?? null } };
-      if (error.classification !== 'INVALID_STACK_ACCESS' && Number.isInteger(error.addressByte) && error.addressByte >= 0 && error.addressByte < 0x1000 && ['read', 'write'].includes(error.accessKind)) inventory(error.accessKind, 'mmio', error.addressByte, error.attemptedValue ?? null, false, before.pcWord);
+      const memoryAccess = error.addressByte === undefined ? null : { addressByte: error.addressByte, kind: error.accessKind,
+        ...(error.accessSpace ? { space: error.accessSpace } : {}), attemptedValue: error.attemptedValue ?? null };
+      failure = { classification: classify(error), reason: error.message, instructionCompleted: false, ...operation, stateBefore: before, stateAtStop: cpu.state(), memoryAccess };
+      if (!error.accessSpace && error.classification !== 'INVALID_STACK_ACCESS' && Number.isInteger(error.addressByte) && error.addressByte >= 0 && error.addressByte < 0x1000 && ['read', 'write'].includes(error.accessKind)) inventory(error.accessKind, 'mmio', error.addressByte, error.attemptedValue ?? null, false, before.pcWord);
       break;
     }
     if (t.eventType === 'interrupt-entry') {

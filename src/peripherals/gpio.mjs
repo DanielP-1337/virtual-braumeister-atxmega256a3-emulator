@@ -6,8 +6,9 @@ const OFFSETS = [...Array(9).keys(), ...Array.from({ length: 8 }, (_, n) => 0x10
 const byte = value => { if (!Number.isInteger(value) || value < 0 || value > 255) throw new RangeError('Expected an unsigned byte'); return value; };
 
 export class GPIOController {
-  constructor({ onAccess = null } = {}) {
-    this.onAccess = onAccess; this.registered = false;
+  constructor({ onAccess = null, unresolvedOutputSource = null, stableHighMask = null } = {}) {
+    this.onAccess = onAccess; this.unresolvedOutputSource = unresolvedOutputSource; this.registered = false;
+    this.stableHighMask = stableHighMask;
     this.context = () => ({});
     this.fault = (message, details) => { throw Object.assign(new Error(message), details); };
     this.reset();
@@ -29,8 +30,12 @@ export class GPIOController {
     const p = this.port(name), cfg = p.pinctrl[pin], opc = (cfg >>> 3) & 7;
     const output = !!(p.dir & (1 << pin)), logical = (p.out >>> pin) & 1, inverted = !!(cfg & 0x40);
     const level = logical ^ +inverted;
+    const source = output ? this.unresolvedOutputSource?.(name, pin) : null;
     let drive = null;
-    if (output) {
+    if (source) {
+      // The peripheral owns the output mux. The GPIO latch cannot supply this signal.
+      drive = 'unresolved';
+    } else if (output) {
       if (opc <= 3) drive = level;
       else if ((opc === 4 || opc === 6) && level === 1) drive = 1;
       else if ((opc === 5 || opc === 7) && level === 0) drive = 0;
@@ -39,7 +44,9 @@ export class GPIOController {
     if (opc === 1) bias = 'keeper-unresolved';
     if ((!output && opc === 2) || opc === 6) bias = 'pull-down';
     if ((!output && opc === 3) || opc === 7) bias = 'pull-up';
-    return { direction: output ? 'output' : 'input', latch: logical, inverted, drive, highImpedance: drive === null, bias, inputEnabled: (cfg & 7) !== 7, slewRateLimited: !!(cfg & 0x80) };
+    // Push-pull stays driven even at an unknown level. A wired driver may be released.
+    const highImpedance = source ? (opc <= 3 ? false : null) : drive === null;
+    return { ...(source ? { source } : {}), direction: output ? 'output' : 'input', latch: logical, inverted, drive, highImpedance, bias, inputEnabled: (cfg & 7) !== 7, slewRateLimited: !!(cfg & 0x80) };
   }
   register(registry, { fault, context = () => ({}) } = {}) {
     if (this.registered) throw new Error('GPIO already registered');
@@ -47,22 +54,23 @@ export class GPIOController {
     for (const base of Object.values(PORT_BASES)) for (const offset of OFFSETS) if (registry.handlers.has(base + offset)) throw new Error('GPIO MMIO registration collision');
     if (fault) this.fault = fault; this.context = context;
     for (const [name, base] of Object.entries(PORT_BASES)) for (const offset of OFFSETS) {
-      registry.map(base + offset, { read: () => this.read(name, offset), write: value => this.write(name, offset, value) });
+      registry.map(base + offset, { read: cycle => this.read(name, offset, cycle), write: value => this.write(name, offset, value) });
     }
     this.registered = true;
   }
   fail(name, offset, kind, classification, reason, value = null) {
     this.fault(reason, { classification, addressByte: PORT_BASES[name] + offset, accessKind: kind, attemptedValue: value });
   }
-  read(name, offset) {
+  read(name, offset, cycle) {
     const p = this.port(name), before = this.onAccess ? this.snapshot(name) : null; let value;
     if (!Number.isInteger(offset)) this.fail(name, offset, 'read', 'GPIO_UNSUPPORTED_REGISTER', 'Invalid GPIO register offset');
     if (offset >= 0 && offset <= 3) value = p.dir;
     else if (offset >= 4 && offset <= 7) value = p.out;
     else if (offset === 8) {
       if (p.pinctrl.some(c => (c & 7) === 7)) this.fail(name, offset, 'read', 'GPIO_INPUT_DISABLED_UNMODELED', 'GPIO input-buffer-disabled sampling behavior is not modeled');
-      if (p.inputKnownMask !== 255) this.fail(name, offset, 'read', 'GPIO_UNRESOLVED_INPUT', 'GPIO IN requires explicit samples for every pin; no external level is assumed');
-      value = p.inputSample;
+      const knownHigh = this.stableHighMask?.(name, cycle, cycle) ?? 0;
+      if ((p.inputKnownMask | knownHigh) !== 255) this.fail(name, offset, 'read', 'GPIO_UNRESOLVED_INPUT', 'GPIO IN requires explicit samples for every pin; no external level is assumed');
+      value = p.inputSample | knownHigh;
       for (let pin = 0; pin < 8; pin++) if (p.pinctrl[pin] & 0x40) value ^= 1 << pin;
     } else if (offset >= 0x10 && offset <= 0x17) value = p.pinctrl[offset - 0x10];
     else this.fail(name, offset, 'read', 'GPIO_UNSUPPORTED_REGISTER', 'Unsupported GPIO register');

@@ -1,0 +1,2723 @@
+{
+  "firmware": "BrewControl 1.1.27",
+  "device": "ATxmega256A3",
+  "pcUnit": "flash word",
+  "clockUnit": "emulator CPU clock",
+  "profiles": {
+    "strict": "Unknown EEPROM",
+    "erased": "Erased EEPROM, uncharacterized oscillator startup",
+    "timed": "Erased EEPROM and the oscillator timing profile",
+    "synthetic": "Timed profile with ADCACAL0 = 0x5A",
+    "paired": "Timed profile with ADCACAL0/1 = 0x5A/0x03",
+    "pe2": "Both calibration bytes and the specified PE2 high interval",
+    "ack": "Both calibration bytes, continuous PE2 high and an ACK for initial address byte 0xDE"
+  },
+  "directPeripheralLds": {
+    "documentedClocks": 2,
+    "observedClocks": 1
+  },
+  "milestones": [
+    {
+      "stage": "tcd0-period",
+      "name": "TCD0 period",
+      "report": "TCD0-PERIOD-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 363,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007AF4",
+          "instructions": 2872939,
+          "clocks": 4706418,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "e153ac382c27e8bb3539dd3e75b13a1d43a1a86b74b9c0a8fb98f67f41f4efc5",
+          "access": {
+            "addressByte": 2364,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd0-cccbuf",
+      "name": "TCD0 channel C compare buffer",
+      "report": "TCD0-CCCBUF-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 373,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007AF6",
+          "instructions": 2872941,
+          "clocks": 4706422,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "03182df4126d9b94deb823ab776b05766825cb5d4888799cd86e50047ec2fda0",
+          "access": {
+            "addressByte": 2366,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd0-ccdbuf",
+      "name": "TCD0 channel D compare buffer",
+      "report": "TCD0-CCDBUF-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 382,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007AFB",
+          "instructions": 2872944,
+          "clocks": 4706427,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "7389780c5c5239175da6da0f847f72fecddd46d8a08805ad397d755a4cca2ce0",
+          "access": {
+            "addressByte": 2305,
+            "kind": "write",
+            "attemptedValue": 195
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd0-ctrlb",
+      "name": "TCD0 waveform and channel enables",
+      "report": "TCD0-CTRLB-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 393,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007AFF",
+          "instructions": 2872948,
+          "clocks": 4706432,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "3073ac0706fc77a4e6f7f0917d94c5f3b5a1318983c69817ba78f0d67ddd9e7e",
+          "access": {
+            "addressByte": 2406,
+            "kind": "write",
+            "attemptedValue": 255
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd1-period",
+      "name": "TCD1 period",
+      "report": "TCD1-PERIOD-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 402,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007B01",
+          "instructions": 2872950,
+          "clocks": 4706436,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "c174cd560209fa5157837cc48dba3547124091b86452ba2b37e33d6f82aaa080",
+          "access": {
+            "addressByte": 2424,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd1-ccabuf",
+      "name": "TCD1 channel A compare buffer",
+      "report": "TCD1-CCABUF-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 412,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007B03",
+          "instructions": 2872952,
+          "clocks": 4706440,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "bcbbd0b702625a61f49dca6a759cdc86213f53c56fd468cf49862cc8c6d4d5d5",
+          "access": {
+            "addressByte": 2426,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd1-ccbbuf",
+      "name": "TCD1 channel B compare buffer",
+      "report": "TCD1-CCBBUF-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 422,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007B06",
+          "instructions": 2872955,
+          "clocks": 4706445,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "0fa36f61440563e9f9c26005a005f9abf14787090da1eba004d34188da7aa83f",
+          "access": {
+            "addressByte": 2369,
+            "kind": "write",
+            "attemptedValue": 51
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd1-ctrlb",
+      "name": "TCD1 waveform and channel enables",
+      "report": "TCD1-CTRLB-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 433,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007B07",
+          "instructions": 2872956,
+          "clocks": 4706447,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "8c02f126fc9af250730b9d6218994628b06aa7b4dbd63616a9b64dea0fa1e8d1",
+          "access": {
+            "addressByte": 2368,
+            "kind": "write",
+            "attemptedValue": 1
+          }
+        }
+      }
+    },
+    {
+      "stage": "tcd1-ctrla",
+      "name": "TCD1 clock start",
+      "report": "TCD1-CTRLA-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 444,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x00803B",
+          "instructions": 2872964,
+          "clocks": 4706459,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "4c0580f286b8f6db327e19c1a02478084c92a315168cedc8e925e6a9731403ce",
+          "access": {
+            "addressByte": 801,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        }
+      }
+    },
+    {
+      "stage": "dacb-ctrlb",
+      "name": "DACB.CTRLB",
+      "report": "DACB-CONTROL-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 447,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x00803E",
+          "instructions": 2872967,
+          "clocks": 4706464,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "43c2648b40127439619f8181b3c4723fc589d1e8db6efc81d7e22cfb0ff164a1",
+          "access": {
+            "addressByte": 802,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        }
+      }
+    },
+    {
+      "stage": "dacb-ctrlc",
+      "name": "DACB.CTRLC",
+      "report": "DACB-CONTROL-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 450,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x008040",
+          "instructions": 2872969,
+          "clocks": 4706467,
+          "stop": "UNSUPPORTED_OPCODE",
+          "matchingResetRuns": 2,
+          "traceSha256": "e20cfe943f087b6f1a45d554db1a29db2b15f2115ff46bb1e4532e256567287f"
+        }
+      }
+    },
+    {
+      "stage": "dacb-or",
+      "name": "Register OR",
+      "report": "DACB-CONTROL-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 453,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x008043",
+          "instructions": 2872972,
+          "clocks": 4706471,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "496a31833830f8e8cc0f8caa1ff353591ca868ca0f7f8d5a70c534acdcc48638",
+          "access": {
+            "addressByte": 800,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        }
+      }
+    },
+    {
+      "stage": "dacb-ctrla",
+      "name": "DACB.CTRLA",
+      "report": "DACB-CTRLA-NVM-CALIBRATION-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 456,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A70",
+          "instructions": 2872985,
+          "clocks": 4706496,
+          "stop": "NVM_UNSUPPORTED_COMMAND",
+          "matchingResetRuns": 2,
+          "traceSha256": "3613d26db75ad7465a301edb56fc754bafb4db28b1a9a403708fec81ee6b8d8b",
+          "access": {
+            "addressByte": 458,
+            "kind": "write",
+            "attemptedValue": 2
+          }
+        }
+      }
+    },
+    {
+      "stage": "nvm-read-calib",
+      "name": "NVM calibration-row read",
+      "report": "DACB-CTRLA-NVM-CALIBRATION-RESULTS.md",
+      "activeProfile": "timed",
+      "checks": {
+        "passed": 460,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        }
+      }
+    },
+    {
+      "stage": "adcacal0",
+      "name": "First synthetic calibration byte",
+      "report": "DACB-CTRLA-NVM-CALIBRATION-RESULTS.md",
+      "activeProfile": "synthetic",
+      "checks": {
+        "passed": 463,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A77",
+          "instructions": 2872990,
+          "clocks": 4706505,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "846b26ecb01b3c088ae26fb4bfd5b86239640b8ad70819f46931f94d9bc9e818",
+          "access": {
+            "addressByte": 524,
+            "kind": "write",
+            "attemptedValue": 90
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-cal",
+      "name": "ADCA.CALL",
+      "report": "ADCA-CAL-RESULTS.md",
+      "activeProfile": "synthetic",
+      "checks": {
+        "passed": 466,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        }
+      }
+    },
+    {
+      "stage": "adcacal1",
+      "name": "Second synthetic calibration byte",
+      "report": "ADCA-CAL-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 469,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A87",
+          "instructions": 2873000,
+          "clocks": 4706523,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "fa2d00fb3c8b4297c0990f1548e3197696bef04c94fae5f2d486626536b361c9",
+          "access": {
+            "addressByte": 512,
+            "kind": "write",
+            "attemptedValue": 1
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-ctrla",
+      "name": "ADCA.CTRLA",
+      "report": "ADCA-CAL-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 473,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A89",
+          "instructions": 2873001,
+          "clocks": 4706525,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "24ba6ef5ed1f2e32d565e0017a243a9ce2ffe97c9d7d3b2c9f3e9c5a9d42a229",
+          "access": {
+            "addressByte": 513,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-ctrlb",
+      "name": "ADCA.CTRLB",
+      "report": "ADCA-CONFIG-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 476,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A90",
+          "instructions": 2873006,
+          "clocks": 4706532,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "9b7638226c7aac33e77e2f99ddc3ca58708724d670eedc93cda8a6838d25a1b5",
+          "access": {
+            "addressByte": 514,
+            "kind": "write",
+            "attemptedValue": 18
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-refctrl",
+      "name": "ADCA.REFCTRL",
+      "report": "ADCA-CONFIG-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 478,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A92",
+          "instructions": 2873007,
+          "clocks": 4706534,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "5323fc8a60d2ecaa898ca2cb6d999af14dc85c10da592ab6ac2fed51a82c21f3",
+          "access": {
+            "addressByte": 515,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-evctrl",
+      "name": "ADCA.EVCTRL",
+      "report": "ADCA-CONFIG-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 481,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A95",
+          "instructions": 2873009,
+          "clocks": 4706537,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "41d8852e0463ce5f244517305e5e0ec7052954050b888f617343cf83859fc56e",
+          "access": {
+            "addressByte": 516,
+            "kind": "write",
+            "attemptedValue": 6
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-prescaler",
+      "name": "ADCA.PRESCALER",
+      "report": "ADCA-CHANNEL0-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 483,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A98",
+          "instructions": 2873011,
+          "clocks": 4706540,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "cdad1ad57d7bb4dd27db8385ff9388940d79c56ad26a53c6eb3565bdd4603351",
+          "access": {
+            "addressByte": 545,
+            "kind": "write",
+            "attemptedValue": 8
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-ch0-muxctrl",
+      "name": "ADCA.CH0.MUXCTRL",
+      "report": "ADCA-CHANNEL0-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 486,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A9A",
+          "instructions": 2873012,
+          "clocks": 4706542,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "9eb66b01497db9fa5a0c79eb43f31937232dfc12b8ba5393597481acbc4d5f00",
+          "access": {
+            "addressByte": 546,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-ch0-intctrl",
+      "name": "ADCA.CH0.INTCTRL",
+      "report": "ADCA-CHANNEL0-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 489,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A9D",
+          "instructions": 2873014,
+          "clocks": 4706545,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "3792e66f94444668edb7b11035143c4145b69dff85f30d3676cd5773ebdfa4a5",
+          "access": {
+            "addressByte": 547,
+            "kind": "write",
+            "attemptedValue": 1
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-ch0-intflags",
+      "name": "ADCA.CH0.INTFLAGS",
+      "report": "ADCA-CH0-INIT-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 491,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007A9F",
+          "instructions": 2873015,
+          "clocks": 4706547,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "fa127cd42fda7b0381e541d97ecc990512a6f8dc5700e06ff73ba395c5fe8f43",
+          "access": {
+            "addressByte": 544,
+            "kind": "write",
+            "attemptedValue": 1
+          }
+        }
+      }
+    },
+    {
+      "stage": "adca-ch0-ctrl",
+      "name": "ADCA.CH0.CTRL",
+      "report": "ADCA-CH0-INIT-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 494,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x00FCCB",
+          "instructions": 2873107,
+          "clocks": 4706701,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "4edae7663b5f8a6be867851160d640c117feb566c51fef8c04103baa9c88d2b2",
+          "access": {
+            "addressByte": 2752,
+            "kind": "write",
+            "attemptedValue": 80
+          }
+        }
+      }
+    },
+    {
+      "stage": "spie-ctrl",
+      "name": "SPIE.CTRL",
+      "report": "ADCA-CH0-INIT-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 498,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x00FCCF",
+          "instructions": 2873111,
+          "clocks": 4706709,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "ae1042fe11bb2349c450630302221e69242178392a126d134c6cd46bc2077226",
+          "access": {
+            "addressByte": 2753,
+            "kind": "write",
+            "attemptedValue": 0
+          }
+        }
+      }
+    },
+    {
+      "stage": "spie-intctrl",
+      "name": "SPIE.INTCTRL",
+      "report": "SPIE-INTCTRL-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 501,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007B26",
+          "instructions": 2873270,
+          "clocks": 4707003,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "e39ea25e5edfa23df863d37c3ebea52dc934748e18626592ed30d3edce990cb5",
+          "access": {
+            "addressByte": 1674,
+            "kind": "write",
+            "attemptedValue": 4
+          }
+        }
+      }
+    },
+    {
+      "stage": "porte-int0mask",
+      "name": "PORTE.INT0MASK",
+      "report": "SPIE-INTCTRL-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 503,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x007B27",
+          "instructions": 2873271,
+          "clocks": 4707005,
+          "stop": "UNHANDLED_MMIO",
+          "matchingResetRuns": 2,
+          "traceSha256": "1bcdcb143ec95c2804199e3bbb25031eef6a029c68451335489ea0eecaf255e2",
+          "access": {
+            "addressByte": 1673,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        }
+      }
+    },
+    {
+      "stage": "porte-intctrl",
+      "name": "PORTE.INTCTRL",
+      "report": "SPIE-INTCTRL-RESULTS.md",
+      "activeProfile": "paired",
+      "checks": {
+        "passed": 507,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        }
+      }
+    },
+    {
+      "stage": "pe2-high-window",
+      "name": "Bounded PE2 high interval",
+      "report": "PE2-HIGH-RESULTS.md",
+      "activeProfile": "pe2",
+      "checks": {
+        "passed": 511,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        },
+        "pe2": {
+          "wordPC": "0x013524",
+          "instructions": 2873284,
+          "clocks": 4707026,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f90ecd1363ed6353c0bae4a33f103628ba67ca2310563917a05ff447c0ca4470",
+          "pe2HighCycles": [
+            4707005,
+            4707025
+          ]
+        }
+      }
+    },
+    {
+      "stage": "pe2-high-continued",
+      "name": "Extended PE2 high interval",
+      "report": "PE2-HIGH-CONTINUED-RESULTS.md",
+      "activeProfile": "pe2",
+      "checks": {
+        "passed": 511,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        },
+        "pe2": {
+          "wordPC": "0x013294",
+          "instructions": 2873317,
+          "clocks": 4707071,
+          "stop": "UNSUPPORTED_OPCODE",
+          "matchingResetRuns": 2,
+          "traceSha256": "d97c93c9eaf240b10bdfcfa9672c90d679ba8befe5b07f1e2a6a81ff2b13019d",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ]
+        }
+      }
+    },
+    {
+      "stage": "pe2-and",
+      "name": "Register AND",
+      "report": "PE2-HIGH-CONTINUED-RESULTS.md",
+      "activeProfile": "pe2",
+      "checks": {
+        "passed": 514,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        },
+        "pe2": {
+          "wordPC": "0x0132A1",
+          "instructions": 2873330,
+          "clocks": 4707085,
+          "stop": "UNSUPPORTED_OPCODE",
+          "matchingResetRuns": 2,
+          "traceSha256": "ce1b0eddda98e0f1a4ed81ab0933a7f0617385c762a0f3e0c15135c36a6b34f4",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ]
+        }
+      }
+    },
+    {
+      "stage": "pe2-st-z",
+      "name": "ST Z+,R25",
+      "report": "PE2-HIGH-CONTINUED-RESULTS.md",
+      "activeProfile": "pe2",
+      "checks": {
+        "passed": 519,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        },
+        "pe2": {
+          "wordPC": "0x0132B2",
+          "instructions": 2873347,
+          "clocks": 4707108,
+          "stop": "TWI_UNKNOWN_ACK",
+          "matchingResetRuns": 2,
+          "traceSha256": "b92201654f9a4929e5b490d00cbe6d178b7d616ea8252e14de483481daabde58",
+          "access": {
+            "addressByte": 1190,
+            "kind": "write",
+            "attemptedValue": 222
+          },
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ]
+        }
+      }
+    },
+    {
+      "stage": "twie-address-ack",
+      "name": "Initial TWIE address ACK",
+      "report": "TWIE-ADDRESS-ACK-RESULTS.md",
+      "activeProfile": "ack",
+      "checks": {
+        "passed": 522,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        },
+        "pe2": {
+          "wordPC": "0x0132B2",
+          "instructions": 2873347,
+          "clocks": 4707108,
+          "stop": "TWI_UNKNOWN_ACK",
+          "matchingResetRuns": 2,
+          "traceSha256": "b92201654f9a4929e5b490d00cbe6d178b7d616ea8252e14de483481daabde58",
+          "access": {
+            "addressByte": 1190,
+            "kind": "write",
+            "attemptedValue": 222
+          },
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ]
+        },
+        "ack": {
+          "wordPC": "0x013353",
+          "instructions": 2875293,
+          "clocks": 4710023,
+          "stop": "UNSUPPORTED_OPCODE",
+          "matchingResetRuns": 2,
+          "traceSha256": "a5e5b281145572bc424f7c4111e27640269600ce3f3c5da4fa23886dd6bb9240",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAddressAck": "0xDE"
+        }
+      }
+    },
+    {
+      "stage": "twie-ld-x",
+      "name": "LD R31,X",
+      "report": "TWIE-ADDRESS-ACK-RESULTS.md",
+      "activeProfile": "ack",
+      "checks": {
+        "passed": 525,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "synthetic": {
+          "wordPC": "0x007A7D",
+          "instructions": 2872994,
+          "clocks": 4706511,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "915a151ab812abba6a086914375dcb99210d3dc469f0f3945ac41186137087c9",
+          "access": {
+            "addressByte": 33,
+            "kind": "read",
+            "space": "production-signature",
+            "attemptedValue": null
+          }
+        },
+        "paired": {
+          "wordPC": "0x013523",
+          "instructions": 2873283,
+          "clocks": 4707025,
+          "stop": "PORTE_INT0_INPUT_HISTORY_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c691b7face49bf15473ece0f213b2cd517b6b6c5da65239b4e506ef311867bf"
+        },
+        "pe2": {
+          "wordPC": "0x0132B2",
+          "instructions": 2873347,
+          "clocks": 4707108,
+          "stop": "TWI_UNKNOWN_ACK",
+          "matchingResetRuns": 2,
+          "traceSha256": "b92201654f9a4929e5b490d00cbe6d178b7d616ea8252e14de483481daabde58",
+          "access": {
+            "addressByte": 1190,
+            "kind": "write",
+            "attemptedValue": 222
+          },
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ]
+        },
+        "ack": {
+          "wordPC": "0x0132FB",
+          "instructions": 2875325,
+          "clocks": 4710071,
+          "stop": "TWI_UNKNOWN_ACK",
+          "matchingResetRuns": 2,
+          "traceSha256": "244c5d5702c4c5cea5b504f71e0656495c123ecbf4844c312ae75bdeaa6b6c0e",
+          "access": {
+            "addressByte": 1191,
+            "kind": "write",
+            "attemptedValue": 0
+          },
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAddressAck": "0xDE"
+        }
+      }
+    }
+  ]
+}

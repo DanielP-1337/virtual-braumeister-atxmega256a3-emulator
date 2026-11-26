@@ -95,7 +95,10 @@ test('nearby pre/postincrement encodings remain unsupported; failed NVM read has
   c.sram[0] = 0xa7;
   c.step();
   assert.deepEqual([c.r[0],c.pair(30),c.cycles],[0xa7,0x2001,2]);
-  for(const op of [0x9002,0x9009,0x900a,0x9201,0x9202,0x9209,0x920a]) {
+  prepare(c,0x9201,30,0x2000); c.r[0]=0x73;
+  assert.equal(c.step().mnemonic,'ST Z+');
+  assert.deepEqual([c.sram[0],c.pair(30)],[0x73,0x2001]);
+  for(const op of [0x9002,0x9009,0x900a,0x9202,0x9209,0x920a]) {
     prepare(c,op,30,0x2000); assert.throws(()=>c.step(),/Unsupported instruction/);
   }
   prepare(c,0x8537,30,0x1c0); const r=discover(c);

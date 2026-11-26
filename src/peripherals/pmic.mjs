@@ -99,6 +99,8 @@ export class PMIC {
   }
 
   vectorTarget(request, returnWord, fault) {
+    // An unresolved source only blocks execution if it wins arbitration at an eligible boundary.
+    if (request.uncertainty) fault(request.uncertainty.reason, { classification:request.uncertainty.classification });
     const base = this.ctrl & IVSEL ? BOOT_BASE_WORD : 0;
     if ((base !== 0) !== (returnWord >= BOOT_BASE_WORD)) {
       fault('Interrupt crosses the application/boot boundary with unknown lock permissions',

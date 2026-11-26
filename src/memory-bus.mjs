@@ -101,6 +101,13 @@ export class MemoryBus {
     c.accesses.push({ kind: 'write', space, addressByte: address, value, ...(waitCycles ? {waitCycles} : {}) });
     return waitCycles;
   }
+  readProgramData(address, extended) {
+    const nvm = this.mmio.programReadNvm;
+    if (!nvm?.productionSignatureSelected) return this.flashByte(address, 'read');
+    const value = nvm.readProductionSignature(address, extended);
+    this.cpu.accesses.push({ kind: 'read', space: 'production-signature', addressByte: address, value });
+    return value;
+  }
   flashByte(address, kind) {
     const c = this.cpu;
     if (!Number.isInteger(address) || address < 0 || address >= this.flash.length) c.fault(`Flash ${kind} outside device at byte 0x${address.toString(16)}`, { classification: 'INVALID_FLASH_ADDRESS', addressByte: address, accessKind: kind });

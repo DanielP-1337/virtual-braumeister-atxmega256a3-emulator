@@ -9,7 +9,7 @@ const snapshots = {
   nvm: 'b24b366085976750621e9a9c2b88468669f3731a4228faea20a282f48ba37e14',
   skip: 'f45928d90d45201910f466cd6c530539a0092bb99efc26fb9e7f25b8cb8159a6',
   logical: 'abcf6510a03ca68993438406b3a8e91b82d62debafb2d2e68354f6f5336ad7e0',
-  eeprom: '2e23c073156a23e82f07f0973afd18ce9ae1c0277a7117c1ae3998c5d1777240',
+  eeprom: 'd46ae7b8cd4121ff04376beea3809a414af838d7086333370d63b945c1f28beb',
 };
 
 if (process.argv.length !== 3) throw new Error('Usage: node scripts/restore-discovery.mjs PATH_TO_LOCAL_FIRMWARE.hex');

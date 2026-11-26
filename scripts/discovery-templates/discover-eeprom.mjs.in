@@ -5,13 +5,16 @@ import { createHash } from 'node:crypto';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadEepromInput } from './eeprom-input.mjs';
+import { pe2HighInput } from './pe2-input.mjs';
+import { twieAddressAck } from './twie-input.mjs';
+import { productionSignatureInput } from './production-signature-input.mjs';
 import { withNvmAccessLog } from './nvm-access-log.mjs';
 import { comparisonRun, withComparedLog } from './compare-run.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2), args = {};
 if (argv.length % 2) throw new Error('Arguments require --name value pairs');
-for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--tcd0-period', '--tcd0-cccbuf', '--tcd0-ccdbuf', '--tcd0-ctrlb', '--tcd1-period', '--tcd1-ccabuf', '--tcd1-ccbbuf', '--tcd1-ctrlb', '--tcd1-ctrla', '--dacb-ctrlb', '--dacb-ctrlc', '--dacb-ctrla', '--nvm-calibration', '--synthetic-adcacal0', '--synthetic-adcacal1', '--adca-cal', '--adca-ctrla', '--adca-ctrlb', '--adca-refctrl', '--adca-evctrl', '--adca-prescaler', '--adca-ch0-muxctrl', '--adca-ch0-intctrl', '--adca-ch0-intflags', '--adca-ch0-ctrl', '--spie-ctrl', '--spie-intctrl', '--porte-int0mask', '--porte-intctrl', '--synthetic-pe2-high', '--synthetic-twie-address-ack', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
 const eepromScenario = args['--eeprom-state'];
 if (eepromScenario !== undefined && eepromScenario !== 'erased') throw new Error('Expected --eeprom-state erased');
 if (eepromScenario && (args['--eeprom'] !== undefined || args['--eeprom-ihex'] !== undefined)) {
@@ -87,6 +90,102 @@ const TimerInterrupts = timerInterruptMapping === 'mapped'
   ? (await import('../src/peripherals/tcc0-intctrla.mjs')).TCC0InterruptControl : null;
 const TimerClock = timerClock === 'mapped' ? (await import('../src/peripherals/tcc0-clock.mjs')).TCC0Clock : null;
 const Counter = timerCounter === 'mapped' ? (await import('../src/peripherals/tcc0-counter.mjs')).TCC0Counter : null;
+const d0PeriodMapping = args['--tcd0-period'] ?? timerInterruptMapping;
+if (!['mapped', 'unmapped'].includes(d0PeriodMapping) || (d0PeriodMapping === 'mapped' && core !== 'current')) {
+  throw new Error('TCD0.PER requires the current core. Use --tcd0-period mapped or unmapped.');
+}
+const TimerD0 = d0PeriodMapping === 'mapped' ? (await import('../src/peripherals/tc0-counter.mjs')).TC0Counter : null;
+const d0CompareMapping = args['--tcd0-cccbuf'] ?? d0PeriodMapping;
+if (!['mapped', 'unmapped'].includes(d0CompareMapping) || (d0CompareMapping === 'mapped' && !TimerD0)) {
+  throw new Error('TCD0.CCCBUF needs the TCD0 register bank. Use --tcd0-cccbuf mapped or unmapped.');
+}
+const d0CompareDMapping = args['--tcd0-ccdbuf'] ?? d0CompareMapping;
+if (!['mapped', 'unmapped'].includes(d0CompareDMapping) || (d0CompareDMapping === 'mapped' && !TimerD0)) {
+  throw new Error('TCD0.CCDBUF needs the TCD0 register bank. Use --tcd0-ccdbuf mapped or unmapped.');
+}
+const d0CtrlbMapping = args['--tcd0-ctrlb'] ?? d0CompareDMapping;
+if (!['mapped', 'unmapped'].includes(d0CtrlbMapping) || (d0CtrlbMapping === 'mapped' && !TimerD0)) {
+  throw new Error('TCD0.CTRLB needs the TCD0 register bank. Use --tcd0-ctrlb mapped or unmapped.');
+}
+const d1PeriodMapping = args['--tcd1-period'] ?? d0CtrlbMapping;
+if (!['mapped', 'unmapped'].includes(d1PeriodMapping) || (d1PeriodMapping === 'mapped' && core !== 'current')) {
+  throw new Error('TCD1.PER requires the current core. Use --tcd1-period mapped or unmapped.');
+}
+const TimerD1 = d1PeriodMapping === 'mapped' ? (await import('../src/peripherals/tcd1-period.mjs')).TCD1Period : null;
+const d1CompareMapping = args['--tcd1-ccabuf'] ?? d1PeriodMapping;
+if (!['mapped', 'unmapped'].includes(d1CompareMapping) || (d1CompareMapping === 'mapped' && !TimerD1)) {
+  throw new Error('TCD1.CCABUF needs the TCD1 register bank. Use --tcd1-ccabuf mapped or unmapped.');
+}
+const d1CompareBMapping = args['--tcd1-ccbbuf'] ?? d1CompareMapping;
+if (!['mapped', 'unmapped'].includes(d1CompareBMapping) || (d1CompareBMapping === 'mapped' && !TimerD1)) {
+  throw new Error('TCD1.CCBBUF needs the TCD1 register bank. Use --tcd1-ccbbuf mapped or unmapped.');
+}
+const d1CtrlbMapping = args['--tcd1-ctrlb'] ?? d1CompareBMapping;
+if (!['mapped', 'unmapped'].includes(d1CtrlbMapping) || (d1CtrlbMapping === 'mapped' && !TimerD1)) {
+  throw new Error('TCD1.CTRLB needs the TCD1 register bank. Use --tcd1-ctrlb mapped or unmapped.');
+}
+const d1ClockMapping = args['--tcd1-ctrla'] ?? d1CtrlbMapping;
+if (!['mapped', 'unmapped'].includes(d1ClockMapping) || (d1ClockMapping === 'mapped' && !TimerD1)) {
+  throw new Error('TCD1.CTRLA needs the TCD1 register bank. Use --tcd1-ctrla mapped or unmapped.');
+}
+const D0Waveform = d0CtrlbMapping === 'mapped' ? (await import('../src/peripherals/tc0-ctrlb.mjs')).TC0WaveformControl : null;
+const D0Clock = (d0CompareMapping === 'mapped' || d0CompareDMapping === 'mapped' || D0Waveform) ? (await import('../src/peripherals/tc0-clock.mjs')).TC0Clock : null;
+const dacbCtrlbMapping = args['--dacb-ctrlb'] ?? d1ClockMapping;
+const dacbCtrlcMapping = args['--dacb-ctrlc'] ?? dacbCtrlbMapping;
+const dacbCtrlaMapping = args['--dacb-ctrla'] ?? dacbCtrlcMapping;
+const dacbMappings = [dacbCtrlbMapping, dacbCtrlcMapping, dacbCtrlaMapping];
+const dacbMapped = dacbMappings.includes('mapped');
+if (dacbMappings.some(mode => !['mapped', 'unmapped'].includes(mode)) || (dacbMapped && core !== 'current')) {
+  throw new Error('DACB control mappings require the current core and accept mapped or unmapped.');
+}
+const DACB = dacbMapped ? (await import('../src/peripherals/dacb.mjs')).DACBControl : null;
+const nvmCalibration = args['--nvm-calibration'] ?? (core === 'current' ? 'mapped' : 'unmapped');
+if (!['mapped', 'unmapped'].includes(nvmCalibration) || (nvmCalibration === 'mapped' && core !== 'current')) {
+  throw new Error('NVM calibration reads require the current core. Use --nvm-calibration mapped or unmapped.');
+}
+const signatureInput = productionSignatureInput(nvmCalibration === 'mapped', args['--synthetic-adcacal0'], args['--synthetic-adcacal1']);
+const adcaMappings = {};
+let adcaMode = core === 'current' ? 'mapped' : 'unmapped';
+for (const [option, key, register] of [
+  ['--adca-cal', 'mapCalibration', 'ADCA calibration'],
+  ['--adca-ctrla', 'mapCtrla', 'ADCA.CTRLA'],
+  ['--adca-ctrlb', 'mapCtrlb', 'ADCA.CTRLB'],
+  ['--adca-refctrl', 'mapRefctrl', 'ADCA.REFCTRL'],
+  ['--adca-evctrl', 'mapEvctrl', 'ADCA.EVCTRL'],
+  ['--adca-prescaler', 'mapPrescaler', 'ADCA.PRESCALER'],
+  ['--adca-ch0-muxctrl', 'mapCh0Muxctrl', 'ADCA.CH0.MUXCTRL'],
+  ['--adca-ch0-intctrl', 'mapCh0Intctrl', 'ADCA.CH0.INTCTRL'],
+  ['--adca-ch0-intflags', 'mapCh0Intflags', 'ADCA.CH0.INTFLAGS'],
+  ['--adca-ch0-ctrl', 'mapCh0Ctrl', 'ADCA.CH0.CTRL'],
+]) {
+  adcaMode = args[option] ?? adcaMode;
+  if (!['mapped', 'unmapped'].includes(adcaMode) || (adcaMode === 'mapped' && core !== 'current')) {
+    throw new Error(register + ' requires the current core. Use ' + option + ' mapped or unmapped.');
+  }
+  adcaMappings[key] = adcaMode === 'mapped';
+}
+const spieCtrlMode = args['--spie-ctrl'] ?? adcaMode;
+if (!['mapped', 'unmapped'].includes(spieCtrlMode) || (spieCtrlMode === 'mapped' && core !== 'current')) {
+  throw new Error('SPIE.CTRL requires the current core. Use --spie-ctrl mapped or unmapped.');
+}
+const spieIntctrlMode = args['--spie-intctrl'] ?? spieCtrlMode;
+if (!['mapped', 'unmapped'].includes(spieIntctrlMode) || (spieIntctrlMode === 'mapped' && core !== 'current')) {
+  throw new Error('SPIE.INTCTRL requires the current core. Use --spie-intctrl mapped or unmapped.');
+}
+const portInt0MaskMode = args['--porte-int0mask'] ?? spieIntctrlMode;
+if (!['mapped', 'unmapped'].includes(portInt0MaskMode) || (portInt0MaskMode === 'mapped' && core !== 'current')) {
+  throw new Error('PORTE.INT0MASK requires the current core. Use --porte-int0mask mapped or unmapped.');
+}
+const portIntctrlMode = args['--porte-intctrl'] ?? portInt0MaskMode;
+if (!['mapped', 'unmapped'].includes(portIntctrlMode) || (portIntctrlMode === 'mapped' && core !== 'current')) {
+  throw new Error('PORTE.INTCTRL requires the current core. Use --porte-intctrl mapped or unmapped.');
+}
+const pe2Input = pe2HighInput(args['--synthetic-pe2-high']);
+if (pe2Input && core !== 'current') throw new Error('--synthetic-pe2-high requires the current core');
+const twieInput = twieAddressAck(args['--synthetic-twie-address-ack']);
+if (twieInput && core !== 'current') throw new Error('--synthetic-twie-address-ack requires the current core');
+const PortEInterrupts = portInt0MaskMode === 'mapped' || portIntctrlMode === 'mapped' ? (await import('../src/peripherals/porte-interrupts.mjs')).PortEInterrupts : null;
+const Adca = Object.values(adcaMappings).includes(true) ? (await import('../src/peripherals/adca.mjs')).ADCA : null;
 const compareRun = args['--compare-run'];
 const clockModule = clockControl === 'mapped' ? await import('../src/peripherals/system-clock.mjs') : null;
 // A3 Table 34-19 gives typical wake-up times, not enable-to-ready times.
@@ -128,8 +227,20 @@ try {
   function run(save, onNvmAccess, compareLine = null) {
     const storage=new EEPROMStorage(eepromInput); const c = new XmegaCPU(image,{eeprom:storage}); let checkpoint = null;
     const gpioEvents = [], nvmTransitions = [], applicationPCs = new Set(); let previousInstructionSha256 = null, completedNvmRead = null, completedSkip = null, completedOri = null, completedMapping = null;
-    const gpio = new GPIOController({ onAccess: e => gpioEvents.push(e) });
+    let d0Waveform, d1;
+    const gpio = new GPIOController({ stableHighMask: pe2Input?.stableHighMask, onAccess: e => gpioEvents.push(e),
+      unresolvedOutputSource: (port, pin) => d0Waveform?.outputSource(port, pin) ?? d1?.waveform?.outputSource(port, pin) });
     gpio.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, cyclesBefore: c.cycles, instructionAttempt: c.steps + 1 }) });
+    const adcaAccesses = [];
+    const adca = Adca ? new Adca({ onAccess: e => adcaAccesses.push(e) }) : null;
+    adca?.register(c.bus.mmio, { ...adcaMappings,
+      context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }), fault: (message, details) => c.fault(message, details) });
+    const dacbAccesses = [];
+    const dacb = DACB ? new DACB({ onAccess: event => dacbAccesses.push(event) }) : null;
+    dacb?.register(c.bus.mmio, { mapCtrlb: dacbCtrlbMapping === 'mapped', mapCtrlc: dacbCtrlcMapping === 'mapped',
+      mapCtrla: dacbCtrlaMapping === 'mapped',
+      context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }),
+      fault: (reason, details) => c.fault(reason, details) });
     const usartAccesses = [];
     const usart = Usart ? new Usart({ onAccess: e => usartAccesses.push(e) }) : null;
     usart?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
@@ -140,6 +251,26 @@ try {
     const counter = Counter ? new Counter({ onAccess: e => counterAccesses.push(e) }) : null;
     counter?.register(c.bus.mmio, { mapPeriod, onPeriodAccess: e => periodAccesses.push(e),
       context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const d0PeriodAccesses = [], d0CompareAccesses = [], d0ClockAccesses = [];
+    const d0 = TimerD0 ? new TimerD0('TCD0', { onAccess: e => d0PeriodAccesses.push(e) }) : null;
+    const timerDContext = () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 });
+    const timerDFault = (reason, details) => c.fault(reason, details);
+    d0?.register(c.bus.mmio, { mapPeriod: true, mapCounter: false, mapCompareC: d0CompareMapping === 'mapped', mapCompareD: d0CompareDMapping === 'mapped',
+      onCompareAccess: e => d0CompareAccesses.push(e), context: timerDContext, fault: timerDFault });
+    const d0Clock = D0Clock ? new D0Clock('TCD0', { counter: d0, onAccess: e => d0ClockAccesses.push(e) }) : null;
+    d0Clock?.register(c.bus.mmio, { context: timerDContext, fault: timerDFault });
+    const d1PeriodAccesses = [], d1CompareAccesses = [], d1ControlAccesses = [], d1ClockAccesses = [];
+    d1 = TimerD1 ? new TimerD1({ onAccess: event => d1PeriodAccesses.push(event) }) : null;
+    d1?.register(c.bus.mmio, { mapCompareA: d1CompareMapping === 'mapped', mapCompareB: d1CompareBMapping === 'mapped',
+      mapCtrla: d1ClockMapping === 'mapped', onCtrlaAccess: e => d1ClockAccesses.push({ ...e, cnt: d1.cnt }),
+      mapCtrlb: d1CtrlbMapping === 'mapped', onCtrlbAccess: e => d1ControlAccesses.push(e),
+      onCompareAccess: e => d1CompareAccesses.push(e),
+      context: timerDContext, fault: timerDFault });
+    const d0WaveformAccesses = [];
+    if (D0Waveform) {
+      d0Waveform = new D0Waveform('TCD0', { clock: d0Clock, onAccess: e => d0WaveformAccesses.push(e) });
+      d0Waveform.register(c.bus.mmio, { context: timerDContext, fault: timerDFault });
+    }
     const timerClockAccesses = [];
     const timer = TimerClock ? new TimerClock({ counter, onAccess: e => timerClockAccesses.push(e) }) : null;
     timer?.register(c.bus.mmio, { context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }),
@@ -171,11 +302,21 @@ try {
       osc.releaseReset();
       systemClock?.register(c.bus, osc);
     }
+    const portInterruptAccesses = [];
+    const portInterrupts = PortEInterrupts ? new PortEInterrupts({ gpio, onAccess: event => portInterruptAccesses.push(event) }) : null;
+    portInterrupts?.register(c.bus.mmio, { mapInt0Mask: portInt0MaskMode === 'mapped', mapIntctrl: portIntctrlMode === 'mapped',
+      context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const spiAccesses = [], spiTransfers = [];
     const spi = Spi ? new Spi({ gpio, onAccess: event => spiAccesses.push(event), onTransfer: event => spiTransfers.push(event) }) : null;
     spi?.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
+    const spieAccesses = [], spieTransfers = [];
+    const spie = spieCtrlMode === 'mapped' || spieIntctrlMode === 'mapped' ? new Spi({ instance: 'SPIE', gpio,
+      onAccess: event => spieAccesses.push(event), onTransfer: event => spieTransfers.push(event) }) : null;
+    spie?.register(c.bus.mmio, { mapCtrl: spieCtrlMode === 'mapped', mapIntctrl: spieIntctrlMode === 'mapped',
+      fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const twiEvidence = { accesses: [], transfers: [], interrupts: [] };
     const twi = Twi ? new Twi({
+      respond: twieInput ? request => twieInput.respond(request, twiEvidence.transfers.length) : null,
       onAccess: event => twiEvidence.accesses.push(event),
       onTransfer: event => twiEvidence.transfers.push(event),
       onInterrupt: event => twiEvidence.interrupts.push(event),
@@ -185,11 +326,17 @@ try {
     const pmic = Pmic ? new Pmic({ sources: [cycle => {
       if (twi.needsClock) twi.advanceTo(cycle);
       return twi.interruptRequest;
-    }, ...(timerInterrupts ? [cycle => timerInterrupts.request(cycle)] : [])],
-      onAcknowledge: (request, cycle) => timerInterrupts?.acknowledge(request, cycle),
+    }, ...(timerInterrupts ? [cycle => timerInterrupts.request(cycle)] : []), ...(spie ? [cycle => spie.interruptRequest(cycle)] : []),
+      ...(portIntctrlMode === 'mapped' ? [cycle => portInterrupts.request(cycle)] : [])],
+      onAcknowledge: (request, cycle) => {
+        timerInterrupts?.acknowledge(request, cycle);
+        spie?.acknowledgeInterrupt(request);
+      },
       onAccess: e => pmicAccesses.push(e) }) : null;
     if (pmic) c.bus.attachPMIC(pmic);
-    const nvm = new NVMController({timeBase:systemClock,pageBuffer:PageBuffer ? new PageBuffer(storage) : null,onAccess:onNvmAccess,onTransition:e=>nvmTransitions.push(e)});
+    const nvm = new NVMController({
+      productionSignature: signatureInput?.bytes ?? null,
+      timeBase:systemClock,pageBuffer:PageBuffer ? new PageBuffer(storage) : null,onAccess:onNvmAccess,onTransition:e=>nvmTransitions.push(e)});
     nvm.register(c.bus.mmio,{fault:(m,d)=>c.fault(m,d),clock:()=>c.cycles,context:()=>({pcWord:c.pc,cyclesBefore:c.cycles,instructionAttempt:c.steps+1})});
     const eepromEvents = [];
     const mapping = c.bus.attachEEPROM(nvm, {
@@ -208,6 +355,8 @@ try {
         if (t.eventType === 'instruction' || t.eventType === 'interrupt-entry') {
           nvm.advanceTo(c.cycles);
           if (spi?.needsClock) spi.advanceTo(c.cycles);
+          if (portInterrupts?.mapIntctrl && portInterrupts.int0Mask) portInterrupts.observe(c.cycles);
+          if (spie?.needsClock) spie.advanceTo(c.cycles);
           if (twi?.needsClock) twi.advanceTo(c.cycles);
         }
         if (t.eventType === 'instruction') {
@@ -251,7 +400,13 @@ try {
       assert.deepEqual(integrity.changedOffsets, [], 'Unexpected persistent write during the strict execution prefix');
     }
     timer?.advanceTo(c.cycles);
-    return { timerInterruptAccesses, timerInterruptState: timerInterrupts?.snapshot(), waveformAccesses, waveformState: waveform?.snapshot(), timerClockAccesses, timerClockState: timer?.snapshot(c.cycles), counterAccesses, counterState: counter?.snapshot(), periodAccesses, periodState: mapPeriod ? counter.snapshotPeriod() : null, baudHighAccesses, baudHighState: baudHigh?.snapshot(), baudAccesses, baudState: baud?.snapshot(), interruptAccesses, interruptState: interrupts?.snapshot(), frameAccesses, frameState: frame?.snapshot(), usartAccesses, usartState: usart?.snapshot(), dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
+    const d0ClockState = d0Clock?.snapshot(c.cycles);
+    const d0Outputs = d0Waveform && Object.fromEntries([0, 1, 2, 3].map(pin => ['PD' + pin, gpio.drive('D', pin)]));
+    const d1ClockState = d1?.clock?.snapshot(c.cycles);
+    const d1Clock = d1ClockState && { accesses: d1ClockAccesses.length, state: d1ClockState, cnt: d1.cnt };
+    const d1Outputs = d1?.waveform && Object.fromEntries([4, 5].map(pin => ['PD' + pin, gpio.drive('D', pin)]));
+    const d1Ctrlb = d1?.waveform && { accesses: d1ControlAccesses.length, state: d1.waveform.snapshot(), cnt: d1.cnt, pads: d1Outputs };
+    return { portInterruptAccesses, portInterruptState: portInterrupts?.snapshot(), spieAccesses, spieTransfers, spieState: spie?.snapshot(), adcaAccesses, adcaState: adca?.snapshot(), productionSignatureKnownBytes: nvm.productionSignatureKnownBytes, dacbAccesses, dacbState: dacb?.snapshot(), d1Clock, d1ClockAccesses, d1Ctrlb, d1ControlAccesses, d1CompareState: d1?.snapshotCompareA(), d1CompareBState: d1?.snapshotCompareB(), d1CompareAccesses, d1PeriodState: d1?.snapshotPeriod(), d1PeriodAccesses, d0WaveformState: d0Waveform?.snapshot(), d0WaveformAccesses, d0Outputs, d0CompareAccesses, d0CompareState: d0?.compare?.snapshot(), d0CompareDState: d0?.compare?.snapshotD(), d0ClockAccesses, d0ClockState, d0PeriodAccesses, d0PeriodState: d0?.snapshotPeriod(), timerInterruptAccesses, timerInterruptState: timerInterrupts?.snapshot(), waveformAccesses, waveformState: waveform?.snapshot(), timerClockAccesses, timerClockState: timer?.snapshot(c.cycles), counterAccesses, counterState: counter?.snapshot(), periodAccesses, periodState: mapPeriod ? counter.snapshotPeriod() : null, baudHighAccesses, baudHighState: baudHigh?.snapshot(), baudAccesses, baudState: baud?.snapshot(), interruptAccesses, interruptState: interrupts?.snapshot(), frameAccesses, frameState: frame?.snapshot(), usartAccesses, usartState: usart?.snapshot(), dfllAccesses, dfllState: osc?.dfll32m?.snapshot(osc.snapshot(c.cycles)), clockAccesses, clockState: systemClock?.snapshot(c.cycles), clockChanges: systemClock?.switches, oscAccesses, oscState: osc?.snapshot(c.cycles), references: dfllReference === 'mapped' ? osc.referenceSelection() : null, pmicAccesses, pmicState: pmic?.snapshot(), twiEvidence, twiState: twi?.snapshot(), spiAccesses, spiTransfers, spiState: spi?.snapshot(), diagnostic, checkpoint, completedMapping, eepromEvents, eepromState:mapping.snapshot(), eepromBytes:storage.bytes, eepromValidity:storage.valid, integrity, nvmTransitions, nvmState:nvm.snapshot(), previousInstructionSha256, completedNvmRead, completedSkip, completedOri, completedInstructionSha256: instructionHash.digest('hex'), traceSha256: hash.digest('hex'), sram: c.sram, gpioEvents, gpioState: gpio.snapshotAll(), applicationPCs: [...applicationPCs], firstApplicationInstruction };
   }
   function executePass(recording) {
     if (!reference) return withNvmAccessLog(resolve(output, 'nvm-accesses.jsonl'), recording, emit => run(recording, emit));
@@ -310,6 +465,30 @@ try {
   assert.deepEqual(a.timerClockState, b.timerClockState);
   assert.deepEqual(a.counterAccesses, b.counterAccesses);
   assert.deepEqual(a.counterState, b.counterState);
+  assert.deepEqual(a.d0CompareAccesses, b.d0CompareAccesses);
+  assert.deepEqual(a.d0CompareState, b.d0CompareState);
+  assert.deepEqual(a.d0CompareDState, b.d0CompareDState);
+  assert.deepEqual(a.d0WaveformState, b.d0WaveformState);
+  assert.deepEqual(a.d0WaveformAccesses, b.d0WaveformAccesses);
+  assert.deepEqual(a.d0Outputs, b.d0Outputs);
+  assert.deepEqual(a.d0ClockAccesses, b.d0ClockAccesses);
+  assert.deepEqual(a.d0ClockState, b.d0ClockState);
+  assert.deepEqual(a.d1PeriodAccesses, b.d1PeriodAccesses);
+  assert.deepEqual(a.d1PeriodState, b.d1PeriodState);
+  assert.deepEqual(a.d1CompareAccesses, b.d1CompareAccesses);
+  assert.deepEqual(a.d1CompareState, b.d1CompareState);
+  assert.deepEqual(a.d1CompareBState, b.d1CompareBState);
+  assert.deepEqual(a.adcaAccesses, b.adcaAccesses);
+  assert.deepEqual(a.adcaState, b.adcaState);
+  assert.equal(a.productionSignatureKnownBytes, b.productionSignatureKnownBytes);
+  assert.deepEqual(a.dacbAccesses, b.dacbAccesses);
+  assert.deepEqual(a.dacbState, b.dacbState);
+  assert.deepEqual(a.d1Clock, b.d1Clock);
+  assert.deepEqual(a.d1ClockAccesses, b.d1ClockAccesses);
+  assert.deepEqual(a.d1Ctrlb, b.d1Ctrlb);
+  assert.deepEqual(a.d1ControlAccesses, b.d1ControlAccesses);
+  assert.deepEqual(a.d0PeriodAccesses, b.d0PeriodAccesses);
+  assert.deepEqual(a.d0PeriodState, b.d0PeriodState);
   assert.deepEqual(a.periodAccesses, b.periodAccesses);
   assert.deepEqual(a.periodState, b.periodState);
   assert.deepEqual(a.dfllAccesses, b.dfllAccesses);
@@ -320,6 +499,11 @@ try {
   assert.deepEqual(a.spiAccesses, b.spiAccesses);
   assert.deepEqual(a.spiTransfers, b.spiTransfers);
   assert.deepEqual(a.spiState, b.spiState);
+  assert.deepEqual(a.portInterruptState, b.portInterruptState);
+  assert.deepEqual(a.portInterruptAccesses, b.portInterruptAccesses);
+  assert.deepEqual(a.spieState, b.spieState);
+  assert.deepEqual(a.spieAccesses, b.spieAccesses);
+  assert.deepEqual(a.spieTransfers, b.spieTransfers);
   assert.deepEqual(a.pmicAccesses, b.pmicAccesses);
   assert.deepEqual(a.pmicState, b.pmicState);
   assert.deepEqual(a.twiEvidence, b.twiEvidence);
@@ -333,6 +517,17 @@ try {
   assert.equal(sha(readFileSync(firmware)), firmwareSha256);
   result = { ...a.diagnostic, firmwareSha256, nodeVersion: process.version, deterministicReplay: true, traceSha256: a.traceSha256, startupCheckpoint: a.checkpoint, completedApplicationInstructions: a.checkpoint ? a.diagnostic.completedInstructions - a.checkpoint.instructions : null };
   result.discoveryAcceptanceVerified = previousPrefixVerified && mappingVerified && oriVerified && statusReadCompleted && skipVerified && a.checkpoint?.verified === true; result.previous002fInstructionPrefixVerified=previousPrefixVerified; result.mappingVerified=mappingVerified; result.mappingEnableEvent=mapped; result.eepromState=a.eepromState; result.eepromAccessEvents=a.eepromEvents.length; result.oriVerified=oriVerified; result.executedOri=ori; result.skipVerified=skipVerified; result.executedSkip=skip; result.previousInstructionSha256=a.previousInstructionSha256; result.nvmStatusReadCompleted=statusReadCompleted; result.nvmEnabled=true; result.nvmAccesses=nvmAccesses; result.nvmState=a.nvmState; result.completedInstructionSha256 = a.completedInstructionSha256; result.previousGpioInstructionPrefixVerified = previousPrefixVerified; result.gpioEnabled = true; result.gpioAccesses = a.gpioEvents.length; result.gpioState = a.gpioState;
+  if (pe2Input) result.pe2Input = pe2Input.report;
+  if (twieInput) result.twieInput = twieInput.report;
+  if (signatureInput) result.productionSignature = { ...signatureInput.report, knownBytes: a.productionSignatureKnownBytes };
+  if (a.adcaState) {
+    result.adca = { accesses: a.adcaAccesses.length, state: a.adcaState };
+    writeFileSync(resolve(output, 'adca-accesses.jsonl'), a.adcaAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.dacbState) {
+    result.dacb = { accesses: a.dacbAccesses.length, state: a.dacbState };
+    writeFileSync(resolve(output, 'dacb-accesses.jsonl'), a.dacbAccesses.map(event => JSON.stringify(event) + '\n').join(''));
+  }
   if (clockModule) {
     result.clock = { resetClockHz: clockModule.RESET_CLOCK_HZ, timeTicksPerSecond: clockModule.TIME_TICKS_PER_SECOND,
       accesses: a.clockAccesses.length, switches: a.clockChanges, state: a.clockState };
@@ -354,6 +549,42 @@ try {
   if (a.timerClockState) {
     result.tcc0Clock = { accesses: a.timerClockAccesses.length, state: a.timerClockState };
     writeFileSync(resolve(output, 'tcc0-clock-accesses.jsonl'), a.timerClockAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  for (const [timer, channel, state, events] of [
+    ['tcd0', 'C', a.d0CompareState, a.d0CompareAccesses],
+    ['tcd0', 'D', a.d0CompareDState, a.d0CompareAccesses],
+    ['tcd1', 'A', a.d1CompareState, a.d1CompareAccesses],
+    ['tcd1', 'B', a.d1CompareBState, a.d1CompareAccesses],
+  ]) {
+    if (!state) continue;
+    // Each channel's log includes the control aliases shared within its timer.
+    const accesses = events.filter(e => e.register.startsWith('CC' + channel) || e.register.startsWith('CTRL'));
+    result[timer + 'Compare' + channel] = { accesses: accesses.length, state };
+    writeFileSync(resolve(output, timer + '-cc' + channel.toLowerCase() + 'buf-accesses.jsonl'), accesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.d0WaveformState) {
+    result.tcd0Ctrlb = { accesses: a.d0WaveformAccesses.length, state: a.d0WaveformState, pads: a.d0Outputs };
+    writeFileSync(resolve(output, 'tcd0-ctrlb-accesses.jsonl'), a.d0WaveformAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.d0ClockState) {
+    result.tcd0Clock = { accesses: a.d0ClockAccesses.length, state: a.d0ClockState };
+    writeFileSync(resolve(output, 'tcd0-clock-accesses.jsonl'), a.d0ClockAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.d1Clock) {
+    result.tcd1Clock = a.d1Clock;
+    writeFileSync(resolve(output, 'tcd1-clock-accesses.jsonl'), a.d1ClockAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.d1Ctrlb) {
+    result.tcd1Ctrlb = a.d1Ctrlb;
+    writeFileSync(resolve(output, 'tcd1-ctrlb-accesses.jsonl'), a.d1ControlAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.d1PeriodState) {
+    result.tcd1Period = { accesses: a.d1PeriodAccesses.length, state: a.d1PeriodState };
+    writeFileSync(resolve(output, 'tcd1-period-accesses.jsonl'), a.d1PeriodAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.d0PeriodState) {
+    result.tcd0Period = { accesses: a.d0PeriodAccesses.length, state: a.d0PeriodState };
+    writeFileSync(resolve(output, 'tcd0-period-accesses.jsonl'), a.d0PeriodAccesses.map(e => JSON.stringify(e) + '\n').join(''));
   }
   if (a.periodState) {
     result.tcc0Period = { accesses: a.periodAccesses.length, state: a.periodState };
@@ -394,6 +625,15 @@ try {
     result.oscillator = { profile: oscTiming, cpuClockHz: a.clockState?.cpuClockHz ?? 2000000, startupCycles: { rc32m: oscStartupCycles.rc32m ?? null, rc32k: oscStartupCycles.rc32k ?? null },
       accesses: a.oscAccesses.length, state: a.oscState };
     writeFileSync(resolve(output, 'osc-accesses.jsonl'), a.oscAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.portInterruptState) {
+    result.porteInterrupts = { accesses: a.portInterruptAccesses.length, state: a.portInterruptState };
+    writeFileSync(resolve(output, 'porte-interrupt-accesses.jsonl'), a.portInterruptAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+  }
+  if (a.spieState) {
+    result.spie = { accesses: a.spieAccesses.length, transfers: a.spieTransfers.length, state: a.spieState };
+    writeFileSync(resolve(output, 'spie-accesses.jsonl'), a.spieAccesses.map(e => JSON.stringify(e) + '\n').join(''));
+    writeFileSync(resolve(output, 'spie-transfers.jsonl'), a.spieTransfers.map(e => JSON.stringify(e) + '\n').join(''));
   }
   if (Spi) {
     const accesses = a.diagnostic.mmioInventory.filter(row => row.addressByte >= 0x08c0 && row.addressByte <= 0x08c3);
@@ -441,12 +681,26 @@ try {
   result.sourceSha256 = Object.fromEntries(['src/xmega.mjs', 'src/memory-bus.mjs', 'src/peripherals/mmio-registry.mjs', 'src/peripherals/gpio.mjs', 'src/discovery.mjs', 'src/hex.mjs', 'src/peripherals/nvm.mjs', 'src/eeprom-storage.mjs', 'src/eeprom-mapping.mjs', 'tests/eeprom.test.mjs'].map(p => [p, sha(readFileSync(resolve(implementationRoot, p)))]));
   result.sourceSha256['scripts/discover-eeprom.mjs'] = sha(readFileSync(fileURLToPath(import.meta.url)));
   result.sourceSha256['scripts/eeprom-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/eeprom-input.mjs')));
+  result.sourceSha256['scripts/pe2-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/pe2-input.mjs')));
+  result.sourceSha256['scripts/production-signature-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/production-signature-input.mjs')));
   result.sourceSha256['scripts/nvm-access-log.mjs'] = sha(readFileSync(resolve(root, 'scripts/nvm-access-log.mjs')));
   if (clockModule) result.sourceSha256['src/peripherals/system-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/system-clock.mjs')));
   result.sourceSha256['scripts/compare-run.mjs'] = sha(readFileSync(resolve(root, 'scripts/compare-run.mjs')));
   if (TimerInterrupts) result.sourceSha256['src/peripherals/tcc0-intctrla.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-intctrla.mjs')));
+  if (Waveform || D0Waveform) result.sourceSha256['src/peripherals/tc0-ctrlb.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-ctrlb.mjs')));
   if (Waveform) result.sourceSha256['src/peripherals/tcc0-ctrlb.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-ctrlb.mjs')));
   if (TimerClock) result.sourceSha256['src/peripherals/tcc0-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-clock.mjs')));
+  if (TimerClock || D0Clock || TimerD1) result.sourceSha256['src/peripherals/timer-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/timer-clock.mjs')));
+  if (TimerClock || D0Clock) result.sourceSha256['src/peripherals/tc0-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-clock.mjs')));
+  if (Counter || TimerD0) result.sourceSha256['src/peripherals/tc0-compare.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-compare.mjs')));
+  if (Counter || TimerD0) result.sourceSha256['src/peripherals/tc0-compare-c.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-compare-c.mjs')));
+  if (Adca) result.sourceSha256['src/peripherals/adca.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/adca.mjs')));
+  if (DACB) result.sourceSha256['src/peripherals/dacb.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/dacb.mjs')));
+  if (TimerD1) result.sourceSha256['src/peripherals/tcd1-period.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcd1-period.mjs')));
+  if (Counter || TimerD0 || TimerD1) result.sourceSha256['src/peripherals/timer-compare.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/timer-compare.mjs')));
+  if (Counter || TimerD0 || TimerD1 || Waveform || D0Waveform) result.sourceSha256['src/peripherals/timer-waveform.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/timer-waveform.mjs')));
+  if (Counter || TimerD0 || TimerD1) result.sourceSha256['src/peripherals/timer-registers.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/timer-registers.mjs')));
+  if (Counter || TimerD0) result.sourceSha256['src/peripherals/tc0-counter.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-counter.mjs')));
   if (Counter) result.sourceSha256['src/peripherals/tcc0-counter.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcc0-counter.mjs')));
   if (BaudHigh) result.sourceSha256['src/peripherals/usart-baud-high.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart-baud-high.mjs')));
   if (BaudControl) result.sourceSha256['src/peripherals/usart-baud.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/usart-baud.mjs')));
@@ -456,7 +710,9 @@ try {
   if (a.dfllState) result.sourceSha256['src/peripherals/dfll32m.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/dfll32m.mjs')));
   if (Osc) result.sourceSha256['src/peripherals/oscillator.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/oscillator.mjs')));
   if (Pmic) result.sourceSha256['src/peripherals/pmic.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/pmic.mjs')));
+  if (Twi) result.sourceSha256['scripts/twie-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/twie-input.mjs')));
   if (Twi) result.sourceSha256['src/peripherals/twie.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/twie.mjs')));
+  if (PortEInterrupts) result.sourceSha256['src/peripherals/porte-interrupts.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/porte-interrupts.mjs')));
   if (Spi) result.sourceSha256['src/peripherals/spic.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/spic.mjs')));
   if (PageBuffer) result.sourceSha256['src/peripherals/eeprom-page-buffer.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/eeprom-page-buffer.mjs')));
   if (result.eepromProtectedProgrammingEnabled) result.sourceSha256['src/peripherals/ccp.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/ccp.mjs')));
