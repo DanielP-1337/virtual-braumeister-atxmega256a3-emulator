@@ -1,7 +1,7 @@
 // Application-independent diagnostic runner. Does not change PC or install peripherals.
 import { decodeWordImmediateOperands, ExecutionFault } from './xmega.mjs';
 
-const registerMnemonics = new Map([[0x0800, 'SBC'], [0x0c00, 'ADD'], [0x1c00, 'ADC'], [0x2000, 'AND'], [0x2800, 'OR'], [0x2c00, 'MOV']]);
+const registerMnemonics = new Map([[0x0800, 'SBC'], [0x0c00, 'ADD'], [0x1800, 'SUB'], [0x1c00, 'ADC'], [0x2000, 'AND'], [0x2800, 'OR'], [0x2c00, 'MOV']]);
 
 export function decodeAt(cpu, pc = cpu.pc) {
   const address = pc * 2;

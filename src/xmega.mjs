@@ -164,10 +164,12 @@ export class XmegaCPU {
         const result = and ? this.r[dest] & imm : this.r[dest] | imm;
         this.setLogicalResult(dest, result);
       }
-      else if ((op & 0xfc00) === 0x0800) {
-        name = 'SBC';
+      else if ((op & 0xec00) === 0x0800) {
+        // SBC and SUB differ in bit 12. Only SBC consumes C and chains Z.
+        const withCarry = (op & 0x1000) === 0;
+        name = withCarry ? 'SBC' : 'SUB';
         this.checkPcTarget(next);
-        this.r[d] = this.compare(this.r[d], this.r[rr], this.sreg & 1, true);
+        this.r[d] = this.compare(this.r[d], this.r[rr], withCarry ? this.sreg & 1 : 0, withCarry);
       }
       else if ((op & 0xfc00) === 0x9c00) {
         name = 'MUL';

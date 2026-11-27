@@ -6,9 +6,10 @@ const OFFSETS = [...Array(9).keys(), ...Array.from({ length: 8 }, (_, n) => 0x10
 const byte = value => { if (!Number.isInteger(value) || value < 0 || value > 255) throw new RangeError('Expected an unsigned byte'); return value; };
 
 export class GPIOController {
-  constructor({ onAccess = null, unresolvedOutputSource = null, stableHighMask = null } = {}) {
+  constructor({ onAccess = null, unresolvedOutputSource = null, stableHighMask = null, inputSampleAt = null } = {}) {
     this.onAccess = onAccess; this.unresolvedOutputSource = unresolvedOutputSource; this.registered = false;
     this.stableHighMask = stableHighMask;
+    this.inputSampleAt = inputSampleAt;
     this.context = () => ({});
     this.fault = (message, details) => { throw Object.assign(new Error(message), details); };
     this.reset();
@@ -69,8 +70,15 @@ export class GPIOController {
     else if (offset === 8) {
       if (p.pinctrl.some(c => (c & 7) === 7)) this.fail(name, offset, 'read', 'GPIO_INPUT_DISABLED_UNMODELED', 'GPIO input-buffer-disabled sampling behavior is not modeled');
       const knownHigh = this.stableHighMask?.(name, cycle, cycle) ?? 0;
-      if ((p.inputKnownMask | knownHigh) !== 255) this.fail(name, offset, 'read', 'GPIO_UNRESOLVED_INPUT', 'GPIO IN requires explicit samples for every pin; no external level is assumed');
-      value = p.inputSample | knownHigh;
+      const sample = this.inputSampleAt?.(name, cycle);
+      if (sample === undefined) {
+        if ((p.inputKnownMask | knownHigh) !== 255) this.fail(name, offset, 'read', 'GPIO_UNRESOLVED_INPUT', 'GPIO IN requires explicit samples for every pin; no external level is assumed');
+        value = p.inputSample | knownHigh;
+      } else {
+        byte(sample);
+        if ((sample & knownHigh) !== knownHigh) throw new RangeError('GPIO sample contradicts a stable high input');
+        value = sample;
+      }
       for (let pin = 0; pin < 8; pin++) if (p.pinctrl[pin] & 0x40) value ^= 1 << pin;
     } else if (offset >= 0x10 && offset <= 0x17) value = p.pinctrl[offset - 0x10];
     else this.fail(name, offset, 'read', 'GPIO_UNSUPPORTED_REGISTER', 'Unsupported GPIO register');

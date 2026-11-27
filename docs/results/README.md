@@ -1,6 +1,46 @@
 # BrewControl 1.1.27 reset results
 
-With erased EEPROM, the oscillator timing profile, calibration bytes `0x5A/0x03`, PE2 held high and an explicit address ACK, the firmware reaches its first data write to TWIE target `0x6F`. Execution stops before word PC `0x0132FB`, after **2,875,325 instructions and 4,710,071 emulator clocks**. The outgoing byte is `0x00`. Its ACK or NACK is unknown. [Address ACK and first data byte](TWIE-ADDRESS-ACK-RESULTS.md)
+With the specified calibration, GPIO, and bus inputs, the ATxmega256A3 emulator runs through **SPIC reply 26**. The firmware sends `0x06` in transfer 27, then stops before reading its reply from `SPIC.DATA` at word PC `0x00FD24` and data address `0x08C3`. All eight PF4/PF5/PF6 histories stop at the same instruction, between **4,804,642 and 4,804,756 emulator clocks**. [Replies 24 through 26 and individual stop clocks](SPIC-TWENTY-FOURTH-TWENTY-SIXTH-RESULTS.md)
+
+## Results since the first TWIE data write
+
+Commit `864f609` reached the first TWIE data write at word PC `0x0132FB`. The 39 subsequent milestones cover the data ACK, all eight TWIE read bytes, three PORTF samples, register SUB, and SPIC replies 1 through 26. The table gives the last stop in each report. Each report lists the results for its individual steps.
+
+| Report | Milestones | Synthetic tests passed per step | Final stop clocks | Next word PC |
+| --- | ---: | --- | ---: | --- |
+| [TWIE acknowledgment of the first data byte](TWIE-FIRST-DATA-ACK-RESULTS.md) | 1 | 528 | 4,713,042 | `0x013312` |
+| [TWIE repeated START and read bytes 1 and 2](TWIE-READ-RESULTS.md) | 2 | 532, 535 | 4,721,537 | `0x01334D` |
+| [TWIE read byte 3](TWIE-THIRD-READ-RESULTS.md) | 1 | 538 | 4,724,504 | `0x01334D` |
+| [TWIE read bytes 4 and 5](TWIE-FOURTH-FIFTH-READ-RESULTS.md) | 2 | 541 | 4,730,438 | `0x01334D` |
+| [TWIE read bytes 6 through 8 and the first PORTF sample](TWIE-SIXTH-EIGHTH-READ-RESULTS.md) | 3 | 541 | 4,738,395 | `0x0079C5` |
+| [PF4, the SUB instruction, and the first SPIC reply](PORTF-SPIC-BRANCH-RESULTS.md) | 3 | 544, 546, 548 | 4,741,172–4,741,210 | `0x00FD24` |
+| [SPIC replies 2 through 4](SPIC-SECOND-FOURTH-RESULTS.md) | 3 | 550 | 4,741,603–4,741,641 | `0x00FD24` |
+| [SPIC replies 5 through 7](SPIC-FIFTH-SEVENTH-RESULTS.md) | 3 | 550 | 4,741,851–4,741,889 | `0x00FD24` |
+| [SPIC replies 8 through 10](SPIC-EIGHTH-TENTH-RESULTS.md) | 3 | 550 | 4,742,282–4,742,320 | `0x00FD24` |
+| [SPIC replies 11 through 13](SPIC-ELEVENTH-THIRTEENTH-RESULTS.md) | 3 | 550 | 4,742,699–4,742,737 | `0x00FD24` |
+| [SPIC replies 14 through 16](SPIC-FOURTEENTH-SIXTEENTH-RESULTS.md) | 3 | 550 | 4,770,656 | `0x0079C5` |
+| [PF5, PF6, and SPIC reply 17](PORTF-PF5-PF6-SPIC17-RESULTS.md) | 3 | 550 | 4,803,532–4,803,646 | `0x00FD24` |
+| [SPIC replies 18 through 20](SPIC-EIGHTEENTH-TWENTIETH-RESULTS.md) | 3 | 550 | 4,803,963–4,804,077 | `0x00FD24` |
+| [SPIC replies 21 through 23](SPIC-TWENTY-FIRST-TWENTY-THIRD-RESULTS.md) | 3 | 550 | 4,804,211–4,804,325 | `0x00FD24` |
+| [SPIC replies 24 through 26](SPIC-TWENTY-FOURTH-TWENTY-SIXTH-RESULTS.md) | 3 | 550 | 4,804,642–4,804,756 | `0x00FD24` |
+
+For replies 1 through 16, all 256 MISO values were exercised on both PF4 paths (8,192 cases). For replies 17 through 26, all 256 values were exercised on all eight pin histories (20,480 cases). These **28,672 SPI cases** count direct executions from verified states. The three PORTF sweeps separately exercised 2,304 raw port values across their saved starting states. MOSI and MISO values in the reset profiles identify the tested transaction sequence.
+
+## Reset controls
+
+The three controls below reproduced their reference traces twice at every new milestone. The extended profile uses erased EEPROM, the `a3-wake-proxy` oscillator profile, calibration bytes `0x5A/0x03`, and PE2 high from clock 4,707,005 through 6,000,000. TWIE target `0x6F` acknowledges `0xDE`, the first write-data byte `0x00`, and `0xDF`, then supplies eight zero bytes. PORTF samples apply only to their specified bus clocks. SPI replies are synthetic inputs.
+
+| Reset control | Instructions | Emulator clocks | First stop | Reason |
+| --- | ---: | ---: | --- | --- |
+| Unknown EEPROM | 46,741 | 61,988 | `0x014E8C` | `UNKNOWN_EEPROM_DATA` |
+| Erased EEPROM, uncharacterized oscillator startup | 2,872,372 | 4,705,639 | `0x007A52` | `OSC_STARTUP_TIMING_UNKNOWN` |
+| Erased EEPROM with oscillator timing profile | 2,872,988 | 4,706,500 | `0x007A74` | `UNKNOWN_PRODUCTION_SIGNATURE_BYTE` |
+
+All 338 new profile comparisons matched on both runs from reset. Together with the 158 earlier comparisons, the snapshot contains 496 pairs across 75 milestones. The machine-readable results record the input profiles, stop PCs, instruction counts, clocks, and trace hashes. New sweep entries also provide case counts and hashes of the local case reports. [Machine-readable reset results](reset-runs.json)
+
+The separate `LDS R16,0x0806` probe still measures one emulator clock for a direct peripheral read where the instruction timing specifies two. All clock counts in these reports use the tested model. [Direct LDS timing probe](../../verification/cpu/lds-mmio-timing.mjs)
+
+## Earlier milestones through the first TWIE data write
 
 The 36 milestones below start at the TCD0 period-register stop recorded in commit `2411e9e`. Each link opens the corresponding technical report. The test count covers the synthetic suite at that milestone. The execution totals and next word PC refer to the most advanced input profile available at that step.
 
@@ -43,7 +83,7 @@ The 36 milestones below start at the TCD0 period-register stop recorded in commi
 | [Initial TWIE address ACK](TWIE-ADDRESS-ACK-RESULTS.md) | ack | 522 | 2,875,293 | 4,710,023 | `0x013353` |
 | [LD R31,X](TWIE-ADDRESS-ACK-RESULTS.md) | ack | 525 | 2,875,325 | 4,710,071 | `0x0132FB` |
 
-## Final reset profiles
+## Reset profiles at the first TWIE data write
 
 | Profile | Input | Instructions | Emulator clocks | First stop |
 |---|---|---:|---:|---|
@@ -57,6 +97,6 @@ The 36 milestones below start at the TCD0 period-register stop recorded in commi
 
 The first PE2 interval covers cycles 4,707,005 through 4,707,025 inclusive. Later PE2 runs extend it through the 6,000,000-cycle execution limit. The `ack` profile also provides the target response to the initial write-address byte `0xDE`.
 
-The 158 scenario reports each compare two runs from reset. Their complete trace hashes and final states matched. Each milestone also checked 11 historical traces and the integrity of 16 original files. The separate direct-peripheral `LDS` timing probe measured one emulator clock against two documented clocks. [All scenario results and trace hashes](reset-runs.json) · [Direct LDS probe](../../verification/cpu/lds-mmio-timing.mjs)
+Those 158 scenario reports each compare two runs from reset. Their complete trace hashes and final states matched. Each milestone also checked 11 historical traces and the integrity of 16 original files. The separate direct-peripheral `LDS` timing probe measured one emulator clock against two documented clocks. [All scenario results and trace hashes](reset-runs.json) · [Direct LDS probe](../../verification/cpu/lds-mmio-timing.mjs)
 
 The synthetic suite runs offline with Node.js 24. Firmware runs use the operator’s local image and the retained historical reference files. [Test command](../../README.md#run-the-tests) · [Local firmware runs](../../README.md#local-firmware-runs)

@@ -6,6 +6,8 @@ import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadEepromInput } from './eeprom-input.mjs';
 import { pe2HighInput } from './pe2-input.mjs';
+import { portfInput } from './portf-input.mjs';
+import { spicFrameInput } from './spic-input.mjs';
 import { twieAddressAck } from './twie-input.mjs';
 import { productionSignatureInput } from './production-signature-input.mjs';
 import { withNvmAccessLog } from './nvm-access-log.mjs';
@@ -14,7 +16,7 @@ import { comparisonRun, withComparedLog } from './compare-run.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2), args = {};
 if (argv.length % 2) throw new Error('Arguments require --name value pairs');
-for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--tcd0-period', '--tcd0-cccbuf', '--tcd0-ccdbuf', '--tcd0-ctrlb', '--tcd1-period', '--tcd1-ccabuf', '--tcd1-ccbbuf', '--tcd1-ctrlb', '--tcd1-ctrla', '--dacb-ctrlb', '--dacb-ctrlc', '--dacb-ctrla', '--nvm-calibration', '--synthetic-adcacal0', '--synthetic-adcacal1', '--adca-cal', '--adca-ctrla', '--adca-ctrlb', '--adca-refctrl', '--adca-evctrl', '--adca-prescaler', '--adca-ch0-muxctrl', '--adca-ch0-intctrl', '--adca-ch0-intflags', '--adca-ch0-ctrl', '--spie-ctrl', '--spie-intctrl', '--porte-int0mask', '--porte-intctrl', '--synthetic-pe2-high', '--synthetic-twie-address-ack', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--tcd0-period', '--tcd0-cccbuf', '--tcd0-ccdbuf', '--tcd0-ctrlb', '--tcd1-period', '--tcd1-ccabuf', '--tcd1-ccbbuf', '--tcd1-ctrlb', '--tcd1-ctrla', '--dacb-ctrlb', '--dacb-ctrlc', '--dacb-ctrla', '--nvm-calibration', '--synthetic-adcacal0', '--synthetic-adcacal1', '--adca-cal', '--adca-ctrla', '--adca-ctrlb', '--adca-refctrl', '--adca-evctrl', '--adca-prescaler', '--adca-ch0-muxctrl', '--adca-ch0-intctrl', '--adca-ch0-intflags', '--adca-ch0-ctrl', '--spie-ctrl', '--spie-intctrl', '--porte-int0mask', '--porte-intctrl', '--synthetic-pe2-high', '--synthetic-portf-in', '--synthetic-spic-first-rx', '--synthetic-spic-next-rx', '--synthetic-twie-address-ack', '--synthetic-twie-first-data-ack', '--synthetic-twie-read-address-ack', '--synthetic-twie-first-read-byte', '--synthetic-twie-second-read-byte', '--synthetic-twie-third-read-byte', '--synthetic-twie-additional-read-bytes', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
 const eepromScenario = args['--eeprom-state'];
 if (eepromScenario !== undefined && eepromScenario !== 'erased') throw new Error('Expected --eeprom-state erased');
 if (eepromScenario && (args['--eeprom'] !== undefined || args['--eeprom-ihex'] !== undefined)) {
@@ -181,8 +183,16 @@ if (!['mapped', 'unmapped'].includes(portIntctrlMode) || (portIntctrlMode === 'm
   throw new Error('PORTE.INTCTRL requires the current core. Use --porte-intctrl mapped or unmapped.');
 }
 const pe2Input = pe2HighInput(args['--synthetic-pe2-high']);
+const portf = portfInput(args['--synthetic-portf-in']);
+const spicInput = spicFrameInput(args['--synthetic-spic-first-rx'], args['--synthetic-spic-next-rx']);
+if (spicInput && core !== 'current') throw new Error('--synthetic-spic-first-rx requires the current core');
+if (portf && core !== 'current') throw new Error('--synthetic-portf-in requires the current core');
 if (pe2Input && core !== 'current') throw new Error('--synthetic-pe2-high requires the current core');
-const twieInput = twieAddressAck(args['--synthetic-twie-address-ack']);
+const twieInput = twieAddressAck(args['--synthetic-twie-address-ack'], args['--synthetic-twie-first-data-ack'], {
+  repeatedReadAck: args['--synthetic-twie-read-address-ack'], firstReadByte: args['--synthetic-twie-first-read-byte'],
+  secondReadByte: args['--synthetic-twie-second-read-byte'], thirdReadByte: args['--synthetic-twie-third-read-byte'],
+  additionalReadBytes: args['--synthetic-twie-additional-read-bytes'],
+});
 if (twieInput && core !== 'current') throw new Error('--synthetic-twie-address-ack requires the current core');
 const PortEInterrupts = portInt0MaskMode === 'mapped' || portIntctrlMode === 'mapped' ? (await import('../src/peripherals/porte-interrupts.mjs')).PortEInterrupts : null;
 const Adca = Object.values(adcaMappings).includes(true) ? (await import('../src/peripherals/adca.mjs')).ADCA : null;
@@ -228,7 +238,7 @@ try {
     const storage=new EEPROMStorage(eepromInput); const c = new XmegaCPU(image,{eeprom:storage}); let checkpoint = null;
     const gpioEvents = [], nvmTransitions = [], applicationPCs = new Set(); let previousInstructionSha256 = null, completedNvmRead = null, completedSkip = null, completedOri = null, completedMapping = null;
     let d0Waveform, d1;
-    const gpio = new GPIOController({ stableHighMask: pe2Input?.stableHighMask, onAccess: e => gpioEvents.push(e),
+    const gpio = new GPIOController({ stableHighMask: pe2Input?.stableHighMask, inputSampleAt: portf?.inputSampleAt, onAccess: e => gpioEvents.push(e),
       unresolvedOutputSource: (port, pin) => d0Waveform?.outputSource(port, pin) ?? d1?.waveform?.outputSource(port, pin) });
     gpio.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, cyclesBefore: c.cycles, instructionAttempt: c.steps + 1 }) });
     const adcaAccesses = [];
@@ -307,7 +317,7 @@ try {
     portInterrupts?.register(c.bus.mmio, { mapInt0Mask: portInt0MaskMode === 'mapped', mapIntctrl: portIntctrlMode === 'mapped',
       context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const spiAccesses = [], spiTransfers = [];
-    const spi = Spi ? new Spi({ gpio, onAccess: event => spiAccesses.push(event), onTransfer: event => spiTransfers.push(event) }) : null;
+    const spi = Spi ? new Spi({ gpio, exchange:spicInput?.createExchange(), onAccess: event => spiAccesses.push(event), onTransfer: event => spiTransfers.push(event) }) : null;
     spi?.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const spieAccesses = [], spieTransfers = [];
     const spie = spieCtrlMode === 'mapped' || spieIntctrlMode === 'mapped' ? new Spi({ instance: 'SPIE', gpio,
@@ -316,7 +326,7 @@ try {
       fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const twiEvidence = { accesses: [], transfers: [], interrupts: [] };
     const twi = Twi ? new Twi({
-      respond: twieInput ? request => twieInput.respond(request, twiEvidence.transfers.length) : null,
+      respond: twieInput ? request => twieInput.respond(request, twiEvidence.transfers) : null,
       onAccess: event => twiEvidence.accesses.push(event),
       onTransfer: event => twiEvidence.transfers.push(event),
       onInterrupt: event => twiEvidence.interrupts.push(event),
@@ -518,6 +528,8 @@ try {
   result = { ...a.diagnostic, firmwareSha256, nodeVersion: process.version, deterministicReplay: true, traceSha256: a.traceSha256, startupCheckpoint: a.checkpoint, completedApplicationInstructions: a.checkpoint ? a.diagnostic.completedInstructions - a.checkpoint.instructions : null };
   result.discoveryAcceptanceVerified = previousPrefixVerified && mappingVerified && oriVerified && statusReadCompleted && skipVerified && a.checkpoint?.verified === true; result.previous002fInstructionPrefixVerified=previousPrefixVerified; result.mappingVerified=mappingVerified; result.mappingEnableEvent=mapped; result.eepromState=a.eepromState; result.eepromAccessEvents=a.eepromEvents.length; result.oriVerified=oriVerified; result.executedOri=ori; result.skipVerified=skipVerified; result.executedSkip=skip; result.previousInstructionSha256=a.previousInstructionSha256; result.nvmStatusReadCompleted=statusReadCompleted; result.nvmEnabled=true; result.nvmAccesses=nvmAccesses; result.nvmState=a.nvmState; result.completedInstructionSha256 = a.completedInstructionSha256; result.previousGpioInstructionPrefixVerified = previousPrefixVerified; result.gpioEnabled = true; result.gpioAccesses = a.gpioEvents.length; result.gpioState = a.gpioState;
   if (pe2Input) result.pe2Input = pe2Input.report;
+  if (portf) result.portfInput = portf.report;
+  if (spicInput) result.spicInput = spicInput.report;
   if (twieInput) result.twieInput = twieInput.report;
   if (signatureInput) result.productionSignature = { ...signatureInput.report, knownBytes: a.productionSignatureKnownBytes };
   if (a.adcaState) {
@@ -681,6 +693,8 @@ try {
   result.sourceSha256 = Object.fromEntries(['src/xmega.mjs', 'src/memory-bus.mjs', 'src/peripherals/mmio-registry.mjs', 'src/peripherals/gpio.mjs', 'src/discovery.mjs', 'src/hex.mjs', 'src/peripherals/nvm.mjs', 'src/eeprom-storage.mjs', 'src/eeprom-mapping.mjs', 'tests/eeprom.test.mjs'].map(p => [p, sha(readFileSync(resolve(implementationRoot, p)))]));
   result.sourceSha256['scripts/discover-eeprom.mjs'] = sha(readFileSync(fileURLToPath(import.meta.url)));
   result.sourceSha256['scripts/eeprom-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/eeprom-input.mjs')));
+  result.sourceSha256['scripts/spic-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/spic-input.mjs')));
+  result.sourceSha256['scripts/portf-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/portf-input.mjs')));
   result.sourceSha256['scripts/pe2-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/pe2-input.mjs')));
   result.sourceSha256['scripts/production-signature-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/production-signature-input.mjs')));
   result.sourceSha256['scripts/nvm-access-log.mjs'] = sha(readFileSync(resolve(root, 'scripts/nvm-access-log.mjs')));
