@@ -43,7 +43,7 @@ The firmware stores successive SPIC replies in the four SRAM cells at `0x4870` t
 | `scripts/` | Headless Ghidra tooling, local execution runners, trace comparison, and EEPROM input handling |
 | `docs/` | Firmware milestone reports, reset results, CPU core evaluation, and independent Atmel Studio measurements |
 
-The [controller board reference](docs/hardware/README.md) shows the four JTAG pins next to J6 and identifies the battery-backed clock that contains the external EEPROM.
+The [controller board reference](docs/hardware/README.md) shows the four JTAG pins next to J6 and identifies the MCP79412 clock and EEPROM. The [power-on capture guide](docs/hardware/README.md#capturing-the-power-on-read-at-0x57) marks the three logic analyzer connections for its I²C bus.
 
 ## Local firmware runs
 
