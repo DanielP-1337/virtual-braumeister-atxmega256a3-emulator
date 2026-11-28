@@ -2,8 +2,9 @@
 const BASE = 0x0200;
 
 export class ADCA {
-  constructor({ onAccess = null } = {}) {
+  constructor({ onAccess = null, conversion = null } = {}) {
     this.onAccess = onAccess;
+    this.conversion = conversion;
     this.controlFields = [];
     this.reset();
   }
@@ -20,20 +21,28 @@ export class ADCA {
     this.ch0Muxctrl = 0;
     this.ch0Intctrl = 0;
     this.ch0Intflags = 0;
+    this.conversion?.reset();
   }
 
   snapshot() {
     const state = { cal: this.cal, temp: this.temp };
     for (const field of this.controlFields) state[field] = this[field];
     if (Object.hasOwn(state, 'prescaler')) state.divider = 4 << state.prescaler;
+    if (this.conversion?.requestCount) state.channel0Conversion = this.conversion.snapshot();
     return state;
   }
 
-  controlWriteIssue(register, value) {
+  get needsClock() { return Boolean(this.conversion?.pending); }
+
+  advanceTo(cycle) { this.conversion?.advanceTo(this, cycle); }
+
+  controlWriteIssue(register, value, cycle) {
     if (register === 'CH0.CTRL' && (value & 0x80)) {
+      if (this.conversion) return this.conversion.startIssue(this, register, value, cycle);
       return { classification: 'ADCA_CONVERSION_START_UNSUPPORTED', reason: 'ADCA channel 0 conversion start requires a conversion model' };
     }
     if (register === 'CTRLA') {
+      if (this.conversion && (value & 0x3e) === 0x04) return this.conversion.startIssue(this, register, value, cycle);
       if (value & 0x3c) return { classification: 'ADCA_CONVERSION_START_UNSUPPORTED', reason: 'ADCA conversion start requires a conversion model' };
       if (value & 0x02) return { classification: 'ADCA_PIPELINE_FLUSH_UNSUPPORTED', reason: 'ADCA pipeline flush requires a conversion model' };
     }
@@ -58,7 +67,8 @@ export class ADCA {
   }
 
   register(registry, { mapCalibration = true, mapCtrla = false, mapCtrlb = false, mapRefctrl = false, mapEvctrl = false,
-    mapPrescaler = false, mapCh0Ctrl = false, mapCh0Muxctrl = false, mapCh0Intctrl = false, mapCh0Intflags = false, context = () => ({}),
+    mapPrescaler = false, mapCh0Ctrl = false, mapCh0Muxctrl = false, mapCh0Intctrl = false, mapCh0Intflags = false,
+    mapInterruptFlags = false, mapChannel0Result = false, context = () => ({}),
     fault = (message, details) => { throw Object.assign(new Error(message), details); } } = {}) {
     const writeTemp = value => { this.temp = value; };
     const registers = mapCalibration ? [
@@ -82,11 +92,38 @@ export class ADCA {
     const fields = [];
     for (const [, name, offset, mask, field = name.toLowerCase()] of controls) {
       fields.push(field);
-      registers.push([name, offset, () => this[field], value => { this[field] = value & mask; }]);
+      const startBit = name === 'CTRLA' ? 0x04 : name === 'CH0.CTRL' ? 0x80 : 0;
+      const read = cycle => this[field] | (startBit && this.conversion?.startBit(cycle) ? startBit : 0);
+      const write = (value, cycle) => {
+        if (this.conversion && name === 'CTRLA') {
+          if ((this.ctrla ^ value) & 1) this.conversion.setEnable(Boolean(value & 1), cycle);
+          this.ctrla = value & 0xc1;
+        } else {
+          if (name === 'PRESCALER' && (value & mask) !== this.prescaler) {
+            this.conversion?.prescalerChanged(this.prescaler, cycle);
+          }
+          this[field] = value & mask;
+        }
+        if (this.conversion && (value & startBit)) this.conversion.start(this, cycle);
+      };
+      registers.push([name, offset, read, write]);
     }
     if (mapCh0Intflags) {
       fields.push('ch0Intflags');
       registers.push(['CH0.INTFLAGS', 0x23, () => this.ch0Intflags, value => { this.ch0Intflags &= ~(value & 0x01); }]);
+    }
+    if (mapInterruptFlags) {
+      registers.push(['INTFLAGS', 0x06, () => this.ch0Intflags, value => { this.ch0Intflags &= ~(value & 1); }]);
+    }
+    if (mapChannel0Result) {
+      if (!this.conversion) throw new Error('Channel 0 result registers require an ADC conversion model');
+      const low = () => {
+        this.temp = this.conversion.result >>> 8;
+        return this.conversion.result & 0xff;
+      };
+      for (const [name, offset] of [['CH0RES', 0x10], ['CH0.RES', 0x24]]) {
+        registers.push([name + 'L', offset, low], [name + 'H', offset + 1, () => this.temp]);
+      }
     }
     if (this.registered || registers.some(([, offset]) => registry.handlers.has(BASE + offset))) {
       throw new Error('ADCA MMIO registration collision');
@@ -95,10 +132,14 @@ export class ADCA {
     for (const [register, offset, read, write] of registers) {
       const addressByte = BASE + offset;
       const access = (kind, value, cycle) => {
+        this.advanceTo(cycle);
         const before = this.onAccess ? this.snapshot() : null;
-        const issue = kind === 'write' && this.controlWriteIssue(register, value);
-        if (kind === 'read') value = read();
-        else if (!issue) write(value);
+        const issue = this.conversion?.accessIssue(this, register, kind, value, cycle) ||
+          (kind === 'write' && this.controlWriteIssue(register, value, cycle));
+        if (!issue) {
+          if (kind === 'read') value = read(cycle);
+          else write(value, cycle);
+        }
         this.onAccess?.({ origin: 'peripheral-model', eventType: 'adc-access', ...context(),
           peripheral: 'ADCA', register, addressByte, kind, value, cycle, completed: !issue,
           ...(issue ? { classification: issue.classification } : {}), before, after: this.snapshot() });

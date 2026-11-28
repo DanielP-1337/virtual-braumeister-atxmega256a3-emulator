@@ -1,8 +1,18 @@
 # BrewControl 1.1.27 reset results
 
-With the specified calibration, GPIO, and bus inputs, the ATxmega256A3 emulator runs through **SPIC reply 26**. The firmware sends `0x06` in transfer 27, then stops before reading its reply from `SPIC.DATA` at word PC `0x00FD24` and data address `0x08C3`. All eight PF4/PF5/PF6 histories stop at the same instruction, between **4,804,642 and 4,804,756 emulator clocks**. [Replies 24 through 26 and individual stop clocks](SPIC-TWENTY-FOURTH-TWENTY-SIXTH-RESULTS.md)
+Two complete resets with the fixed low GPIO profile reached the TWIE write address `0x57` at word PC `0x0132B2` after **53,702,806 emulator clocks** and **37,279,312 instructions**. An address ACK leads to an offset write of 0xF0. A NACK leads to a new write address for 0x6F. The response of the physical board is open. [ADC inputs, bus branches, and exact stop clocks](ADCA-TWIE-STARTUP-RESULTS.md)
 
-## Results since the first TWIE data write
+## Startup past SPIC reply 26
+
+| Report | Verified coverage |
+| --- | --- |
+| [SPIC replies 27 through 36 and the following port reads](SPIC-27-36-RESULTS.md) | Ten individual 8-by-256 reply sweeps, eight complete reset profiles per reply, and subsequent input ranges through reply 100 |
+| [SPIE, the CPU shifts, and the firmware delay](SPIE-CPU-STARTUP-RESULTS.md) | The change from SPIC to SPIE after 231,490 transfers, seven SPIE replies, ASR, ROR, PORTF, and the 4,799,999-iteration delay |
+| [First PA1 conversion and the TWIE address](ADCA-TWIE-STARTUP-RESULTS.md) | All 256 ADC prescaler phases and 4,096 sample codes, plus both responses to wire address 0xAE |
+
+The ten SPIC steps add 110 pairs of full reset runs to the 496 pairs recorded through reply 26. The machine-readable snapshot also lists the 17 later verification steps, their three double reset controls, and six additional pairs of full firmware runs. It records the separate outcomes of checkpoint experiments and complete resets. [Machine-readable reset results](reset-runs.json)
+
+## From the first TWIE data write through SPIC reply 26
 
 Commit `864f609` reached the first TWIE data write at word PC `0x0132FB`. The 39 subsequent milestones cover the data ACK, all eight TWIE read bytes, three PORTF samples, register SUB, and SPIC replies 1 through 26. The table gives the last stop in each report. Each report lists the results for its individual steps.
 
@@ -36,7 +46,7 @@ The three controls below reproduced their reference traces twice at every new mi
 | Erased EEPROM, uncharacterized oscillator startup | 2,872,372 | 4,705,639 | `0x007A52` | `OSC_STARTUP_TIMING_UNKNOWN` |
 | Erased EEPROM with oscillator timing profile | 2,872,988 | 4,706,500 | `0x007A74` | `UNKNOWN_PRODUCTION_SIGNATURE_BYTE` |
 
-All 338 new profile comparisons matched on both runs from reset. Together with the 158 earlier comparisons, the snapshot contains 496 pairs across 75 milestones. The machine-readable results record the input profiles, stop PCs, instruction counts, clocks, and trace hashes. New sweep entries also provide case counts and hashes of the local case reports. [Machine-readable reset results](reset-runs.json)
+All 338 profile comparisons added through reply 26 matched on both runs from reset. Together with the 158 preceding comparisons, those 75 milestones contain 496 pairs. The machine-readable results record the input profiles, stop PCs, instruction counts, clocks, and trace hashes. New sweep entries also provide case counts and hashes of the local case reports. [Machine-readable reset results](reset-runs.json)
 
 The separate `LDS R16,0x0806` probe still measures one emulator clock for a direct peripheral read where the instruction timing specifies two. All clock counts in these reports use the tested model. [Direct LDS timing probe](../../verification/cpu/lds-mmio-timing.mjs)
 

@@ -12673,6 +12673,5148 @@
         ],
         "directCases": 2048
       }
+    },
+    {
+      "stage": "portf-cont-13",
+      "name": "SPIC reply 27",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928172,
+          "clocks": 4804720,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "df8495b7a47e30ae7dfffa9edbb53979320dec7d8da68a216b4dde350766c3a4",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "42e81c32011572dadca2f8a55692efcaedb6b6b947e3b8ae19ee0fc6e79b8016",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928196,
+          "clocks": 4804758,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "ac4c650ab6ffe09bff1b0f9b2ea74eb0f2a56b7813c5505bb00952fce9fe73d2",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "4ad27a9113936ce9bda81046c20255a2a7d8a88dc1d3e3509fae90c103499cb1",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928196,
+          "clocks": 4804758,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "a19e9ce79005073485f3aa5d10795469343a2633d1d3a815850639a606114d5c",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "7c4b90e54b69d80b3a2eb667ca77615aa332af0268923290b94e951b585b8e20",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928220,
+          "clocks": 4804796,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "995ae39f23a2562f9a5c8211b92a191cf1296f7cc210e333cfecec06094a0548",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "535bf7f29cb830098331369ee9645cec3fac3a86fff33ded5cc40698d050e498",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928196,
+          "clocks": 4804758,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "504426cb0a47d15a8a894d8490ee7113b9545cfa771f69dc34245eb5e71972a5",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "2e91d45502cca04e6b199a0de165df8eaa33652cca83c6063583b7eeb7dcfb1b",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928220,
+          "clocks": 4804796,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "d42958a02411bc27ff9d6d95049cfdac138276ef2ccb9d7ca46e892f6549e474",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "19a11c0e31ad2409d6853f9ded97bdbc462684658de54c7cea67a80e52e12a69",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928220,
+          "clocks": 4804796,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "1b30045ad03c44d695a53fc55926549118f6c2f299f38eefc74add56e358f272",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "438d9b4d99ee7659466b43b20428965b3a20d15d4423fdb7428ada5d51824115",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928244,
+          "clocks": 4804834,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "b63096ab771e4dddd7b9ce7f44fb3104c6f81f9f7750fd9de3284bb6ce152bb3",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "11151be41c58285b4291a3c4a77f319cd04bf2786a0d5e1f35f9bbba55ea127d",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80"
+        }
+      },
+      "spiSweep": {
+        "frame": 27,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "4839af4d2ae41033fecb6c432155fbae931948f8cf89981bd341d5fcca24627f"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "bcb366aedd0849bbf125c193ca123c0d54d203624b44c213b86d986242b454f2"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "70199e83230d992ef70394a6d6e1412b68aeb8f7764c05e0ffc8b40ebf2d28b5"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "77144d1e5d7b4624e6a08d822223548cc3596d207b69149a0c76f18748988a5d"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "7930aa355e090270ab3c512f1693bc29f89cae2f58828bc31f44614b52dfd9ff"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "026184e29510c840c655b9bcc4840d191e192a964912d7e73b3b97e7159f24e9"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "c3dc959df61805f33293f5d7ec6a876c92679b1e5ca7b7d0ed25d825bdb83f11"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "711dd959bb8464e0bd5521333b61848d0bbad32ba84d29ac2e73442c62901592"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 27,
+        "mosi": "0x06",
+        "nextMosi": "0x00",
+        "receiveAddress": "0x4872",
+        "instructions": 48,
+        "clocks": 78,
+        "earliestNextStop": 4804720,
+        "latestNextStop": 4804834
+      }
+    },
+    {
+      "stage": "portf-cont-14",
+      "name": "SPIC reply 28",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928332,
+          "clocks": 4804981,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "ae87808f95dc4bfee6d42bd5e59ed63ec973977a9140ada5fcc152e42ba9d4be",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "7d87af9005cd11945fae587acb8264fa7da073308be00659e6eb1f2f4932799a",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928356,
+          "clocks": 4805019,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "e10c7d363bcd7a7c2ca57e730f3a4147106d6ce1956461e894ffe566194b9033",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "f1036b63b2c796174fbcc4702db3d3c336b38aeaacf01d41d8ab17d83fdf4a67",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928356,
+          "clocks": 4805019,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "90228b2fa5dd5ba3f8ef2c0c304533c0dac1b9b8f7597c619431b740156298ff",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "860377beb2915dfafc7217a5acd1a761378932695bb6de64ff9b04531583c7f6",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928380,
+          "clocks": 4805057,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "79ec12793a25912f04e63e0de2f9728dfe3552217f3706b61108c694f6e7b41d",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "84c6ff81334b7966fc13ebd097b789f56a403f557b6c8ed9286a5a80461f5f23",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928356,
+          "clocks": 4805019,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "01cee5283cfb61585bf1f1e584d7e8e86c48ac755524a1acc341acf8a0dae0d7",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "fe459165f0dd602af8552e9cab8011dc382855b923f8b9a9b21a120ebd209d76",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928380,
+          "clocks": 4805057,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "6e554396104b3ad76bfe27d08baa69e47fb2c60d5c1d650fb80da4be2c887676",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "7352cc243aabb0de824ace0cfdb53eb1ad97597ff8593db7b9e3660eebff7a0e",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928380,
+          "clocks": 4805057,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "093d30ca9b4f76a284192b0001ede6ad94b73a646d64ac1792b4a844e333ad7f",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "8abe7c97e315e0afa6405e9daa282916ca5ab791bca7ecc33f5d5887c12c6e11",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928404,
+          "clocks": 4805095,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "e125c9140693a3ad361046a1858ec2fffd8d66720f9a4258d77e7f2c7c188fed",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "98464c53b3f549270da20374028f1b9deffdcbb31e1087c6131c37a4a61e95e1",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69"
+        }
+      },
+      "spiSweep": {
+        "frame": 28,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "65e412e1409f6655bbcce5a8274e964f6a58fd810d419620ea6af46c144656f0"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "a604a62e41fdd84c3dd2d64733a9e3b73f315ec4274dbadc7fdfea032619c002"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "2ab8e63dd235ff10e50acbfbbbeee37f6426bc70d15766a329688f717d57d9f3"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "a092a47c88be4fcc55f117e8fe40b96260c1c46730cddf7c89cd0df1b35de888"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "76c1e0bf1d26a856d8c0c669fdc1626d8f05b0ad6d3fccc06f069fd7e5dd9b87"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "f58ddc9d96d2595cb6a4059f4c71098c76642b43290dfcb29ab6d38c77edbbc8"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "19544d3374eca796edf963e86d6319bed220038bbe0fcdbb5808bfb4cb2f4e0d"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "2813df32e195fd5245201ea7997f0f8ef2966e1a4c48887f4817a095473dbb40"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 28,
+        "mosi": "0x00",
+        "nextMosi": "0x00",
+        "receiveAddress": "0x4873",
+        "instructions": 160,
+        "clocks": 261,
+        "earliestNextStop": 4804981,
+        "latestNextStop": 4805095
+      }
+    },
+    {
+      "stage": "portf-cont-15",
+      "name": "SPIC reply 29",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928380,
+          "clocks": 4805059,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "9e0c26635064db491c4520561641184d8c5326e0bd240038bcb012284c25c507",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "0b98032d38b253507c9dae19bfbb6fa97af17c9b12df10f752fb89fa0be1b0e1",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928404,
+          "clocks": 4805097,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "bb0e5d2224c3de8a541ed66a9e628c56cb167205bab15a6030d2aaedabf6448e",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "a3216644b06cc1c1edbf33919d6517c5ea5f909dc1ae7263dfc4fe67ff08af46",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928404,
+          "clocks": 4805097,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "a53dceb6e0e25eb5cccc9438dd1158ecfcc374faa700f38e4cb07f73c47869cd",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "e01f6313390be315d64e31cadb50c4282c9a633c5539c1deefda1763c2690874",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928428,
+          "clocks": 4805135,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "c7fe67ede69a5ac6b7662635c863fe57a2e379bc6355dc883ec6da3ea5b21ccb",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "8ca57dc3b57a3d17424455b8109b0ce074a2372a6f18664e4c28c827172ac3f8",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928404,
+          "clocks": 4805097,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "a54e065054658c1ee9d362ba4949ee88d851b52e4b74ba8620d1a3601006b9fd",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "63399ac1816b7ce81694330ebbdd0c20fad8a35a64aa7dc4598010cb9b94c0ba",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928428,
+          "clocks": 4805135,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "4de5715e51bda159fad74590884902e833fd281d6ad0392432fd94c41ff0c031",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "6eb5c4741459d9b2c1e66ca0eae14b1346074d2e9310dcb3cabfb116fc441860",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928428,
+          "clocks": 4805135,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "e47bf80eda7c9e563b080cd95fdcca528fe0a2a2196c68fd1559356f079f3777",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "9a032d43f24a70020682a04ecf8c88321c39805fb4a6b72b63812bb3917ad34b",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928452,
+          "clocks": 4805173,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "942aa1ebdbd6bc02cc61f9e1edb8f9d1e2a627b01857ee68b190c2beb261afb7",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "39ac59478b1febbd8b060bf5c1ad77ba86ca1692efd16cc8aa8da7b378bcb049",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3"
+        }
+      },
+      "spiSweep": {
+        "frame": 29,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "aa0e001f3bddaa27fab0ac119a412d78454c1680e70d1b8078be8269af3a294b"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "dd985d3f4f37c0f2e8a35bba12d3825dde7c211823c836e309df805ba6d80571"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "d040a9a31b297b1b7097287a8c1ae78d843c421447b73b49971c817b5ac4c949"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "2a5448c0ef6527242c7316d7182e58af5a044bd215cfbdf05184b1cff4c970bf"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "4ef03c298b773fda9472ee59d32786006162919bdd4b74f1099cbc32e870fd8c"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "795dfe4aaa0f7e4634829d1b05d9639617394aa2165a462f95a904b03cd0407e"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "55b78e08a8616ee5e92c8f0ad2e4ea30931d06011f587205047e18e6e9fc32d8"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "4591d2366ff01f09cdbf2da604d12286a83bfa949fefeab50a96cb74eb1dd761"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 29,
+        "mosi": "0x00",
+        "nextMosi": "0x28",
+        "receiveAddress": "0x4870",
+        "instructions": 48,
+        "clocks": 78,
+        "earliestNextStop": 4805059,
+        "latestNextStop": 4805173
+      }
+    },
+    {
+      "stage": "portf-cont-16",
+      "name": "SPIC reply 30",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928433,
+          "clocks": 4805151,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "65316ee845f27d5ad1e5e6b621f3a8f270f4662a84ac64ebbc8885c7fbc8da87",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "af0b1a50b74af5fc364d12f55e896ccef0e7a8e512e141be70df984368c8a67e",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928457,
+          "clocks": 4805189,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "9abe2805fda8be199e4202f7cc11e46a02596ff1bbb5f5189ee7692ba3642722",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "f1103a5fbf1bb58313c0c419748ccccac69e5350758b78ad19d0de4ac35ae3b7",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928457,
+          "clocks": 4805189,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "c1026c3a6842119ead4154184b29b0c6af21bb1328263309411b8658992d9eee",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "e1003cd7fa8c9daa5b1e954ea57ca50c04365582d4d2598b2606cfc4f359c50f",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928481,
+          "clocks": 4805227,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "edfa2c6602029f089ebf03796aa587433290bd111fbd15b0eedca60a065a062d",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "21f29a5202a6a2328371fc6239f04bd84a697dd6c615612a34b0d129faa14bd1",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928457,
+          "clocks": 4805189,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "df8eb2ed170b56ef1a2d81e1377888ffd28b66bb9cb1073a98d1e0be53d0c36d",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "d9b005bcc2202c413255e5a6f4a4e4eef0233a297692d6a56ff575641414911c",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928481,
+          "clocks": 4805227,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "592cd5ec9b2b7fc1508a128e1c0d2159a62dc339bd2e82c22585e6c159c98665",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "43a26cdca942355699864b35793bb6040a8672c5cf0be64002d966e0aba161fd",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928481,
+          "clocks": 4805227,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "2e93a5d8ac11ce247e047f16c27f673c2f1211d83fdada40b1fb45f62bd14b08",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "33ddac114341453fb4e86512b0a04d89eb847541bbb0bdbe15842a247ac57ff4",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928505,
+          "clocks": 4805265,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "cfe0ee5f8437a460beb36f643e053b6c3e4d7ee6a5794f84eb2dd9d461701712",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "c423b421a65186284ea89453232e89dc0c27250d0c171030bb10b3a88eee5b1b",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80"
+        }
+      },
+      "spiSweep": {
+        "frame": 30,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "0079f466facd49a951ecfe58f46c0b0e62241f1168042454477e3132a049cc13"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "4b31e8315182cfeceb84acaee86308334b18c35a8072320133e4cb91297a325d"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "ab0ef3afd541960f65f4cc29f098572da8ac70d65360865c7ad0146c273f3c52"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "b5bb0fecfeb9dd3f61e86177ee0a54793ca921236d737d1ead7981a1eac88f7b"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "cf6190ad5f887c3a9653da81e1c87f928c5248cd41aeee9bce1d9c0a41ad7006"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "836083d7c6297c0a16381757620f8117222e0a6a8c12fc40dc01a58eec0485a6"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "3711601dea87d0265daa738bdfbb9e25e5f07d568ac3225a4942f69b724958b8"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "2fc6d2512e01f12648e019fc3b42922c577b2565e80b4dad6ac672b4ca81c6ae"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 30,
+        "mosi": "0x28",
+        "nextMosi": "0x00",
+        "receiveAddress": "0x4871",
+        "instructions": 53,
+        "clocks": 92,
+        "earliestNextStop": 4805151,
+        "latestNextStop": 4805265
+      }
+    },
+    {
+      "stage": "portf-cont-17",
+      "name": "SPIC reply 31",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928481,
+          "clocks": 4805229,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "022f5260e40bcbf525084b6f6461b819fafe6f4a268090dc6b46928e864f531c",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "77ecb06983b8b0600b2bffd32fee4dd66b877e9947f1a55d48f77c0cdf877765",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00 FF"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928505,
+          "clocks": 4805267,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "2ab95d1a06c77b436f92a08ac5bf4d9b4735ec2904c35428d6ef1f6eb643473c",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "c2372ccc4e509e67bb503adf8fbe1239c4cf4c74169c9a60369a3887f1c30635",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF 01"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928505,
+          "clocks": 4805267,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "47b3bbe288b3b45d281a828112fa9d930bb397412ddf9ab0b858380de996b79a",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "44e1e6fe7a5ee2f84e181d4b7bcfc74e5be62932f66b091a5815e7ffa7b6b8f1",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01 FE"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928529,
+          "clocks": 4805305,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "d2f2529a14cc7c0c5173f183d509de2f63d9656e001d68ead0a19fda5c31a57b",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "d7cbba28234ce5aca0375648d271d7118a6059919de778805bba5c4fbac4e77a",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE 5A"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928505,
+          "clocks": 4805267,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "0107ac96703f6616bb3c5abdb3462b04f57e2471bcb2ae9331326892c9240d25",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "fd4c9fc3f5366d03ad77e4f4c8640b7ffb5bd3e709037ab9d872f9641df7b24b",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A A5"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928529,
+          "clocks": 4805305,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "78e4ce63ced438451888ee867b8da06f69f23ed61fc17eef2fc7371fab0a4812",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "07e0ec177abdf07c53bad723ea952bac0a0d34a67c1e5cbe2ff6c482c2d55e08",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5 7F"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928529,
+          "clocks": 4805305,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "cfbdf57c480d07e0c0dbfe05e51c96cbe643fecf2e685eaac93690791cded179",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "d2c0e96d5db385931460b0951e47d46b95147885330be5f612c970692ba3c1cc",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F 80"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928553,
+          "clocks": 4805343,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "cdf198ba71034ee3ca0cc00ffa2a1e542183950d22270c076d9f61209c5d98ad",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "ce07f7262d66319d373eb7e85f0265ee3fbd29db18579ff7e7a0be746e1a8542",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80 00"
+        }
+      },
+      "spiSweep": {
+        "frame": 31,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "951d77945a441c013b43959451375a1cc7074680970608fa3401666ca1fa7987"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "3212aa0d8912793387b98753e7c27e2537aef8c7757a91fdbd1b65461dcbd8fb"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "5a84774484537627f5a81e8b62531143931747a8e1ffc3ed5541260ff1fcf0cf"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "0db76f8751001d23694c659c187a8488f82d30612866f048e195705a0bdc42b7"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "4d3125db0a1d22b6d92e4ffeac2eaae5b091bf58956120889affdc7e4eb24180"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "4264ca651af1c40cf6bfc7bc70aefbe0ab873b84cfb187e8029b3fcb368a62e4"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "fc13666eb6953ef40768e396670c8006188c796ee2c05b8867035e2791c667ca"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "378f092b00947dc71e68a7ba85e6ff9c648547a4b24331e9fa9a59272eef5d5c"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 31,
+        "mosi": "0x00",
+        "nextMosi": "0x06",
+        "receiveAddress": "0x4872",
+        "instructions": 48,
+        "clocks": 78,
+        "earliestNextStop": 4805229,
+        "latestNextStop": 4805343
+      }
+    },
+    {
+      "stage": "portf-cont-18",
+      "name": "SPIC reply 32",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928641,
+          "clocks": 4805490,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "1189fc0c998a814b2dfea5d4f85d8d7811c0b0f6ec59d502c2598eaf6cadc345",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "0804e6543cc94cf281b7b9ed183647cf7e84026aaaf42913075bc3caa41cd32a",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00 FF 01"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928665,
+          "clocks": 4805528,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "e2cfa170017930a39753d171928f060ba392a99cab055c14c3d5cfefeba5a82c",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "b6dd9e533c58802f2051e49dca57ab1bb0522e6b5d261c63b1dc1cc1460adf0c",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF 01 FE"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928665,
+          "clocks": 4805528,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "551b7cb496c69b09c3defbac3a6cbd8ed54274a04ee09f2027aafd680b49d766",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "9acd8dd23e394ea0d16b5bbc67494bcd382ca0681b4c662a7a5db7c76ed64d0f",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01 FE 5A"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928689,
+          "clocks": 4805566,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "3492c73e061a5e77892249fbaee79d446d0e32f5e81cafb42d268133e25435b3",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "38a48d72d398cbfd6d9601f9952c9cfe5db40566797546f205173ef262a054ab",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE 5A A5"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928665,
+          "clocks": 4805528,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "5bf0dbb5baef6e7b55ea58d04f5d8eea2873f1a5f26e90c2da3e108a9b486f45",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "f1627522adb3d0b2e050377dff740d235e2a322b54a43cd7aa83dd0dfbca79b4",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A A5 7F"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928689,
+          "clocks": 4805566,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "543ce64c0eb3fd088437bf6ba9176df3f4b2a06f4b0327eed1d377fd2cc04d18",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "51bdcb04cbbec0a4059488de8017ff698f43969e45e45953e088f9e99cd87996",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5 7F 80"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928689,
+          "clocks": 4805566,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "cde0fd2ecce19ebda345ed8f062facfba4381e062e0e4d2c6bcf052958a1b57a",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "da1b04174207988dfa91b431dce61599d433334762f03fedb36c4f7b5f7c081c",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F 80 00"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928713,
+          "clocks": 4805604,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "9cb603dd1ea9453aa8018d45f50c5b9ac86e59f2286fab3f082cd6acd6be66c1",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "61d4af14b95cffd962eb171a021a3326583ca43181c41da07d1d2af8c3a45ef2",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80 00 FF"
+        }
+      },
+      "spiSweep": {
+        "frame": 32,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "78ba719436c95d3cfd9f89d819e84a1f2768757c2a5ade773d7c9973f8997f57"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "612da33e2bcf53c1c15a673559a1fed444561dc5864e3ba1ea3e79a304f93185"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "cf10edb99febf21365873e1e535b134da0591ae2a71a8718626dafed58e35107"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "1bd25e4ac200507d4e092c8eb5c1b3c94bb701d37aafea908aaf529d85b5b180"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "14b49af5e4851e401dd2f37722f52e91b446f71a56ed7fae645af3d7512c603f"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "bdf8ae727bd98bb44602918e483890a9eda20dcd69744c7924fd852da41237b2"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "3c7012e7f5c8d21cad02bfda69c2b86ef1f5dd7142448c35bd036bb1fab75801"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "411807a67384675b2505e477334204fa0d03dce32f9ea2f9dcac8a6c56b8d01a"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 32,
+        "mosi": "0x06",
+        "nextMosi": "0x00",
+        "receiveAddress": "0x4873",
+        "instructions": 160,
+        "clocks": 261,
+        "earliestNextStop": 4805490,
+        "latestNextStop": 4805604
+      }
+    },
+    {
+      "stage": "portf-cont-19",
+      "name": "SPIC reply 33",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928689,
+          "clocks": 4805568,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "208ab87344da7201185ba0ae8950ea7459c27aa4ff1124cd87ab02706cb874d3",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "ed01b3f35d6ab32f01e76c422b65be05b523f0c62761c194f0479ba051514355",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00 FF 01 FE"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928713,
+          "clocks": 4805606,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "248332c7a7407c27a537206dc6af02c4847371206d1d0075bc397587e15d123c",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "f0b5dcef8bd5d8425f372272bc0aa6e864c7ee0d89e06916d5f3c125886268e2",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF 01 FE 5A"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928713,
+          "clocks": 4805606,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "8324ec8a8c579c82d13ae7b4bc7edf1f8bf4b3094dde859cb7dc46b400f2c961",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "ac2725a755319246e3344c97d49d291f3a22d49dab28036dca8a8333e26bbb87",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01 FE 5A A5"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928737,
+          "clocks": 4805644,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "e3da7edec228f0980fe0421f68b4f4b10915fb4a3e161c0953198c0f1d9ef2c5",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "11fe22273456525f8140ab68e3e4905ebb49ad9c2680ef236335cdc40a2d229b",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE 5A A5 7F"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928713,
+          "clocks": 4805606,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "3c8a649e42ba090b8479a9b326378bf2d72da72946f9d397713391d1e16473fd",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "5402492bd7cc7094a852018a3239fbac72f63472f0cacae6eeba18fec189200e",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A A5 7F 80"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928737,
+          "clocks": 4805644,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "5f8f998696c7406a55fc808cbd8ffa7652950d0d327acb475980a0f975af44fd",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "51bdcb04cbbec0a4059488de8017ff698f43969e45e45953e088f9e99cd87996",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5 7F 80 00"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928737,
+          "clocks": 4805644,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "4c222f4ee572544b4dcd0374d520ab3ac0b4f71418ed7849c065982b2aac8876",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "182b93f8804259aaf1249e6b3021c1006e3cbbaa5745e97a872632245e831a19",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F 80 00 FF"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928761,
+          "clocks": 4805682,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "baebf864bdaf6d87f7d665b3e8d9d4e70d76c41800c32d0ea1d3039d1157a38b",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "38e89163101d3094d7704ed64d34a816161a70e2197623417739e700f8e10118",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80 00 FF 01"
+        }
+      },
+      "spiSweep": {
+        "frame": 33,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "d5ceb0200454bc9e8a1ecd6a2cab2304dc10381428a39529f6244f583ff7ecff"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "8e3549401ec269ab2f9404e862853ce9e9d5c4931fe94a774901b26b1edb46a4"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "b3684435c534bcffbb8a95d23c2715c6e4028e0305ee990f05286d7221a6e60b"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "3329a567f76b42e6911f62bcadcc3b98f4a58e13dee785b7e548999cc165c4e3"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "bd8587a8f1689c7b0411801b1099b7cd8e88134b86277574ca4e80cd2ca4b6ef"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "c311e1402468febb89eaa7c257cb6653b4e3ce80998a758570f19a43d98a7f22"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "18931f3731ad3e1058f65134ff3961f246b0ecfe92758fc847259047c97a2cc3"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "cf25487725e894d3f600121ce4a90a5c3f58e87737aebaff1c40fcb9cb9bbe63"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 33,
+        "mosi": "0x00",
+        "nextMosi": "0x01",
+        "receiveAddress": "0x4870",
+        "instructions": 48,
+        "clocks": 78,
+        "earliestNextStop": 4805568,
+        "latestNextStop": 4805682
+      }
+    },
+    {
+      "stage": "portf-cont-20",
+      "name": "SPIC reply 34",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 550,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928742,
+          "clocks": 4805660,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "9e676096f3d9e770f93de9095def21a283e964239feeb1b7f369e30c07c9ad5e",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "c2404da94c1b134a9f4f86d018d9788e4607c0729455ce9db852ecd5b8b92a91",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00 FF 01 FE 5A"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928766,
+          "clocks": 4805698,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "9fefd6d832f948c1a00beb00c6d7136196e8af96a1dd60bedceedb39ee99c1e4",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "26d7625e03ffb6a10728c1d2113df6ccadca92442fe59b5e34d9c26febe80a7f",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF 01 FE 5A A5"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928766,
+          "clocks": 4805698,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "356bb390df50473d7c9d714c6c420d4a0066a4999414e2a7287f950f2e55a1a3",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "3dec7442c609ad8a6f0f1a93ba1dbc75e43c86aa624fe0e71f7c084fa97e1119",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01 FE 5A A5 7F"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928790,
+          "clocks": 4805736,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "587afe5accbaed7be07028b7c580774b4af04da90eb2ba1a99abe9bb0e4f597a",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "403d3a4ee2d33dd4006fd6830a9c015ec646552027eade96ab0373fb43056208",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE 5A A5 7F 80"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928766,
+          "clocks": 4805698,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "8ca6981b4aef94c68e2c3e3ac45eb3b15ba2d59866fccf3e71947cdb11202b41",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "236caa2d9e929c3d9871f3d8535d07496fb1151ee81cd78a1b22b4bcbec6e641",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A A5 7F 80 00"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928790,
+          "clocks": 4805736,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "e5a427d87d67ee02bd41cfb9b642131afebd347f0ff00267989280dfefc96aa7",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "087092a67c43370264734b9d9ac8a6410810b13af09c2164999c2dc2769ee95c",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5 7F 80 00 FF"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928790,
+          "clocks": 4805736,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "cfcde3fd1bf7c558eae1b2687bfde8805b75f7f0e3d05433404a91275d123fb5",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "547fe816e5b5507e44db7dfa02e82da4e29c55af9ce63f6d6b19df424a9c9cae",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F 80 00 FF 01"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928814,
+          "clocks": 4805774,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "24d3a1f3a93a3dfa7bbd17d4b2e44c20d8a393dadf1eb306907055392cd6871d",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "060b236c0b4d8b28ff4f8211f45eb671238250a61f5eed15bd614fe88a7f8ab6",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80 00 FF 01 FE"
+        }
+      },
+      "spiSweep": {
+        "frame": 34,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "75a992f0e4950e587ab2a65204730a81d9537deab95d9f93be284967123a545f"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "5e1e7e36ec00cef66f265839dc984161d4cece1980fbb68b214432e210305496"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "4aa12f9bfcf182318a8de45f150bc30b9cf7532c5e97b0ab8b2355c044bccd02"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "a0c0e30a53a8d3ca701ccbff36424e418866c855a8a8605060296cf83a1652a3"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "ca3282de56cd2c1a226f1dc2e9db6b59eb5e1ffe45c78061b44df22554679e2a"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "5e5ed7cd4f4c78c5428cd41786f27bc68aedf74fbeba4e0f16e24392b4bb3a00"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "c0ae8b713e06853c9f933eabaaeef5a00bf6cd11e8d88010303a533cb93090c4"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "b8009839f3d2380ec1acac1cd57fffd46d5e1a0d8d08c39b782b2612242e0742"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 34,
+        "mosi": "0x01",
+        "nextMosi": "0x38",
+        "receiveAddress": "0x4871",
+        "instructions": 53,
+        "clocks": 92,
+        "earliestNextStop": 4805660,
+        "latestNextStop": 4805774
+      }
+    },
+    {
+      "stage": "portf-cont-21",
+      "name": "SPIC reply 35",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 553,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928790,
+          "clocks": 4805738,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "1f2a8addcf8cfcedc89152fe4fabd103d7fcb35837dc795d6e3a019644e74f48",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "da15efd9c0e96590e79a8627767361982c65f4b586346004d9a6d0be92749e5b",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00 FF 01 FE 5A A5"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928814,
+          "clocks": 4805776,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "ad86ef0dabf2ace917f0e3bbf9858915ca0573c1a9e0fa0013f5c2687e21b293",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "ffc98a64427bf3178f629166c5ba929e97a03ef230637dbf2c73cf6ca733f97c",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF 01 FE 5A A5 7F"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928814,
+          "clocks": 4805776,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "7ac8d0851cb4e41c8fe854bfe388eff0a153642faa0eee5b0cddce17fe83df74",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "28a07806c86214042721b8ab5479e69df79a1a603afc7a22e88bce223c72f662",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01 FE 5A A5 7F 80"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928838,
+          "clocks": 4805814,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "659ad957a687df2c0e25b5da2d32133ce827f5fcf2c951f86237fbc0264650d4",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "39b2dcd3f5a5dd6b94fc252754af2270b839d3c6189318bcca68ace029241254",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE 5A A5 7F 80 00"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928814,
+          "clocks": 4805776,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "77f25fa08ceb95d5444728bc48b507df282b02504d18c281acd8fc533a463633",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "96cc109776f2a867a79687cef2152379d06efc22f470ee4910a0c9ee1df68351",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A A5 7F 80 00 FF"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928838,
+          "clocks": 4805814,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "d41af819967c579d7712828e8a20f82482335a4b9ae195cb3d2b825a8198ee5a",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "cc52e719949487446fd588e6fabf55c8ab7218bbdd0fcf78aa1e71f8540bfea0",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5 7F 80 00 FF 01"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928838,
+          "clocks": 4805814,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "5af3a02a1250e80b79409eed09a22c6f936b0db2ca35b960b90065f16e2dcf17",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "12fbfe8ca3524c03b9793f119d632a18e7761c6a1fbecf2395f5f89b56de8009",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F 80 00 FF 01 FE"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928862,
+          "clocks": 4805852,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "0cd14a8c5618dbdaa8c092dba9dacc095e533dc2e4c9fc4d1077e48b4920ea67",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "41d61839c2137341346147687cf6b3e3e56596b578b500a5b926f178b6e04d8d",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80 00 FF 01 FE 5A"
+        }
+      },
+      "spiSweep": {
+        "frame": 35,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "70823cc7f3c2ad25b4d76eca5e0879329cd040a436f50263493a13db16d383f9"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "6f412c9cf60259e6065e58975a7eb6c26b428c7d561ce10c5623245046cb5e1a"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "0e8031e4b3539a032717d8b670b938dd22bdab76e7a41c313048c3969fcbc64b"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "e25e7a88cf978c1d518e208a15a625aaea2730d3c23f073ddb18453b03e1a695"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "1363b16ca9803dc52ca2b5932f7d57a0c1a1d488f7380ba2acb2ab8fd783f866"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "28119aa45a8e0b517b3f3284d57151289975175136d10f198f919bc38a80bb80"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "cbafa4147b1a139db012e626dae5edc12706ab111f9616dd9ac0ffb11ef33051"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "9c61e4959d18a60d21a12c79611d004b3694f18e6e660d0f8ad1e2c35c8e8b5d"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 35,
+        "mosi": "0x38",
+        "nextMosi": "0xEF",
+        "receiveAddress": "0x4872",
+        "instructions": 48,
+        "clocks": 78,
+        "earliestNextStop": 4805738,
+        "latestNextStop": 4805852
+      }
+    },
+    {
+      "stage": "portf-cont-22",
+      "name": "SPIC reply 36",
+      "report": "SPIC-27-36-RESULTS.md",
+      "activeProfile": "low-low-low",
+      "checks": {
+        "passed": 556,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "historicalTraces": 11,
+        "originalFiles": 16,
+        "firmwareComparisonTests": 4,
+        "syntheticExportPipeline": "PASS"
+      },
+      "runs": {
+        "strict": {
+          "wordPC": "0x014E8C",
+          "instructions": 46741,
+          "clocks": 61988,
+          "stop": "UNKNOWN_EEPROM_DATA",
+          "matchingResetRuns": 2,
+          "traceSha256": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "access": {
+            "addressByte": 4096,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "erased": {
+          "wordPC": "0x007A52",
+          "instructions": 2872372,
+          "clocks": 4705639,
+          "stop": "OSC_STARTUP_TIMING_UNKNOWN",
+          "matchingResetRuns": 2,
+          "traceSha256": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "access": {
+            "addressByte": 81,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "timed": {
+          "wordPC": "0x007A74",
+          "instructions": 2872988,
+          "clocks": 4706500,
+          "stop": "UNKNOWN_PRODUCTION_SIGNATURE_BYTE",
+          "matchingResetRuns": 2,
+          "traceSha256": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1",
+          "access": {
+            "addressByte": 32,
+            "kind": "read",
+            "attemptedValue": null
+          }
+        },
+        "low-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928950,
+          "clocks": 4805999,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "b292376d3402d0972b8911825d38cc21ca40e0f75191cd6dded53c0000edaed9",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "5d20299c986d5f57d09d3d73d8954f17e78c4b457c1d460f4da792d91fa31b82",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 00 FF 96 13 A5 00 24 FF 69 27 00 53 00 FF 01 FE 5A A5 7F"
+        },
+        "low-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928974,
+          "clocks": 4806037,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "ec99ae3ef7b3617c4cc58357d5096df3293d6b76a7e09eaa6e38fe8a48829356",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "0e96fa34e5d201a89559a4ee375147568d1cc01bf4254367070c84ad8c7e71eb",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 01 FE 69 E7 00 FF DB 00 96 D8 FF AC FF 01 FE 5A A5 7F 80"
+        },
+        "low-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928974,
+          "clocks": 4806037,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "39c21ee27fe206e4d2fe9da1027d1646cb68c1d11f8e08bb28bf7d41c136d6d9",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "0ef470481f206c3ef396b2d5c0aeb1d04c13d4689f8f4212ff5c27ca4986dd3a",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF 55 AA 3C 00 F0 3C 00 55 7F FF 5C 81 01 FE 5A A5 7F 80 00"
+        },
+        "low-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928998,
+          "clocks": 4806075,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "8f3899ffe6ebf5e883add52c3922c4868dd9421d7cca9309d10661b1df558ebe",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "1f663059283f402847874862782cf424779d085b96bda464e0d892a40a58d787",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xE6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 7F 80 C3 FF 69 C3 FF AA 80 00 A3 7E FE 5A A5 7F 80 00 FF"
+        },
+        "high-low-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928974,
+          "clocks": 4806037,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "7d6e758efaf96822e07308d5ad99a9842c4b5bc947442c0d861fdb0ad3dca381",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "3c34fd2d5630063ac993dfcfa7307541ee1b2eb0ec44d587e92a9fb14e5433f3",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 FF 80 7F 5A BD 96 7F 81 39 C3 5A 01 FF 5A A5 7F 80 00 FF 01"
+        },
+        "high-low-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928998,
+          "clocks": 4806075,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "371ab2fa3fb3b4fb6bf9d477e2217f3fce5dd13eba87357174e7f279e099cacf",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "9a6f67569d281be254a5d378afbaeb588c2fee7d9a1eba6733f3a31787834767",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xC6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "00 FF 00 FF A5 39 E1 6C B4 27 D2 87 49 A6 3C 71 00 AA 55 A5 42 0F 80 7E C6 3C A5 FE 00 A5 7F 80 00 FF 01 FE"
+        },
+        "high-high-low": {
+          "wordPC": "0x00FD24",
+          "instructions": 2928998,
+          "clocks": 4806075,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "fe58b557d8f642d0d5beac16401079ab39aae46a9678d540aabf010936106442",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "047c31ba9c155cc1282e1fe0f553dfac81dddae7ee655ff24e3eff7022edaf0a",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0x00"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E 00 FE 01 00 81 FF 55 A5 80 00 7F 96 3C 7F 80 00 FF 01 FE 5A"
+        },
+        "high-high-high": {
+          "wordPC": "0x00FD24",
+          "instructions": 2929022,
+          "clocks": 4806113,
+          "stop": "SPI_UNKNOWN_RX",
+          "matchingResetRuns": 2,
+          "traceSha256": "a177a9b2326826d15ca53eceec402d7d8224bf991a8c7849468d0d987a82d5f8",
+          "access": {
+            "addressByte": 2243,
+            "kind": "read",
+            "attemptedValue": null
+          },
+          "sramSha256": "12facdf57176235cf4d723dc653c01f8dc4259b22314d9ea81e571737b90989f",
+          "pe2HighCycles": [
+            4707005,
+            6000000
+          ],
+          "syntheticAdcCalibration": "5A 03",
+          "syntheticAddressAck": "0xDE",
+          "syntheticFirstDataAck": "0x00",
+          "syntheticReadAddressAck": "0xDF",
+          "syntheticTwieReadBytes": "00 00 00 00 00 00 00 00",
+          "portFSamples": [
+            {
+              "clock": 4738396,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4770657,
+              "value": "0xF6"
+            },
+            {
+              "clock": 4802913,
+              "value": "0xF6"
+            }
+          ],
+          "syntheticSpiReplies": "FF 00 FF 00 5A C6 1E 93 4B D8 2D 78 B6 59 C3 8E FF FF 00 FF 7E 5A AA 5A 7F FF 80 69 C3 80 00 FF 01 FE 5A A5"
+        }
+      },
+      "spiSweep": {
+        "frame": 36,
+        "valuesPerHistory": 256,
+        "histories": [
+          "low-low-low",
+          "low-low-high",
+          "low-high-low",
+          "low-high-high",
+          "high-low-low",
+          "high-low-high",
+          "high-high-low",
+          "high-high-high"
+        ],
+        "reports": [
+          {
+            "histories": [
+              "low-low-low"
+            ],
+            "sha256": "92684b55ccdf19cc2991c850ba7f4e7e6f0f94394fbb98758dba218a4933daad"
+          },
+          {
+            "histories": [
+              "low-low-high"
+            ],
+            "sha256": "3f6d4c7ef95e66b0bbbde652ec617e5142bc4f7439c4db6653c6bcac2282f6ea"
+          },
+          {
+            "histories": [
+              "low-high-low"
+            ],
+            "sha256": "14a61fcb26af990c35155eeb38d75d6b2d3d2c31380d7f57cf6413fde2df81f0"
+          },
+          {
+            "histories": [
+              "low-high-high"
+            ],
+            "sha256": "d69004c727795cbe044365b00573ee2a56ff68591845b75da4439e33ac42f100"
+          },
+          {
+            "histories": [
+              "high-low-low"
+            ],
+            "sha256": "f8b99362fbc57d5114d1d51befd9a3108bebe7e61f8fd58e60c47473a399247e"
+          },
+          {
+            "histories": [
+              "high-low-high"
+            ],
+            "sha256": "9cf1463d3fbf8aa73372581ed6771d667aba473d72606c280668fee2c9f3dbc4"
+          },
+          {
+            "histories": [
+              "high-high-low"
+            ],
+            "sha256": "ceb6901663b06dd579c2e7a9ebd29ecd050239e0e527a7c911cc1e2e85eca473"
+          },
+          {
+            "histories": [
+              "high-high-high"
+            ],
+            "sha256": "57260ba22ed7428bb54994ffcf376fcca3d883f3cdfb2fb96744e82c83804398"
+          }
+        ],
+        "directCases": 2048
+      },
+      "transfer": {
+        "frame": 36,
+        "mosi": "0xEF",
+        "nextMosi": "0x00",
+        "receiveAddress": "0x4873",
+        "instructions": 160,
+        "clocks": 261,
+        "earliestNextStop": 4805999,
+        "latestNextStop": 4806113
+      }
     }
-  ]
+  ],
+  "extendedStartup": {
+    "firmwareSha256": "c5cea66ff95f62b9e487559d9b2177b84956033854a54ea670a7927731c71847",
+    "scope": "BrewControl 1.1.27 with explicit synthetic digital inputs. Clocks use the tested emulator timing.",
+    "inputs": {
+      "eeprom": "erased",
+      "oscillator": "a3-wake-proxy",
+      "calibration": "0x035A",
+      "pe2": "high during each measured interval",
+      "initialTwie": {
+        "address": "0x6F",
+        "writeOffset": "0x00",
+        "readBytes": "00 00 00 00 00 00 00 00",
+        "writeAddressAck": true,
+        "offsetAck": true,
+        "readAddressAck": true
+      },
+      "longestProfile": {
+        "gpio": "low-low-low, then low on undriven PORTF bits",
+        "spicFromReply30": "0x00",
+        "spieReplies": "00 00 00 00 00 00 00",
+        "adcClockPhase": 0,
+        "pa1Raw": "0x000"
+      }
+    },
+    "steps": [
+      {
+        "stage": "spie-first-data",
+        "name": "SPIE.DATA write",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 550,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      },
+      {
+        "stage": "spie-first-status",
+        "name": "SPIE.STATUS read",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 550,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      },
+      {
+        "stage": "spie-rx-1",
+        "name": "SPIE reply 1",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 550,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 512
+      },
+      {
+        "stage": "spie-rx-2",
+        "name": "SPIE reply 2",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 553,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 1024
+      },
+      {
+        "stage": "spie-rx-3",
+        "name": "SPIE reply 3",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 556,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 1024
+      },
+      {
+        "stage": "spie-rx-4",
+        "name": "SPIE reply 4",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 1024
+      },
+      {
+        "stage": "spie-rx-5",
+        "name": "SPIE reply 5",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 1024
+      },
+      {
+        "stage": "spie-rx-6",
+        "name": "SPIE reply 6",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 1024
+      },
+      {
+        "stage": "spie-rx-7",
+        "name": "SPIE reply 7",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "executedReplyCases": 1024
+      },
+      {
+        "stage": "cpu-asr",
+        "name": "ASR R23",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 553,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "firmwareCases": [
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0x00",
+            "fromClock": 27298375,
+            "stopClock": 27298376,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0x14",
+            "fromClock": 27298374,
+            "stopClock": 27298375,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0x41",
+            "fromClock": 27298376,
+            "stopClock": 27298377,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0xFF",
+            "fromClock": 27298375,
+            "stopClock": 27298376,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0x00",
+            "fromClock": 27327694,
+            "stopClock": 27327695,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0x14",
+            "fromClock": 27327693,
+            "stopClock": 27327694,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0x41",
+            "fromClock": 27327695,
+            "stopClock": 27327696,
+            "nextWordPC": "0x0088DD"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0xFF",
+            "fromClock": 27327694,
+            "stopClock": 27327695,
+            "nextWordPC": "0x0088DD"
+          }
+        ]
+      },
+      {
+        "stage": "cpu-ror",
+        "name": "ROR R22",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 556,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "firmwareCases": [
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0x00",
+            "fromClock": 27298376,
+            "stopClock": 27317596,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0x14",
+            "fromClock": 27298375,
+            "stopClock": 27317597,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0x41",
+            "fromClock": 27298377,
+            "stopClock": 27317597,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "low-low-low",
+            "seventhSpieReply": "0xFF",
+            "fromClock": 27298376,
+            "stopClock": 27317596,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0x00",
+            "fromClock": 27327695,
+            "stopClock": 27349853,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0x14",
+            "fromClock": 27327694,
+            "stopClock": 27349852,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0x41",
+            "fromClock": 27327696,
+            "stopClock": 27349852,
+            "nextWordPC": "0x0079C5"
+          },
+          {
+            "portProfile": "high-high-high",
+            "seventhSpieReply": "0xFF",
+            "fromClock": 27327695,
+            "stopClock": 27349853,
+            "nextWordPC": "0x0079C5"
+          }
+        ]
+      },
+      {
+        "stage": "post-rotate-port",
+        "name": "PORTF after ROR",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 556,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        },
+        "rawPortCases": 2048,
+        "consistentPortCases": 512,
+        "followedBranches": 16
+      },
+      {
+        "stage": "firmware-delay",
+        "name": "24-bit delay before the ADC",
+        "report": "SPIE-CPU-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 556,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      },
+      {
+        "stage": "adc-first-start",
+        "name": "First ADCA channel 0 start",
+        "report": "ADCA-TWIE-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      },
+      {
+        "stage": "adc-first-flags",
+        "name": "ADCA completion flag",
+        "report": "ADCA-TWIE-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      },
+      {
+        "stage": "adc-first-result",
+        "name": "First PA1 result",
+        "report": "ADCA-TWIE-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      },
+      {
+        "stage": "twie-57-address",
+        "name": "TWIE write address 0x57",
+        "report": "ADCA-TWIE-STARTUP-RESULTS.md",
+        "checks": {
+          "passed": 562,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "historicalTraces": 11,
+          "originalFiles": 16,
+          "firmwareComparisonTests": 4,
+          "syntheticExportPipeline": "PASS"
+        },
+        "matchingResetsPerControl": 2,
+        "controlTraceSha256": {
+          "strict": "586c8a3cddec681d364fa0946b1a93c10e3a33f1e16279633f9c5c3cdd5b86b1",
+          "erased": "f1c3c76e63bf02be9c79af87a00d8825ec7e987f7522a86ae2572b3ee40bd099",
+          "timed": "4f097b5c65e2ac7718667c0f6a7a3c446dd41432f2f968d2bcbc4bc866ae05d1"
+        }
+      }
+    ],
+    "pairedFirmwareRuns": [
+      {
+        "stage": "spie-first-data",
+        "profile": "low-low-low",
+        "wordPC": "0x00FD21",
+        "stop": "UNHANDLED_MMIO",
+        "clocks": 27294672,
+        "instructions": 16583728,
+        "matchingResetRuns": 2,
+        "traceSha256": "a3d774addf5ae3ea88c4961f8b7c3aa3cb385f9d17855a9f66799cc2ae64b135",
+        "sramSha256": "00762fdfc5bb6af8dff6588dfd3ec4f2a0279cd7b30c8c3d6dd49a3ab22633e6"
+      },
+      {
+        "stage": "spie-first-data",
+        "profile": "high-high-high",
+        "wordPC": "0x00FD21",
+        "stop": "UNHANDLED_MMIO",
+        "clocks": 27323991,
+        "instructions": 16602165,
+        "matchingResetRuns": 2,
+        "traceSha256": "730ec1fb3bf46ac85aae39a8921fbfa282aa5a411db46944245d6f6b961aba11",
+        "sramSha256": "31c4d0facd5e22683c1ee2ea1720c1c7c9820cefe6fde33b77381313ce2caac0"
+      },
+      {
+        "stage": "spie-first-status",
+        "profile": "low-low-low",
+        "wordPC": "0x00FD24",
+        "stop": "SPI_UNKNOWN_RX",
+        "clocks": 27294701,
+        "instructions": 16583745,
+        "matchingResetRuns": 2,
+        "traceSha256": "c74a695f69ae4a9af88bebcac3e2a8247ed25050992e7e322977b016acbf8f75",
+        "sramSha256": "00762fdfc5bb6af8dff6588dfd3ec4f2a0279cd7b30c8c3d6dd49a3ab22633e6"
+      },
+      {
+        "stage": "spie-first-status",
+        "profile": "high-high-high",
+        "wordPC": "0x00FD24",
+        "stop": "SPI_UNKNOWN_RX",
+        "clocks": 27324020,
+        "instructions": 16602182,
+        "matchingResetRuns": 2,
+        "traceSha256": "27092a44f1d86394a748e91042c5cc6a1ca806b063d16b02b0d138ca1f1d79ec",
+        "sramSha256": "31c4d0facd5e22683c1ee2ea1720c1c7c9820cefe6fde33b77381313ce2caac0"
+      },
+      {
+        "stage": "firmware-delay",
+        "profile": "low-low-low",
+        "wordPC": "0x010293",
+        "stop": "ADCA_CONVERSION_START_UNSUPPORTED",
+        "clocks": 53699668,
+        "instructions": 37277264,
+        "matchingResetRuns": 2,
+        "traceSha256": "085bd1acd9d190f3e32341626f907ed43d92f50b7adb348885683d0039655aae",
+        "sramSha256": "ebf93621939b28eb2d04e678b0d9ea1eb9fe2447a31e7aa5293ad78d3dc34ac5"
+      },
+      {
+        "stage": "twie-57-address",
+        "profile": "low-low-low, ADC phase 0, PA1 code 0x000",
+        "wordPC": "0x0132B2",
+        "stop": "TWI_UNKNOWN_ACK",
+        "clocks": 53702806,
+        "instructions": 37279312,
+        "matchingResetRuns": 2,
+        "traceSha256": "76ae6c46d798b2365a1a7e537f702437f918076080d044ef24887e483c540c7d",
+        "sramSha256": "faf5e069d325b8bc21c0b94ea834ee288dab180e59ccfb9e1aa7d8f04a0dd938"
+      }
+    ],
+    "spicRanges": [
+      {
+        "firstReply": 30,
+        "lastReply": 88,
+        "inputHistories": 8,
+        "spiCases": 120832,
+        "portCases": 2048,
+        "consistentPortCases": 512,
+        "outputHistories": 16
+      },
+      {
+        "firstReply": 89,
+        "lastReply": 92,
+        "inputHistories": 16,
+        "spiCases": 16384,
+        "portCases": 4096,
+        "consistentPortCases": 1024,
+        "outputHistories": 32
+      },
+      {
+        "firstReply": 93,
+        "lastReply": 100,
+        "inputHistories": 32,
+        "spiCases": 65536,
+        "portCases": 8192,
+        "consistentPortCases": 2048,
+        "outputHistories": 64
+      }
+    ],
+    "spicRangeResetCrossCheck": {
+      "histories": 8,
+      "matchingResetsPerHistory": 2,
+      "verifiedSections": 472,
+      "traceSha256ByHistory": {
+        "low-low-low": "bd00689c37e4e3f4aa4370aa9633b6a1fc79ddadba050acb9030496d6eda9603",
+        "low-low-high": "1b0739f7d6294d50a815561f78442004851f6fe4d55a05cf7292a52bd0eb69a2",
+        "low-high-low": "447debf13a9da7cfaee3cd2a8854d27ae2fff0096d3e01547ddde7b3ab203a3c",
+        "low-high-high": "2c11bb4fce5f22dca13466bae15e78e252137cf4149a319102c3e977e4ba4da6",
+        "high-low-low": "3f8d676597e6f033cfd24d4c49366029db9cc6ee42266765b48ea88801780f75",
+        "high-low-high": "a4c21e8b9e00a87be9b6d7ab7f9b4a1e26af8e301d9a3cfe3ed92501bd8747a2",
+        "high-high-low": "fa84be931434ac5a544b53dc55137a0e9780aec414fc24f67da93a59872f217b",
+        "high-high-high": "be08d19824cafc0d625082262cf920ca9d67d6a0adc96b4eabcaf90225959003"
+      }
+    },
+    "spicAfterReply100": {
+      "fixedHistories": 64,
+      "firstReply": 101,
+      "firstPortStopClock": 4931935,
+      "lastPortStopClock": 4931937,
+      "lastReplyReadRange": [
+        266,
+        269
+      ]
+    },
+    "spicFill": {
+      "firstReply": 30,
+      "lastReply": 231490,
+      "gpioProfiles": 2,
+      "transfersBeforeSpie": 231490
+    },
+    "delay": {
+      "iterations": 4799999,
+      "takenBranches": 4799998,
+      "tcc0Interrupts": 747,
+      "entryClock": 29578628,
+      "exitClock": 53699642,
+      "spicDataflowInLowProfile": {
+        "first": 30,
+        "last": 246632,
+        "readCount": 246603
+      }
+    },
+    "adc": {
+      "wordPCs": {
+        "start": "0x010293",
+        "firstFlagRead": "0x010295",
+        "poll": "0x01029D",
+        "clearFlag": "0x0102A2",
+        "readLow": "0x0102A4",
+        "readHigh": "0x0102A6"
+      },
+      "divider": 256,
+      "requestClock": 53699670,
+      "sampleStartRange": [
+        53699671,
+        53699926
+      ],
+      "completionClockRange": [
+        53701463,
+        53701718
+      ],
+      "possiblePhases": 256,
+      "distinctPollingPaths": 5,
+      "polling": [
+        {
+          "clockBeforeResultRead": 53701511,
+          "phaseCount": 44,
+          "polls": 28
+        },
+        {
+          "clockBeforeResultRead": 53701579,
+          "phaseCount": 68,
+          "polls": 29
+        },
+        {
+          "clockBeforeResultRead": 53701647,
+          "phaseCount": 68,
+          "polls": 30
+        },
+        {
+          "clockBeforeResultRead": 53701715,
+          "phaseCount": 68,
+          "polls": 31
+        },
+        {
+          "clockBeforeResultRead": 53701783,
+          "phaseCount": 8,
+          "polls": 32
+        }
+      ],
+      "rawCodes": 4096,
+      "phaseCodeCombinations": 1048576,
+      "executedCodePaths": 20480
+    },
+    "twie": {
+      "writeAddress": "0x57",
+      "wireAddress": "0xAE",
+      "adcPhaseGroups": [
+        {
+          "phase": 0,
+          "count": 68,
+          "portFirst": false,
+          "addressStopClocks": [
+            53702806
+          ]
+        },
+        {
+          "phase": 11,
+          "count": 68,
+          "portFirst": false,
+          "addressStopClocks": [
+            53702874
+          ]
+        },
+        {
+          "phase": 79,
+          "count": 8,
+          "portFirst": true,
+          "addressStopClocks": [
+            53703101,
+            53703139
+          ]
+        },
+        {
+          "phase": 87,
+          "count": 44,
+          "portFirst": false,
+          "addressStopClocks": [
+            53702670
+          ]
+        },
+        {
+          "phase": 131,
+          "count": 68,
+          "portFirst": false,
+          "addressStopClocks": [
+            53702738
+          ]
+        }
+      ],
+      "possiblePortValues": 64,
+      "conditionalCpuExecutions": 1408,
+      "phaseZeroPrefixSha256": "76ae6c46d798b2365a1a7e537f702437f918076080d044ef24887e483c540c7d",
+      "branches": [
+        {
+          "addressResponse": "ACK",
+          "nextWordPC": "0x0132FB",
+          "clocks": 53705769,
+          "nextRequest": {
+            "action": "write",
+            "address": 87,
+            "index": 0,
+            "value": 240
+          },
+          "stop": "TWI_UNKNOWN_ACK",
+          "suffixTraceSha256": "65e9746c0e2e48814e4a01e05745e8a421deb10a34ad83d06e7e0bd63eb69c17",
+          "sramSha256": "2b87ee64e4f8a2d5421145e856e0eea880d189d46514927363d89de1af9a61b2"
+        },
+        {
+          "addressResponse": "NACK",
+          "nextWordPC": "0x0132B2",
+          "clocks": 53706193,
+          "nextRequest": {
+            "action": "address",
+            "address": 111,
+            "read": false,
+            "repeated": false
+          },
+          "stop": "TWI_UNKNOWN_ACK",
+          "suffixTraceSha256": "1c7c18f9d25c6632015b478b034c6182046b19c398917728dd0fae6553985778",
+          "sramSha256": "33366623f403b68cfa1991e34c8af9d1c314f7c93d8a1953a88d525a0d5d14f1"
+        }
+      ]
+    }
+  }
 }

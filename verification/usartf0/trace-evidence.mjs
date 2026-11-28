@@ -14,6 +14,26 @@ async function fileHash(file, limit) {
   for await (const chunk of createReadStream(file, options)) hash.update(chunk);
   return hash;
 }
+// Share the reset prefix only within a single matrix of profiles. Each stage
+// starts a new matrix and reads both common files again.
+function sharedBaseHashes() {
+  const entries = new Map();
+  const identity = file => {
+    const s = statSync(file, {bigint:true});
+    return [s.dev,s.ino,s.size,s.mtimeNs,s.ctimeNs].join('/');
+  };
+  return async (file, limit) => {
+    const key = file + '\0' + (limit ?? 'all'), before = identity(file);
+    let entry = entries.get(key);
+    if (!entry || entry.identity !== before) {
+      const hash = await fileHash(file,limit);
+      assert.equal(identity(file),before,'Common reset evidence changed while hashing '+file);
+      entry = {identity:before,hash};
+      entries.set(key,entry);
+    }
+    return entry.hash.copy();
+  };
+}
 function finalLine(buffer) {
   assert.equal(buffer.at(-1), 10);
   const start = buffer.lastIndexOf(10, buffer.length - 2) + 1;
@@ -28,7 +48,7 @@ function tailAt(file, start) {
 }
 
 // Rehash the raw base, its old terminal diagnostic, and both generations of suffixes.
-async function compareStored(priv, dir, priorDir, current, prior, { allowNvmAppend = false } = {}) {
+async function compareStored(priv, dir, priorDir, current, prior, { allowNvmAppend = false, hashBase = fileHash } = {}) {
   const m = json(dir, 'trace-reference.json'), oldM = json(priorDir, 'trace-reference.json');
   assert.deepEqual(m, current.traceStorage);
   assert.deepEqual(oldM, prior.traceStorage);
@@ -36,7 +56,7 @@ async function compareStored(priv, dir, priorDir, current, prior, { allowNvmAppe
   assert.equal(m.referenceRun, oldM.referenceRun);
   const base = join(priv, m.referenceRun), raw = join(base, 'trace.jsonl');
   const original = json(base, 'result.json');
-  const prefix = await fileHash(raw, m.trace.prefixBytes);
+  const prefix = await hashBase(raw, m.trace.prefixBytes);
   assert.equal(prefix.copy().digest('hex'), m.trace.prefixSha256);
   const oldEnd = tailAt(raw, m.trace.prefixBytes);
   assert.equal(lines(oldEnd).length, 1);
@@ -45,7 +65,7 @@ async function compareStored(priv, dir, priorDir, current, prior, { allowNvmAppe
   assert.equal(original.traceSha256, m.referenceTraceSha256);
   assert.equal(oldM.trace.prefixBytes, m.trace.prefixBytes);
   assert.equal(oldM.trace.prefixSha256, m.trace.prefixSha256);
-  const nvm = join(base, 'nvm-accesses.jsonl'), nvmPrefix = await fileHash(nvm);
+  const nvm = join(base, 'nvm-accesses.jsonl'), nvmPrefix = await hashBase(nvm);
   const oldNvm = read(priorDir, 'nvm-suffix.jsonl'), newNvm = read(dir, 'nvm-suffix.jsonl');
   assert.deepEqual(newNvm.subarray(0, oldNvm.length), oldNvm);
   for (const [suffix, manifest] of [[oldNvm, oldM], [newNvm, m]]) {
@@ -78,4 +98,4 @@ async function compareStored(priv, dir, priorDir, current, prior, { allowNvmAppe
   return now.subarray(joint.before.length);
 }
 
-export { compareStored, fileHash, finalLine, json, lines, read, sha };
+export { compareStored, fileHash, finalLine, json, lines, read, sha, sharedBaseHashes };

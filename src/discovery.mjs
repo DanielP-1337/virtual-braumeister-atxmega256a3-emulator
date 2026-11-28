@@ -18,6 +18,9 @@ export function decodeAt(cpu, pc = cpu.pc) {
       addressByte: cpu.pair(30) + (extended ? cpu.rampz * 65536 : 0),
     } };
   }
+  if ((op & 0xfe0d) === 0x9405) {
+    return { ...base, mnemonic: (op & 2) ? 'ROR' : 'ASR', operands: { register: d } };
+  }
   if ((op & 0xfc00) === 0x9c00) {
     return { ...base, mnemonic: 'MUL', operands: { leftRegister: d, rightRegister: rr } };
   }

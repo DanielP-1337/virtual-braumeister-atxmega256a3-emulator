@@ -194,6 +194,20 @@ export class XmegaCPU {
           (negative !== overflow ? 0x10 : 0) | (overflow ? 8 : 0) |
           (negative ? 4 : 0) | (result === 0 ? 2 : 0) | (sum > 0xff ? 1 : 0);
       }
+      else if ((op & 0xfe0d) === 0x9405) {
+        const rotateThroughCarry = (op & 2) !== 0;
+        name = rotateThroughCarry ? 'ROR' : 'ASR';
+        this.checkPcTarget(next);
+        const value = this.r[d];
+        const highBit = rotateThroughCarry ? (this.sreg & 1) << 7 : value & 0x80;
+        const result = highBit | (value >>> 1);
+        const carry = value & 1;
+        const negative = result >>> 7;
+        const overflow = negative ^ carry;
+        this.r[d] = result;
+        this.sreg = (this.sreg & 0xe0) | ((negative ^ overflow) << 4) | (overflow << 3) |
+          (negative << 2) | (result === 0 ? 2 : 0) | carry;
+      }
       else if ((op & 0xfe0f) === 0x9402) {
         name = 'SWAP';
         this.checkPcTarget(next);

@@ -35,6 +35,8 @@
 !/scripts/pe2-input.mjs
 !/scripts/portf-input.mjs
 !/scripts/spic-input.mjs
+!/scripts/spie-input.mjs
+!/scripts/adca-input.mjs
 !/scripts/twie-input.mjs
 !/scripts/production-signature-input.mjs
 !/scripts/probe-cores.mjs
@@ -73,6 +75,12 @@
 !/verification/usartf0/
 /verification/usartf0/*
 !/verification/usartf0/trace-evidence.mjs
+
+!/verification/gpio/
+/verification/gpio/*
+!/verification/gpio/check-spie-native-registers.mjs
+!/verification/gpio/spic-register-dataflow.mjs
+!/verification/gpio/check-spic-register-dataflow.mjs
 
 !/verification/cpu/
 /verification/cpu/*

@@ -8,6 +8,8 @@ import { loadEepromInput } from './eeprom-input.mjs';
 import { pe2HighInput } from './pe2-input.mjs';
 import { portfInput } from './portf-input.mjs';
 import { spicFrameInput } from './spic-input.mjs';
+import { adcaSampleInput } from './adca-input.mjs';
+import { spieFrameInput } from './spie-input.mjs';
 import { twieAddressAck } from './twie-input.mjs';
 import { productionSignatureInput } from './production-signature-input.mjs';
 import { withNvmAccessLog } from './nvm-access-log.mjs';
@@ -16,7 +18,7 @@ import { comparisonRun, withComparedLog } from './compare-run.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2), args = {};
 if (argv.length % 2) throw new Error('Arguments require --name value pairs');
-for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--tcd0-period', '--tcd0-cccbuf', '--tcd0-ccdbuf', '--tcd0-ctrlb', '--tcd1-period', '--tcd1-ccabuf', '--tcd1-ccbbuf', '--tcd1-ctrlb', '--tcd1-ctrla', '--dacb-ctrlb', '--dacb-ctrlc', '--dacb-ctrla', '--nvm-calibration', '--synthetic-adcacal0', '--synthetic-adcacal1', '--adca-cal', '--adca-ctrla', '--adca-ctrlb', '--adca-refctrl', '--adca-evctrl', '--adca-prescaler', '--adca-ch0-muxctrl', '--adca-ch0-intctrl', '--adca-ch0-intflags', '--adca-ch0-ctrl', '--spie-ctrl', '--spie-intctrl', '--porte-int0mask', '--porte-intctrl', '--synthetic-pe2-high', '--synthetic-portf-in', '--synthetic-spic-first-rx', '--synthetic-spic-next-rx', '--synthetic-twie-address-ack', '--synthetic-twie-first-data-ack', '--synthetic-twie-read-address-ack', '--synthetic-twie-first-read-byte', '--synthetic-twie-second-read-byte', '--synthetic-twie-third-read-byte', '--synthetic-twie-additional-read-bytes', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
+for (let i = 0; i < argv.length; i += 2) { if (!['--firmware', '--output', '--max-steps', '--max-cycles', '--eeprom', '--eeprom-ihex', '--eeprom-state', '--core', '--osc-timing', '--clock-control', '--dfll-reference', '--dfll-enable', '--usartf0-ctrlb', '--usartf0-ctrlc', '--usartf0-ctrla', '--usartf0-baudctrla', '--usartf0-baudctrlb', '--tcc0-counter', '--tcc0-clock', '--tcc0-ctrlb', '--tcc0-period', '--tcc0-intctrla', '--tcd0-period', '--tcd0-cccbuf', '--tcd0-ccdbuf', '--tcd0-ctrlb', '--tcd1-period', '--tcd1-ccabuf', '--tcd1-ccbbuf', '--tcd1-ctrlb', '--tcd1-ctrla', '--dacb-ctrlb', '--dacb-ctrlc', '--dacb-ctrla', '--nvm-calibration', '--synthetic-adcacal0', '--synthetic-adcacal1', '--adca-cal', '--adca-ctrla', '--adca-ctrlb', '--adca-refctrl', '--adca-evctrl', '--adca-prescaler', '--adca-ch0-muxctrl', '--adca-ch0-intctrl', '--adca-ch0-intflags', '--adca-ch0-ctrl', '--adca-ch0-conversion', '--adca-intflags', '--adca-ch0-result', '--synthetic-adca-clock-phase', '--synthetic-adca-ch0-results', '--spie-ctrl', '--spie-intctrl', '--spie-data', '--spie-status', '--synthetic-spie-rx', '--porte-int0mask', '--porte-intctrl', '--synthetic-pe2-high', '--synthetic-portf-in', '--synthetic-spic-first-rx', '--synthetic-spic-next-rx', '--synthetic-twie-address-ack', '--synthetic-twie-first-data-ack', '--synthetic-twie-read-address-ack', '--synthetic-twie-first-read-byte', '--synthetic-twie-second-read-byte', '--synthetic-twie-third-read-byte', '--synthetic-twie-additional-read-bytes', '--compare-run'].includes(argv[i]) || Object.hasOwn(args, argv[i])) throw new Error('Unknown/duplicate argument'); args[argv[i]] = argv[i + 1]; }
 const eepromScenario = args['--eeprom-state'];
 if (eepromScenario !== undefined && eepromScenario !== 'erased') throw new Error('Expected --eeprom-state erased');
 if (eepromScenario && (args['--eeprom'] !== undefined || args['--eeprom-ihex'] !== undefined)) {
@@ -166,6 +168,21 @@ for (const [option, key, register] of [
   }
   adcaMappings[key] = adcaMode === 'mapped';
 }
+const conversionMode = args['--adca-ch0-conversion'] ?? adcaMode;
+const globalFlagsMode = args['--adca-intflags'] ?? conversionMode;
+const channelResultMode = args['--adca-ch0-result'] ?? globalFlagsMode;
+for (const mode of [conversionMode, globalFlagsMode, channelResultMode]) {
+  if (!['mapped', 'unmapped'].includes(mode) || (mode === 'mapped' && core !== 'current')) {
+    throw new Error('ADCA conversion and result mappings require the current core and accept mapped or unmapped.');
+  }
+}
+const adcaInput = adcaSampleInput(args['--synthetic-adca-clock-phase'], args['--synthetic-adca-ch0-results']);
+if (conversionMode !== 'mapped' && (adcaInput || channelResultMode === 'mapped')) {
+  throw new Error('ADC samples, clock phase and result registers require a mapped channel 0 conversion.');
+}
+const AdcaConversion = conversionMode === 'mapped' ? (await import('../src/peripherals/adca-conversion.mjs')).ADCASingleConversion : null;
+adcaMappings.mapInterruptFlags = globalFlagsMode === 'mapped';
+adcaMappings.mapChannel0Result = channelResultMode === 'mapped';
 const spieCtrlMode = args['--spie-ctrl'] ?? adcaMode;
 if (!['mapped', 'unmapped'].includes(spieCtrlMode) || (spieCtrlMode === 'mapped' && core !== 'current')) {
   throw new Error('SPIE.CTRL requires the current core. Use --spie-ctrl mapped or unmapped.');
@@ -174,6 +191,15 @@ const spieIntctrlMode = args['--spie-intctrl'] ?? spieCtrlMode;
 if (!['mapped', 'unmapped'].includes(spieIntctrlMode) || (spieIntctrlMode === 'mapped' && core !== 'current')) {
   throw new Error('SPIE.INTCTRL requires the current core. Use --spie-intctrl mapped or unmapped.');
 }
+const spieDataMode = args['--spie-data'] ?? spieIntctrlMode;
+const spieStatusMode = args['--spie-status'] ?? spieDataMode;
+for (const [name, mode] of [['data', spieDataMode], ['status', spieStatusMode]]) {
+  if (!['mapped', 'unmapped'].includes(mode) || (mode === 'mapped' && core !== 'current')) {
+    throw new Error('SPIE.' + name.toUpperCase() + ' requires the current core. Use --spie-' + name + ' mapped or unmapped.');
+  }
+}
+const spieRegisters = { mapCtrl: spieCtrlMode === 'mapped', mapIntctrl: spieIntctrlMode === 'mapped',
+  mapData: spieDataMode === 'mapped', mapStatus: spieStatusMode === 'mapped' };
 const portInt0MaskMode = args['--porte-int0mask'] ?? spieIntctrlMode;
 if (!['mapped', 'unmapped'].includes(portInt0MaskMode) || (portInt0MaskMode === 'mapped' && core !== 'current')) {
   throw new Error('PORTE.INT0MASK requires the current core. Use --porte-int0mask mapped or unmapped.');
@@ -184,6 +210,8 @@ if (!['mapped', 'unmapped'].includes(portIntctrlMode) || (portIntctrlMode === 'm
 }
 const pe2Input = pe2HighInput(args['--synthetic-pe2-high']);
 const portf = portfInput(args['--synthetic-portf-in']);
+const spieInput = spieFrameInput(args['--synthetic-spie-rx']);
+if (spieInput && !spieRegisters.mapData) throw new Error('--synthetic-spie-rx requires mapped SPIE.DATA');
 const spicInput = spicFrameInput(args['--synthetic-spic-first-rx'], args['--synthetic-spic-next-rx']);
 if (spicInput && core !== 'current') throw new Error('--synthetic-spic-first-rx requires the current core');
 if (portf && core !== 'current') throw new Error('--synthetic-portf-in requires the current core');
@@ -242,7 +270,7 @@ try {
       unresolvedOutputSource: (port, pin) => d0Waveform?.outputSource(port, pin) ?? d1?.waveform?.outputSource(port, pin) });
     gpio.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, cyclesBefore: c.cycles, instructionAttempt: c.steps + 1 }) });
     const adcaAccesses = [];
-    const adca = Adca ? new Adca({ onAccess: e => adcaAccesses.push(e) }) : null;
+    const adca = Adca ? new Adca({ conversion: AdcaConversion ? new AdcaConversion(adcaInput ?? {}) : null, onAccess: e => adcaAccesses.push(e) }) : null;
     adca?.register(c.bus.mmio, { ...adcaMappings,
       context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }), fault: (message, details) => c.fault(message, details) });
     const dacbAccesses = [];
@@ -320,9 +348,9 @@ try {
     const spi = Spi ? new Spi({ gpio, exchange:spicInput?.createExchange(), onAccess: event => spiAccesses.push(event), onTransfer: event => spiTransfers.push(event) }) : null;
     spi?.register(c.bus.mmio, { fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const spieAccesses = [], spieTransfers = [];
-    const spie = spieCtrlMode === 'mapped' || spieIntctrlMode === 'mapped' ? new Spi({ instance: 'SPIE', gpio,
+    const spie = Object.values(spieRegisters).some(Boolean) ? new Spi({ instance: 'SPIE', gpio, exchange: spieInput?.createExchange(),
       onAccess: event => spieAccesses.push(event), onTransfer: event => spieTransfers.push(event) }) : null;
-    spie?.register(c.bus.mmio, { mapCtrl: spieCtrlMode === 'mapped', mapIntctrl: spieIntctrlMode === 'mapped',
+    spie?.register(c.bus.mmio, { ...spieRegisters,
       fault: (m, d) => c.fault(m, d), context: () => ({ pcWord: c.pc, instructionAttempt: c.steps + 1 }) });
     const twiEvidence = { accesses: [], transfers: [], interrupts: [] };
     const twi = Twi ? new Twi({
@@ -366,6 +394,7 @@ try {
           nvm.advanceTo(c.cycles);
           if (spi?.needsClock) spi.advanceTo(c.cycles);
           if (portInterrupts?.mapIntctrl && portInterrupts.int0Mask) portInterrupts.observe(c.cycles);
+          if (adca?.needsClock) adca.advanceTo(c.cycles);
           if (spie?.needsClock) spie.advanceTo(c.cycles);
           if (twi?.needsClock) twi.advanceTo(c.cycles);
         }
@@ -530,6 +559,8 @@ try {
   if (pe2Input) result.pe2Input = pe2Input.report;
   if (portf) result.portfInput = portf.report;
   if (spicInput) result.spicInput = spicInput.report;
+  if (adcaInput) result.adcaInput = { provenance: 'synthetic', ...adcaInput };
+  if (spieInput) result.spieInput = spieInput.report;
   if (twieInput) result.twieInput = twieInput.report;
   if (signatureInput) result.productionSignature = { ...signatureInput.report, knownBytes: a.productionSignatureKnownBytes };
   if (a.adcaState) {
@@ -694,6 +725,7 @@ try {
   result.sourceSha256['scripts/discover-eeprom.mjs'] = sha(readFileSync(fileURLToPath(import.meta.url)));
   result.sourceSha256['scripts/eeprom-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/eeprom-input.mjs')));
   result.sourceSha256['scripts/spic-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/spic-input.mjs')));
+  result.sourceSha256['scripts/spie-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/spie-input.mjs')));
   result.sourceSha256['scripts/portf-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/portf-input.mjs')));
   result.sourceSha256['scripts/pe2-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/pe2-input.mjs')));
   result.sourceSha256['scripts/production-signature-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/production-signature-input.mjs')));
@@ -708,6 +740,8 @@ try {
   if (TimerClock || D0Clock) result.sourceSha256['src/peripherals/tc0-clock.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-clock.mjs')));
   if (Counter || TimerD0) result.sourceSha256['src/peripherals/tc0-compare.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-compare.mjs')));
   if (Counter || TimerD0) result.sourceSha256['src/peripherals/tc0-compare-c.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tc0-compare-c.mjs')));
+  result.sourceSha256['scripts/adca-input.mjs'] = sha(readFileSync(resolve(root, 'scripts/adca-input.mjs')));
+  if (AdcaConversion) result.sourceSha256['src/peripherals/adca-conversion.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/adca-conversion.mjs')));
   if (Adca) result.sourceSha256['src/peripherals/adca.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/adca.mjs')));
   if (DACB) result.sourceSha256['src/peripherals/dacb.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/dacb.mjs')));
   if (TimerD1) result.sourceSha256['src/peripherals/tcd1-period.mjs'] = sha(readFileSync(resolve(root, 'src/peripherals/tcd1-period.mjs')));

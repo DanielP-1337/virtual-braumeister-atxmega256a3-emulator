@@ -4,7 +4,7 @@ A headless JavaScript emulator for the ATxmega256A3 in the legacy Speidel Braume
 
 ## Run the tests
 
-Use Node.js 24 and PowerShell 7. From the repository root, run the following commands. The 550 synthetic tests exercise the emulator using generated programs and test inputs. They run offline with Node's standard library.
+Use Node.js 24 and PowerShell 7. From the repository root, run the following commands. The synthetic test suite exercises the emulator using generated programs and test inputs. They run offline with Node's standard library.
 
 ```powershell
 New-Item -ItemType Directory -Path private -Force | Out-Null
@@ -13,7 +13,9 @@ node --test "tests/*.test.mjs"
 
 ## Current state
 
-BrewControl 1.1.27 stops before **SPIC reply 27** with the tested inputs. The firmware sends `0x06` and stops before reading `SPIC.DATA` at word PC `0x00FD24`, after **4,804,642 to 4,804,756 emulator clocks** across all eight pin histories. [SPI replies 24 through 26](docs/results/SPIC-TWENTY-FOURTH-TWENTY-SIXTH-RESULTS.md)
+Two full resets with a fixed low-input profile, seven zero SPIE replies, ADC clock phase 0, and a PA1 sample of `0x000` reach the TWIE write address `0x57` at word PC `0x0132B2` after **53,702,806 emulator clocks**. Both runs execute 37,279,312 instructions and produce identical traces through that address. Across all 256 ADC clock phases and all 4,096 possible sample values, the first conversion leads to the same bus address. An ACK leads to an offset write of `0xF0`. A NACK leads to a new write address for `0x6F`. The responses of the physical devices are still unknown. [First ADC conversion and both TWIE outcomes](docs/results/ADCA-TWIE-STARTUP-RESULTS.md)
+
+In the latest per-reply reset runs, BrewControl 1.1.27 sends `0x00` in SPIC transfer 37 and stops before reading its reply from `SPIC.DATA` at word PC `0x00FD24`. All eight pin histories reach this instruction after **4,805,999 to 4,806,113 emulator clocks**. [SPIC replies 27 through 36](docs/results/SPIC-27-36-RESULTS.md)
 
 The core supports an independently tested subset of AVRxm instructions, three-byte return addresses, deterministic tracing, and explicit stops on unsupported operations. The memory bus connects the CPU to GPIO, NVM and mapped EEPROM, SPI, TWI, interrupts, clock control, the USARTF0 control and baud-selector registers, and the TCC0 counter and active period register with their shared temporary byte, clock selection, normal-mode control, and overflow interrupt delivery. TCD0 has its own period and CPU temporary byte. Its channel C and D compare buffers have independent valid flags. A shared lock controls software and automatic updates. The automatic transfer occurs at TOP in normal mode and at BOTTOM in single-slope PWM. GPIO reports the timer as the source for enabled output pins and leaves the instantaneous waveform levels unresolved. DACB models the digital control state of CTRLA, CTRLB and CTRLC. The NVM controller supports LPM reads from explicitly supplied production-signature bytes. Each peripheral implements only its documented, tested subset.
 
@@ -29,7 +31,7 @@ With PE2 held high through the run, the firmware executes `AND R18,R18` and `ST 
 
 With the write-data and read-address ACKs supplied, TWIE target `0x6F` returns eight zero bytes. A TCC0 interrupt samples PF4 while the eighth byte is pending. Both PF4 paths store it at SRAM `0x41DD` and finish the transaction with NACK and STOP. After SPIC reply 16, the overflow handler samples PF5 and PF6. Across those three samples the firmware uses masks `0x10`, `0x20`, and `0x40`. [TWIE receive timing](docs/results/TWIE-SIXTH-EIGHTH-READ-RESULTS.md) · [PF5 and PF6 samples](docs/results/PORTF-PF5-PF6-SPIC17-RESULTS.md)
 
-The firmware stores successive SPIC replies in the four SRAM cells at `0x4870` through `0x4873`. All 256 values were executed for each of replies 1 through 16 on both PF4 paths, and for replies 17 through 26 on all eight PF4/PF5/PF6 histories. After reply 24 the firmware writes `00 02 06 00` to the transmit buffer starting at `0x476B`. The separate direct-peripheral LDS timing probe still measures one clock where two are expected. A complete application boot and a browser UI are future work. [Reset profiles and verified milestones](docs/results/README.md) · [Direct LDS timing probe](verification/cpu/lds-mmio-timing.mjs)
+The firmware stores successive SPIC replies in the four SRAM cells at `0x4870` through `0x4873`. All 256 values were executed for each of replies 1 through 16 on both PF4 paths, and for replies 17 through 36 on all eight PF4/PF5/PF6 histories. After reply 28 the firmware replaces `00 02 06 00` with `00 28 00 06` in the transmit buffer starting at `0x476B`. Replies 27, 28, and 29 reach the next blocked read after 78, 261, and 78 clocks respectively. The separate direct-peripheral LDS timing probe still measures one clock where two are expected. A complete application boot and a browser UI are future work. [Reset profiles and verified milestones](docs/results/README.md) · [Direct LDS timing probe](verification/cpu/lds-mmio-timing.mjs)
 
 ## Repository contents
 

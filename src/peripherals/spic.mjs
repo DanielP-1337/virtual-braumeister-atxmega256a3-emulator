@@ -67,9 +67,10 @@ export class SPIController {
       rx: this.rx, selectUnresolved: this.selectUnresolved, busy: this.busy, pending: this.busy ? { ...this.pending.frame } : null };
   }
 
-  register(registry, { fault, context = () => ({}), mapCtrl = true, mapIntctrl = false } = {}) {
+  register(registry, { fault, context = () => ({}), mapCtrl = true, mapIntctrl = false, mapStatus = false, mapData = false } = {}) {
     const { base } = this.bank;
-    const offsets = this.instance === 'SPIE' ? [0, 1].filter(i => i === 0 ? mapCtrl : mapIntctrl) : [0, 1, 2, 3];
+    const enabled = [mapCtrl, mapIntctrl, mapStatus, mapData];
+    const offsets = this.instance === 'SPIE' ? [0, 1, 2, 3].filter(i => enabled[i]) : [0, 1, 2, 3];
     if (this.registered || offsets.some(i => registry.handlers.has(base + i))) {
       throw new Error(this.instance + ' MMIO registration collision');
     }
