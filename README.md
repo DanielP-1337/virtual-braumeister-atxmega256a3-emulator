@@ -43,6 +43,8 @@ The firmware stores successive SPIC replies in the four SRAM cells at `0x4870` t
 | `scripts/` | Headless Ghidra tooling, local execution runners, trace comparison, and EEPROM input handling |
 | `docs/` | Firmware milestone reports, reset results, CPU core evaluation, and independent Atmel Studio measurements |
 
+The [controller board reference](docs/hardware/README.md) shows the four JTAG pins next to J6 and identifies the battery-backed clock that contains the external EEPROM.
+
 ## Local firmware runs
 
 The MIT license covers the emulator, its tests, and the accompanying project tools. Third-party firmware remains subject to its own license. Supply your own local inputs for firmware experiments. Keep firmware, EEPROM images, Ghidra databases and exports, firmware-specific evidence, and generated traces outside version control. The `private/` folder is reserved for local evidence and scratch data.
